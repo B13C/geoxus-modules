@@ -5,9 +5,11 @@ import com.geoxus.core.common.event.GXBaseEvent;
 import com.geoxus.modules.user.entity.UUserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
 public class UserSaveAfterEvent extends GXBaseEvent {
     private UUserEntity targetEntity;
 
