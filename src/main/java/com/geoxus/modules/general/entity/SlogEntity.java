@@ -1,0 +1,42 @@
+package com.geoxus.modules.general.entity;
+
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
+import com.geoxus.core.common.entity.GXBaseEntity;
+import com.geoxus.core.framework.service.GXCoreModelService;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+
+import javax.validation.constraints.NotEmpty;
+
+@Data
+@TableName("s_log")
+@EqualsAndHashCode(callSuper = false)
+@Accessors(chain = true)
+public class SlogEntity extends GXBaseEntity {
+    @TableId
+    private int id;
+
+    @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
+    @NotEmpty
+    private int coreModelId;
+
+    private long modelId;
+
+    private String ext;
+
+    private String source;
+
+    private long userId;
+
+    public SlogEntity() {
+    }
+
+    public SlogEntity(int coreModelId, long modelId, String ext, String source, long userId) {
+        this.coreModelId = coreModelId;
+        this.modelId = modelId;
+        this.ext = ext;
+    }
+}
