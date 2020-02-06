@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
-import com.geoxus.core.framework.entity.CoreMediaLibraryEntity;
+import com.geoxus.core.framework.entity.GXCoreMediaLibraryEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -44,5 +44,5 @@ public class GoodsEntity extends GXBaseEntity {
     private int status;
 
     @TableField(exist = false)
-    private List<CoreMediaLibraryEntity> media;
+    private List<GXCoreMediaLibraryEntity> media;
 }

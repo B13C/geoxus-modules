@@ -5,7 +5,7 @@ import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.service.GXApiIdempotentService;
 import com.geoxus.core.common.util.GXResultUtils;
-import com.geoxus.core.framework.entity.CoreModelEntity;
+import com.geoxus.core.framework.entity.GXCoreModelEntity;
 import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.user.entity.UUserEntity;
@@ -34,7 +34,7 @@ public class CommonController {
     public GXResultUtils getModelAttribute(@RequestBody Dict param) {
         final Integer coreModelId = param.getInt("coreModelId");
         final String fieldName = param.getStr("fieldName");
-        final CoreModelEntity modelEntity = coreModelService.getModelDetailByModelId(coreModelId, fieldName);
+        final GXCoreModelEntity modelEntity = coreModelService.getModelDetailByModelId(coreModelId, fieldName);
         return GXResultUtils.ok().putData(modelEntity);
     }
 }

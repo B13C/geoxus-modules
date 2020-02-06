@@ -8,7 +8,7 @@ import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.common.util.GXBase64DecodedMultipartFileUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXUploadUtils;
-import com.geoxus.core.framework.entity.CoreMediaLibraryEntity;
+import com.geoxus.core.framework.entity.GXCoreMediaLibraryEntity;
 import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
 import com.geoxus.core.common.config.UploadConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,7 @@ public class UploadController {
         if (file.isEmpty() || null == FileTypeUtil.getType(file.getInputStream())) {
             return GXResultUtils.error(GXResultCode.FILE_ERROR);
         }
-        CoreMediaLibraryEntity entity = mediaLibraryService.saveFileInfo(file);
+        GXCoreMediaLibraryEntity entity = mediaLibraryService.saveFileInfo(file);
         Map<String, Object> map = new HashMap<>();
         map.put("mediaId", entity.getId());
         map.put("mediaPath", entity.getFilePath());
@@ -103,7 +103,7 @@ public class UploadController {
     @PostMapping("/download-file")
     public void downloadFile(@RequestBody Dict dict, HttpServletResponse response) {
         try {
-            CoreMediaLibraryEntity entity = mediaLibraryService.getById(dict.getInt("id"));
+            GXCoreMediaLibraryEntity entity = mediaLibraryService.getById(dict.getInt("id"));
             File file = new File(uploadConfig.getDepositPath() + File.separator + entity.getFileName());
             byte[] data = FileUtils.readFileToByteArray(file);
             response.reset();
