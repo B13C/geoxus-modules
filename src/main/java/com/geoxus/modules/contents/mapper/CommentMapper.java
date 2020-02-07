@@ -17,7 +17,7 @@ public interface CommentMapper extends GXBaseMapper<CommentEntity> {
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
             @Result(column = "{model_id=id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.CoreMediaLibraryMapper.list"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.list"
             ))
     })
     List<Dict> listOrSearch(IPage<Dict> page, Dict param);
@@ -26,7 +26,7 @@ public interface CommentMapper extends GXBaseMapper<CommentEntity> {
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
             @Result(column = "{model_id=id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.CoreMediaLibraryMapper.list"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.list"
             ))
     })
     Dict detail(Dict param);

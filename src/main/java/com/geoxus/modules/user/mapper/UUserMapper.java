@@ -21,7 +21,7 @@ public interface UUserMapper extends GXBaseMapper<UUserEntity> {
                     select = "com.geoxus.modules.user.mapper.UUserMapper.fansCount"
             ), javaType = Integer.class),
             @Result(column = "{model_id=user_id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.CoreMediaLibraryMapper.list"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.list"
             ))
     })
     List<Dict> listOrSearch(IPage<Dict> page, Dict param);
@@ -44,7 +44,7 @@ public interface UUserMapper extends GXBaseMapper<UUserEntity> {
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
             @Result(column = "{model_id=id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.CoreMediaLibraryMapper.list"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.list"
             ))
     })
     Dict specialInfo(Dict param);

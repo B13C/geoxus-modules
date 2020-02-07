@@ -19,7 +19,7 @@ public interface BannerMapper extends GXBaseMapper<BannerEntity> {
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
             @Result(column = "{model_id=banner_id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.CoreMediaLibraryMapper.getMediaByCondition"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ), javaType = List.class)
     })
     List<Dict> listOrSearch(IPage<Dict> page, Dict param);
@@ -28,7 +28,7 @@ public interface BannerMapper extends GXBaseMapper<BannerEntity> {
     @Results({
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
             @Result(column = "{model_id=banner_id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.CoreMediaLibraryMapper.getMediaByCondition"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ), javaType = List.class)
     })
     Dict detail(Dict param);
