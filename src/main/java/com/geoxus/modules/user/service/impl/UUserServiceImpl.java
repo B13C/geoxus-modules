@@ -360,6 +360,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public long create(UUserEntity target, Dict param) {
         if (null != param && null != param.getInt("captcha_type") && null != param.getStr("verify_code")) {
             boolean verifyRet = true;
