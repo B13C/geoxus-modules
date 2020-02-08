@@ -3,12 +3,10 @@ package com.geoxus.modules.system.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.common.entity.GXSPermissionsEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**

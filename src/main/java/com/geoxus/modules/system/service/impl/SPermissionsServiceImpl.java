@@ -2,12 +2,11 @@ package com.geoxus.modules.system.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
+import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.util.GXCommonUtils;
 import com.geoxus.core.common.util.GXShiroUtils;
-import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.system.entity.SAdminHasRolesEntity;
 import com.geoxus.modules.system.entity.SPermissionsEntity;
 import com.geoxus.modules.system.entity.SRoleHasPermissionsEntity;
@@ -62,40 +61,27 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
 
     @Override
     public Set<String> getAdminPermissions(long adminId) {
-        long id = 0;
+        long id;
         if (adminId != 0) {
             id = adminId;
         } else {
             id = GXShiroUtils.getAdminId();
         }
         Set<String> codeSet = new HashSet<>();
-
-        if (id == GXCommonUtils.getEnvironmentValue("super.admin.id", Long.class)) {
-            //超级管理员直接获取 所有权限
-            List<SPermissionsEntity> list = super.list(new QueryWrapper<SPermissionsEntity>().isNotNull("name"));
-            //组装权限CODE
-            list.forEach(x -> {
-                if (StringUtils.isNotBlank(x.getPermissionCode())) {
-                    codeSet.addAll(Arrays.asList(x.getPermissionCode().trim().split(",")));
-                }
-            });
-        } else {
-            //普通管理员
-            SAdminHasRolesEntity adminHasRoles = adminHasRolesService.getOne(new QueryWrapper<SAdminHasRolesEntity>().eq("admin_id", id));
-            if (null != adminHasRoles) {
-                //获取角色与权限的对应
-                List<SRoleHasPermissionsEntity> roleHasPermissionsList = roleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", adminHasRoles.getRoleId()));
-                //获得权限ID
-                List<Integer> idList = roleHasPermissionsList.stream().map(SRoleHasPermissionsEntity::getPermissionId).collect(Collectors.toList());
-                if (!idList.isEmpty()) {
-                    List<SPermissionsEntity> list = super.list(new QueryWrapper<SPermissionsEntity>().in("id", idList));
-                    //组装权限CODE
-                    list.forEach(x -> {
-                        if (StringUtils.isNotBlank(x.getPermissionCode())) {
-                            codeSet.addAll(Arrays.asList(x.getPermissionCode().trim().split(",")));
-                        }
-                    });
-                }
+        SAdminHasRolesEntity adminHasRoles = adminHasRolesService.getOne(new QueryWrapper<SAdminHasRolesEntity>().eq("admin_id", id));
+        if (null != adminHasRoles) {
+            //获取角色与权限的对应
+            List<SRoleHasPermissionsEntity> roleHasPermissionsList = roleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", adminHasRoles.getRoleId()));
+            //获得权限ID
+            List<Integer> permissionIdList = roleHasPermissionsList.stream().map(SRoleHasPermissionsEntity::getPermissionId).collect(Collectors.toList());
+            if (!permissionIdList.isEmpty()) {
+                List<SPermissionsEntity> list = super.list(new QueryWrapper<SPermissionsEntity>().in("permission_id", permissionIdList));
+                //组装权限CODE
+                list.forEach(x -> {
+                    if (StringUtils.isNotBlank(x.getPermissionCode())) {
+                        codeSet.addAll(Arrays.asList(x.getPermissionCode().trim().split(",")));
+                    }
+                });
             }
         }
         return codeSet;
@@ -108,7 +94,8 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
         //删除之前的权限
         roleHasPermissionsService.remove(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
         //保存权限
-        final List<Integer> permissionIds = Convert.convert(List.class, param.getObj("permission_ids"));
+        final List<Integer> permissionIds = Convert.convert(new TypeReference<List<Integer>>() {
+        }, param.getObj("permission_ids"));
         if (permissionIds != null && !permissionIds.isEmpty()) {
             permissionIds.forEach(id -> {
                 SRoleHasPermissionsEntity entity = new SRoleHasPermissionsEntity();
@@ -122,32 +109,7 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     @Override
     public List<Integer> getRolePermissions(Integer roleId) {
         List<SRoleHasPermissionsEntity> list = roleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
-        List<Integer> idList = list.stream().map(x -> x.getPermissionId()).collect(Collectors.toList());
-        return idList;
-    }
-
-    @Override
-    public long create(SPermissionsEntity target, Dict param) {
-        return 0;
-    }
-
-    @Override
-    public long update(SPermissionsEntity target, Dict param) {
-        return 0;
-    }
-
-    @Override
-    public boolean delete(Dict param) {
-        return false;
-    }
-
-    @Override
-    public GXPagination listOrSearch(Dict param) {
-        return null;
-    }
-
-    @Override
-    public Dict detail(Dict param) {
-        return null;
+        List<Integer> permissionIdList = list.stream().map(x -> x.getPermissionId()).collect(Collectors.toList());
+        return permissionIdList;
     }
 }
