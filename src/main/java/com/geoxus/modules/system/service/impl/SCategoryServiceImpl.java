@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
-import com.geoxus.modules.system.constant.CategoryConstants;
+import com.geoxus.modules.system.constant.SCategoryConstants;
 import com.geoxus.modules.system.entity.SCategoryEntity;
 import com.geoxus.modules.system.mapper.SCategoryMapper;
 import com.geoxus.modules.system.service.SCategoryService;
@@ -38,7 +38,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
 
     @Override
     public boolean delete(Dict param) {
-        final List<Integer> ids = Convert.convert((Type) TypeUtil.getClass(param.getObj(CategoryConstants.PRIMARY_KEY).getClass()), param.getObj(CategoryConstants.PRIMARY_KEY));
+        final List<Integer> ids = Convert.convert((Type) TypeUtil.getClass(param.getObj(SCategoryConstants.PRIMARY_KEY).getClass()), param.getObj(SCategoryConstants.PRIMARY_KEY));
         final ArrayList<SCategoryEntity> updateList = new ArrayList<>();
         for (int id : ids) {
             SCategoryEntity entity = getById(id);
@@ -80,20 +80,20 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
 
     @Override
     public boolean openStatus(Dict param) {
-        final int id = param.getInt(CategoryConstants.PRIMARY_KEY);
-        return modifyStatus(Dict.create().set(CategoryConstants.PRIMARY_KEY, id), GXBusinessStatusCode.NORMAL.getCode());
+        final int id = param.getInt(SCategoryConstants.PRIMARY_KEY);
+        return modifyStatus(Dict.create().set(SCategoryConstants.PRIMARY_KEY, id), GXBusinessStatusCode.NORMAL.getCode());
     }
 
     @Override
     public boolean closeStatus(Dict param) {
-        final int id = param.getInt(CategoryConstants.PRIMARY_KEY);
-        return modifyStatus(Dict.create().set(CategoryConstants.PRIMARY_KEY, id), GXBusinessStatusCode.OFF_STATE.getCode());
+        final int id = param.getInt(SCategoryConstants.PRIMARY_KEY);
+        return modifyStatus(Dict.create().set(SCategoryConstants.PRIMARY_KEY, id), GXBusinessStatusCode.OFF_STATE.getCode());
     }
 
     @Override
     public boolean freezeStatus(Dict param) {
-        final int id = param.getInt(CategoryConstants.PRIMARY_KEY);
-        return modifyStatus(Dict.create().set(CategoryConstants.PRIMARY_KEY, id), GXBusinessStatusCode.FREEZE.getCode());
+        final int id = param.getInt(SCategoryConstants.PRIMARY_KEY);
+        return modifyStatus(Dict.create().set(SCategoryConstants.PRIMARY_KEY, id), GXBusinessStatusCode.FREEZE.getCode());
     }
 
     /**
@@ -103,7 +103,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
      * @param subs   子集数据
      */
     private void buildSubs(Dict parent, List<Dict> subs) {
-        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parentId") == (int) parent.getInt(CategoryConstants.PRIMARY_KEY)).collect(Collectors.toList());
+        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parentId") == (int) parent.getInt(SCategoryConstants.PRIMARY_KEY)).collect(Collectors.toList());
         parent.set("children", children);
         if (!CollectionUtils.isEmpty(children)) {//有子分类的情况
             children.forEach(child -> buildSubs(child, subs));//再次递归构建

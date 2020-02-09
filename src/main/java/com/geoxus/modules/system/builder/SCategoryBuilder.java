@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
-import com.geoxus.modules.system.constant.CategoryConstants;
+import com.geoxus.modules.system.constant.SCategoryConstants;
 import org.apache.ibatis.jdbc.SQL;
 
 public class SCategoryBuilder implements GXBaseBuilder {
@@ -21,7 +21,7 @@ public class SCategoryBuilder implements GXBaseBuilder {
     @Override
     public String detail(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("s_category");
-        sql.WHERE(StrUtil.format("id = {}", param.getInt(CategoryConstants.PRIMARY_KEY)));
+        sql.WHERE(StrUtil.format("id = {}", param.getInt(SCategoryConstants.PRIMARY_KEY)));
         return sql.toString();
     }
 }
