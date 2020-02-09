@@ -9,9 +9,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.system.constant.CategoryConstants;
-import com.geoxus.modules.system.entity.CategoryEntity;
-import com.geoxus.modules.system.mapper.CategoryMapper;
-import com.geoxus.modules.system.service.CategoryService;
+import com.geoxus.modules.system.entity.SCategoryEntity;
+import com.geoxus.modules.system.entity.SMenuEntity;
+import com.geoxus.modules.system.mapper.SMenuMapper;
+import com.geoxus.modules.system.service.SMenuService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
@@ -21,25 +23,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEntity> implements CategoryService {
+@Slf4j
+public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> implements SMenuService {
     @Override
-    public long create(CategoryEntity target, Dict param) {
+    public long create(SMenuEntity target, Dict param) {
         save(target);
-        return target.getCategoryId();
+        return target.getMenuId();
     }
 
     @Override
-    public long update(CategoryEntity target, Dict param) {
+    public long update(SMenuEntity target, Dict param) {
         updateById(target);
-        return target.getCategoryId();
+        return target.getMenuId();
     }
 
     @Override
     public boolean delete(Dict param) {
         final List<Integer> ids = Convert.convert((Type) TypeUtil.getClass(param.getObj(CategoryConstants.PRIMARY_KEY).getClass()), param.getObj(CategoryConstants.PRIMARY_KEY));
-        final ArrayList<CategoryEntity> updateList = new ArrayList<>();
+        final ArrayList<SMenuEntity> updateList = new ArrayList<>();
         for (int id : ids) {
-            CategoryEntity entity = getById(id);
+            SMenuEntity entity = getById(id);
             entity.setStatus(GXBusinessStatusCode.DELETED.getCode());
             updateList.add(entity);
         }
@@ -94,11 +97,6 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
         return modifyStatus(Dict.create().set(CategoryConstants.PRIMARY_KEY, id), GXBusinessStatusCode.FREEZE.getCode());
     }
 
-    @Override
-    public boolean updateFieldByCondition(String tableName, Dict data, Dict condition) {
-        return baseMapper.updateFieldByCondition(tableName, data, condition);
-    }
-
     /**
      * 递归构建
      *
@@ -115,7 +113,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, CategoryEnt
 
     @Override
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
-        System.out.println("validateExists : " + value + "field : " + field);
+        log.info("validateExists : {} , field : {}", value, field);
         final int parentId = Convert.toInt(value);
         return parentId == 0 || null != getById(parentId);
     }

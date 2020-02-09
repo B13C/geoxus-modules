@@ -5,8 +5,8 @@ import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.response.GXPagination;
-import com.geoxus.modules.system.entity.CategoryEntity;
-import com.geoxus.modules.system.service.CategoryService;
+import com.geoxus.modules.system.entity.SCategoryEntity;
+import com.geoxus.modules.system.service.SCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,20 +18,20 @@ import java.util.List;
 
 @RestController("backendCategoryController")
 @RequestMapping("/category/backend")
-public class CategoryController implements GXController<CategoryEntity> {
+public class CategoryController implements GXController<SCategoryEntity> {
     @Autowired
-    private CategoryService categoryService;
+    private SCategoryService categoryService;
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation CategoryEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation SCategoryEntity target) {
         final long i = categoryService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("category_id", i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation CategoryEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation SCategoryEntity target) {
         final long i = categoryService.update(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("category_id", i));
     }

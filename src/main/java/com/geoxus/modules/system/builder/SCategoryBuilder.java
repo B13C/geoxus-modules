@@ -7,7 +7,7 @@ import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.system.constant.CategoryConstants;
 import org.apache.ibatis.jdbc.SQL;
 
-public class CategoryBuilder implements GXBaseBuilder {
+public class SCategoryBuilder implements GXBaseBuilder {
     @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("s_category");

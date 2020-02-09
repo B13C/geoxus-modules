@@ -7,7 +7,7 @@ import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
-import com.geoxus.modules.system.service.CategoryService;
+import com.geoxus.modules.system.service.SCategoryService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,7 +18,7 @@ import java.io.Serializable;
 @Data
 @TableName("s_category")
 @EqualsAndHashCode(callSuper = false)
-public class CategoryEntity extends GXBaseEntity implements Serializable {
+public class SCategoryEntity extends GXBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO)
@@ -27,7 +27,7 @@ public class CategoryEntity extends GXBaseEntity implements Serializable {
     @NotBlank
     private String categoryName;
 
-    @GXValidateDBExistsAnnotation(service = CategoryService.class, fieldName = "id")
+    @GXValidateDBExistsAnnotation(service = SCategoryService.class, fieldName = "id")
     private int parentId;
 
     @Min(1)

@@ -3,11 +3,11 @@ package com.geoxus.modules.system.service;
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.service.GXBusinessService;
 import com.geoxus.core.common.validator.GXValidateDBExists;
-import com.geoxus.modules.system.entity.CategoryEntity;
+import com.geoxus.modules.system.entity.SMenuEntity;
 
 import java.util.List;
 
-public interface CategoryService extends GXBusinessService<CategoryEntity>, GXValidateDBExists {
+public interface SMenuService extends GXBusinessService<SMenuEntity>, GXValidateDBExists {
     /**
      * 获取树状结构
      *
@@ -39,14 +39,4 @@ public interface CategoryService extends GXBusinessService<CategoryEntity>, GXVa
      * @return
      */
     boolean freezeStatus(Dict param);
-
-    /**
-     * 更新数据
-     *
-     * @param tableName
-     * @param data
-     * @param condition
-     * @return
-     */
-    boolean updateFieldByCondition(String tableName, Dict data, Dict condition);
 }
