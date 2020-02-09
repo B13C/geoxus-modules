@@ -1,363 +1,21 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 192.168.1.109
+ Source Server         : 192.168.1.123
  Source Server Type    : MySQL
  Source Server Version : 50729
- Source Host           : 192.168.1.109:3306
+ Source Host           : 192.168.1.123:3306
  Source Schema         : geoxus
 
  Target Server Type    : MySQL
  Target Server Version : 50729
  File Encoding         : 65001
 
- Date: 03/02/2020 20:54:32
+ Date: 09/02/2020 17:18:42
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for QRTZ_BLOB_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_BLOB_TRIGGERS`;
-CREATE TABLE `QRTZ_BLOB_TRIGGERS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `BLOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `SCHED_NAME`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `QRTZ_BLOB_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_CALENDARS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_CALENDARS`;
-CREATE TABLE `QRTZ_CALENDARS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `CALENDAR_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `CALENDAR` blob NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_CRON_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_CRON_TRIGGERS`;
-CREATE TABLE `QRTZ_CRON_TRIGGERS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `CRON_EXPRESSION` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TIME_ZONE_ID` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `QRTZ_CRON_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_FIRED_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_FIRED_TRIGGERS`;
-CREATE TABLE `QRTZ_FIRED_TRIGGERS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `ENTRY_ID` varchar(95) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `INSTANCE_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `FIRED_TIME` bigint(13) NOT NULL,
-  `SCHED_TIME` bigint(13) NOT NULL,
-  `PRIORITY` int(11) NOT NULL,
-  `STATE` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `JOB_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `JOB_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `ENTRY_ID`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_TRIG_INST_NAME`(`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_INST_JOB_REQ_RCVRY`(`SCHED_NAME`, `INSTANCE_NAME`, `REQUESTS_RECOVERY`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_J_G`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_T_G`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_FT_TG`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_JOB_DETAILS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_JOB_DETAILS`;
-CREATE TABLE `QRTZ_JOB_DETAILS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `JOB_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `JOB_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `DESCRIPTION` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `JOB_CLASS_NAME` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `IS_DURABLE` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `IS_NONCONCURRENT` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `IS_UPDATE_DATA` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `REQUESTS_RECOVERY` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `JOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_J_REQ_RECOVERY`(`SCHED_NAME`, `REQUESTS_RECOVERY`) USING BTREE,
-  INDEX `IDX_QRTZ_J_GRP`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_LOCKS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_LOCKS`;
-CREATE TABLE `QRTZ_LOCKS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `LOCK_NAME` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `LOCK_NAME`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_PAUSED_TRIGGER_GRPS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_PAUSED_TRIGGER_GRPS`;
-CREATE TABLE `QRTZ_PAUSED_TRIGGER_GRPS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_SCHEDULER_STATE
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_SCHEDULER_STATE`;
-CREATE TABLE `QRTZ_SCHEDULER_STATE`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `INSTANCE_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `LAST_CHECKIN_TIME` bigint(13) NOT NULL,
-  `CHECKIN_INTERVAL` bigint(13) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `INSTANCE_NAME`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_SIMPLE_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_SIMPLE_TRIGGERS`;
-CREATE TABLE `QRTZ_SIMPLE_TRIGGERS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `REPEAT_COUNT` bigint(7) NOT NULL,
-  `REPEAT_INTERVAL` bigint(12) NOT NULL,
-  `TIMES_TRIGGERED` bigint(10) NOT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `QRTZ_SIMPLE_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_SIMPROP_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_SIMPROP_TRIGGERS`;
-CREATE TABLE `QRTZ_SIMPROP_TRIGGERS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `STR_PROP_1` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `STR_PROP_2` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `STR_PROP_3` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `INT_PROP_1` int(11) NULL DEFAULT NULL,
-  `INT_PROP_2` int(11) NULL DEFAULT NULL,
-  `LONG_PROP_1` bigint(20) NULL DEFAULT NULL,
-  `LONG_PROP_2` bigint(20) NULL DEFAULT NULL,
-  `DEC_PROP_1` decimal(13, 4) NULL DEFAULT NULL,
-  `DEC_PROP_2` decimal(13, 4) NULL DEFAULT NULL,
-  `BOOL_PROP_1` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `BOOL_PROP_2` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  CONSTRAINT `QRTZ_SIMPROP_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) REFERENCES `QRTZ_TRIGGERS` (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for QRTZ_TRIGGERS
--- ----------------------------
-DROP TABLE IF EXISTS `QRTZ_TRIGGERS`;
-CREATE TABLE `QRTZ_TRIGGERS`  (
-  `SCHED_NAME` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `JOB_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `JOB_GROUP` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `DESCRIPTION` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `NEXT_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
-  `PREV_FIRE_TIME` bigint(13) NULL DEFAULT NULL,
-  `PRIORITY` int(11) NULL DEFAULT NULL,
-  `TRIGGER_STATE` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `TRIGGER_TYPE` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `START_TIME` bigint(13) NOT NULL,
-  `END_TIME` bigint(13) NULL DEFAULT NULL,
-  `CALENDAR_NAME` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `MISFIRE_INSTR` smallint(2) NULL DEFAULT NULL,
-  `JOB_DATA` blob NULL,
-  PRIMARY KEY (`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_J`(`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_JG`(`SCHED_NAME`, `JOB_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_C`(`SCHED_NAME`, `CALENDAR_NAME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_G`(`SCHED_NAME`, `TRIGGER_GROUP`) USING BTREE,
-  INDEX `IDX_QRTZ_T_STATE`(`SCHED_NAME`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_N_STATE`(`SCHED_NAME`, `TRIGGER_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_N_G_STATE`(`SCHED_NAME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NEXT_FIRE_TIME`(`SCHED_NAME`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST`(`SCHED_NAME`, `TRIGGER_STATE`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_STATE`) USING BTREE,
-  INDEX `IDX_QRTZ_T_NFT_ST_MISFIRE_GRP`(`SCHED_NAME`, `MISFIRE_INSTR`, `NEXT_FIRE_TIME`, `TRIGGER_GROUP`, `TRIGGER_STATE`) USING BTREE,
-  CONSTRAINT `QRTZ_TRIGGERS_ibfk_1` FOREIGN KEY (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) REFERENCES `QRTZ_JOB_DETAILS` (`SCHED_NAME`, `JOB_NAME`, `JOB_GROUP`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_attributes
--- ----------------------------
-DROP TABLE IF EXISTS `core_attributes`;
-CREATE TABLE `core_attributes`  (
-  `attribute_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '属性ID',
-  `category` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '属性分类',
-  `field_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '属性名字',
-  `show_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示名字',
-  `validation_desc` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '验证表达式说明',
-  `validation_expression` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '验证表达式,可以位正则表达式',
-  `ext` json NULL COMMENT '附加信息',
-  `is_core` smallint(255) NULL DEFAULT 1 COMMENT '是否为框架内置字段',
-  `data_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '属性的数据类型',
-  `column_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '属性的列类型',
-  `front_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '前端类型',
-  `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT 0 COMMENT '更新时间',
-  PRIMARY KEY (`attribute_id`) USING BTREE,
-  UNIQUE INDEX `unique_field_name`(`field_name`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_attributes_enums
--- ----------------------------
-DROP TABLE IF EXISTS `core_attributes_enums`;
-CREATE TABLE `core_attributes_enums`  (
-  `attribute_enum_id` int(11) NOT NULL AUTO_INCREMENT,
-  `attribute_id` int(11) NOT NULL,
-  `core_model_id` smallint(6) NULL DEFAULT 0,
-  `value_enum` int(11) NULL DEFAULT NULL,
-  `show_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `created_at` int(11) NULL DEFAULT 0,
-  `updated_at` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`attribute_enum_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_config
--- ----------------------------
-DROP TABLE IF EXISTS `core_config`;
-CREATE TABLE `core_config`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `core_model_id` int(45) NOT NULL COMMENT '核心模型ID',
-  `ext` json NULL COMMENT '其他额外数据',
-  `status` int(11) NULL DEFAULT NULL COMMENT '状态',
-  `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统配置' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_media_library
--- ----------------------------
-DROP TABLE IF EXISTS `core_media_library`;
-CREATE TABLE `core_media_library`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `core_model_id` int(11) NULL DEFAULT NULL COMMENT '系统模型ID',
-  `model_type` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模型类型',
-  `model_id` int(11) NULL DEFAULT NULL COMMENT '业务模型ID',
-  `collection_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '集合名字',
-  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件名字',
-  `file_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '带后缀的文件名字',
-  `mime_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文件mime',
-  `disk` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '存储方式',
-  `size` int(11) NOT NULL COMMENT '文件大小',
-  `manipulations` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '维护者',
-  `custom_properties` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '自定义属性',
-  `responsive_images` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '响应式图片',
-  `order_column` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '排序',
-  `resource_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '资源类型',
-  `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '资源集合表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_model
--- ----------------------------
-DROP TABLE IF EXISTS `core_model`;
-CREATE TABLE `core_model`  (
-  `model_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `module_id` int(11) NULL DEFAULT NULL COMMENT '模块ID(商品,订单...)',
-  `model_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模型类型,用于统一JAVA、PHP命名',
-  `model_show` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模型显示名字',
-  `model_identification` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '模型标识',
-  `search_condition` json NULL COMMENT '搜索条件',
-  `ext` json NULL COMMENT '额外信息',
-  `model_type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '命名空间',
-  `created_at` int(255) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`model_id`) USING BTREE,
-  UNIQUE INDEX `unique_model_identification`(`model_identification`) USING BTREE,
-  INDEX `fk_module_id`(`module_id`) USING BTREE,
-  CONSTRAINT `fk_module_id` FOREIGN KEY (`module_id`) REFERENCES `core_modules` (`module_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_model_attribute_group
--- ----------------------------
-DROP TABLE IF EXISTS `core_model_attribute_group`;
-CREATE TABLE `core_model_attribute_group`  (
-  `model_attribute_group_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `model_attribute_group_inner_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'ext' COMMENT '模型内的分组(如 : 项目信息....)',
-  `model_id` int(11) NULL DEFAULT NULL COMMENT '模型ID',
-  `attribute_id` int(11) NULL DEFAULT NULL COMMENT '属性ID',
-  `required` smallint(2) NULL DEFAULT 1 COMMENT '是否必须  0、不是  1、是',
-  `ext` json NULL COMMENT '扩展信息',
-  `show_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示名字',
-  `validation_expression` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '正则表达式',
-  `force_validation` smallint(2) NULL DEFAULT 0 COMMENT '是否强制使用rule进行验证',
-  `field_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段别名',
-  `default_value` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字段默认值',
-  `created_at` int(11) NULL DEFAULT 0 COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT 0 COMMENT '更新时间',
-  PRIMARY KEY (`model_attribute_group_id`) USING BTREE,
-  UNIQUE INDEX `unique_model_id_attribute_id`(`model_id`, `attribute_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_model_attribute_permission
--- ----------------------------
-DROP TABLE IF EXISTS `core_model_attribute_permission`;
-CREATE TABLE `core_model_attribute_permission`  (
-  `attribute_permission_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '属性ID',
-  `model_attribute_group_id` int(11) NULL DEFAULT NULL COMMENT '模型组的ID 比如: goods、order、contents',
-  `core_model_id` int(11) NULL DEFAULT NULL COMMENT '模型ID',
-  `attribute_id` int(11) NULL DEFAULT NULL COMMENT '属性ID',
-  `ext` json NULL COMMENT '扩展信息',
-  `allow` json NULL COMMENT '允许的人员或者角色({\"roles\":[],\"users\":[]})',
-  `deny` json NULL COMMENT '拒绝的人员或者角色({\"roles\":[],\"users\":[]})',
-  `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`attribute_permission_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for core_modules
--- ----------------------------
-DROP TABLE IF EXISTS `core_modules`;
-CREATE TABLE `core_modules`  (
-  `module_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `module_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '模块名字',
-  `ext` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '额外信息',
-  `created_at` int(255) NULL DEFAULT NULL COMMENT '创建时间',
-  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
-  PRIMARY KEY (`module_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for o_goods
@@ -518,14 +176,16 @@ CREATE TABLE `s_admin_has_permissions`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `s_admin_has_roles`;
 CREATE TABLE `s_admin_has_roles`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `role_id` int(10) UNSIGNED NOT NULL COMMENT '角色ID',
   `admin_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '管理员ID',
   `model_type` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'App\\System\\Entities\\SAdminModel' COMMENT '模型类型(使用的模型,主要用于PHP)',
+  `created_at` int(11) NULL DEFAULT 0 COMMENT '创建时间',
+  `updated_at` int(11) NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `fk_s_role_has_s_admin_s_admin1_idx`(`admin_id`) USING BTREE,
   INDEX `fk_s_role_has_s_admin_s_role1_idx`(`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与管理员对应表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色与管理员对应表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for s_banner
@@ -601,6 +261,25 @@ CREATE TABLE `s_log`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统日志信息' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for s_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `s_menu`;
+CREATE TABLE `s_menu`  (
+  `menu_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `parent_id` int(11) NULL DEFAULT 0 COMMENT '父级ID',
+  `menu_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单名字',
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单URL',
+  `perms` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限(多个用逗号分割,如:user-list,post-create)',
+  `type` tinyint(2) NULL DEFAULT NULL COMMENT '类型 0 : 目录  1 : 菜单  2 : 按钮',
+  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `status` int(255) NULL DEFAULT NULL COMMENT '状态',
+  `created_at` int(255) NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`menu_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for s_message
 -- ----------------------------
 DROP TABLE IF EXISTS `s_message`;
@@ -619,25 +298,36 @@ CREATE TABLE `s_message`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for s_oss
+-- ----------------------------
+DROP TABLE IF EXISTS `s_oss`;
+CREATE TABLE `s_oss`  (
+  `id` bigint(20) NOT NULL COMMENT '主键',
+  `url` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'URL地址',
+  `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '文件上传' ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for s_permissions
 -- ----------------------------
 DROP TABLE IF EXISTS `s_permissions`;
 CREATE TABLE `s_permissions`  (
   `permission_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `parent_id` int(11) NULL DEFAULT 0 COMMENT '父级ID',
   `permission_code` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限码',
+  `url` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求的url, 可以填正则表达式',
   `guard_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'api' COMMENT '权限保护类型(web,php，主要用于PHP)',
   `show_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限名称',
-  `parent_id` int(11) NULL DEFAULT 0 COMMENT '父级ID',
   `path` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '当前层级(1-2-3)',
-  `url` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '请求的url, 可以填正则表达式',
   `type` int(11) NULL DEFAULT NULL COMMENT '类型，1：菜单，2：按钮，3：其他',
   `status` int(11) NULL DEFAULT NULL COMMENT '状态，1：正常，0：冻结',
   `sort` int(11) NULL DEFAULT NULL COMMENT '权限在当前模块下的顺序，由小到大',
   `remark` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `created_at` int(11) NULL DEFAULT NULL COMMENT '创建时间',
+  `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`permission_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '权限列表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '权限列表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for s_region
@@ -676,6 +366,7 @@ CREATE TABLE `s_role_has_permissions`  (
 DROP TABLE IF EXISTS `s_roles`;
 CREATE TABLE `s_roles`  (
   `role_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '角色id',
+  `parent_id` int(11) NULL DEFAULT 0 COMMENT '父级ID(用于特殊场合),比如:用户自己又有自己的分配权限',
   `role_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名字',
   `show_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示名字',
   `guard_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'api' COMMENT '保护的类型(web,api,主要用于PHP)',
@@ -683,18 +374,17 @@ CREATE TABLE `s_roles`  (
   `status` int(11) NULL DEFAULT NULL COMMENT '状态，1：可用，0：冻结',
   `remark` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   `path` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '层级(0,1,2)(用于特殊场合),比如:用户自己又有自己的分配权限',
-  `parent_id` int(11) NULL DEFAULT NULL COMMENT '父级ID(用于特殊场合),比如:用户自己又有自己的分配权限',
   `created_at` int(11) NULL DEFAULT NULL,
   `updated_at` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`role_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for s_user_token
 -- ----------------------------
 DROP TABLE IF EXISTS `s_user_token`;
 CREATE TABLE `s_user_token`  (
-  `user_id` int(11) NOT NULL COMMENT '主键ID',
+  `user_id` bigint(11) NOT NULL COMMENT '主键ID',
   `token` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户Token',
   `type` smallint(3) NULL DEFAULT 2 COMMENT '类型(1、admin  2、user)',
   `expired_at` int(11) NULL DEFAULT NULL COMMENT '过期时间',
@@ -702,38 +392,6 @@ CREATE TABLE `s_user_token`  (
   `updated_at` int(11) NULL DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户Token' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for schedule_job
--- ----------------------------
-DROP TABLE IF EXISTS `schedule_job`;
-CREATE TABLE `schedule_job`  (
-  `job_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务id',
-  `bean_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'spring bean名称',
-  `params` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数',
-  `cron_expression` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'cron表达式',
-  `status` tinyint(4) NULL DEFAULT NULL COMMENT '任务状态  0：正常  1：暂停',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`job_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for schedule_job_log
--- ----------------------------
-DROP TABLE IF EXISTS `schedule_job_log`;
-CREATE TABLE `schedule_job_log`  (
-  `log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务日志id',
-  `job_id` bigint(20) NOT NULL COMMENT '任务id',
-  `bean_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'spring bean名称',
-  `params` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '参数',
-  `status` tinyint(4) NOT NULL COMMENT '任务状态    0：成功    1：失败',
-  `error` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '失败信息',
-  `times` int(11) NOT NULL COMMENT '耗时(单位：毫秒)',
-  `create_time` datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
-  PRIMARY KEY (`log_id`) USING BTREE,
-  INDEX `job_id`(`job_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for u_balance
@@ -780,8 +438,8 @@ CREATE TABLE `u_transaction_log`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `u_user`;
 CREATE TABLE `u_user`  (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `parent_id` int(11) NULL DEFAULT 0 COMMENT '推荐人ID或上级ID',
+  `user_id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `parent_id` bigint(11) NULL DEFAULT 0 COMMENT '推荐人ID或上级ID',
   `username` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户名',
   `password` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码MD5+重叠混淆',
   `salt` char(8) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '加密盐',
@@ -789,22 +447,22 @@ CREATE TABLE `u_user`  (
   `qq_open_id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT 'QQ OPENID,用于快捷登录',
   `ali_pay_open_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '支付宝开放ID',
   `pay_password` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '支付密码',
-  `pay_salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pay_salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付密码的盐',
   `nick_name` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '昵称',
   `phone` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
   `path` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '用户路径,用于实现层级关系(比如,无限级分销)',
   `hierarchy` smallint(255) NULL DEFAULT 1 COMMENT '用户所属层级',
+  `status` tinyint(6) NULL DEFAULT NULL COMMENT '状态',
   `ext` json NULL COMMENT '额外数据',
-  `status` smallint(6) GENERATED ALWAYS AS (json_extract(`ext`,'$.status')) VIRTUAL COMMENT '状态' NULL,
   `core_model_id` int(11) NULL DEFAULT 14 COMMENT '核心模型ID',
-  `user_type` int(6) GENERATED ALWAYS AS (json_unquote(json_extract(`ext`,'$.type'))) STORED COMMENT '用户类型' NULL,
-  `last_login_at` int(11) GENERATED ALWAYS AS (json_unquote(json_extract(`ext`,'$.last_login_time'))) STORED COMMENT '最后登录时间' NULL,
+  `user_type` int(6) NULL DEFAULT NULL COMMENT '用户类型',
+  `last_login_at` int(11) NULL DEFAULT NULL COMMENT '最后登录时间',
   `invite_code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邀请码',
   `created_at` int(11) NULL DEFAULT 0 COMMENT '创建时间',
   `updated_at` int(11) NULL DEFAULT 0 COMMENT '更新时间',
   PRIMARY KEY (`user_id`) USING BTREE,
   INDEX `path_index`(`hierarchy`, `path`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帐户表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1226149153655099393 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '帐户表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for u_user_favorites
@@ -889,36 +547,6 @@ CREATE TABLE `user_log`  (
   `updated_at` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`user_log_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Function structure for getChildList
--- ----------------------------
-DROP FUNCTION IF EXISTS `getChildList`;
-delimiter ;;
-CREATE FUNCTION `getChildList`()
-
-;;
-delimiter ;
-
--- ----------------------------
--- Function structure for getParentList
--- ----------------------------
-DROP FUNCTION IF EXISTS `getParentList`;
-delimiter ;;
-CREATE FUNCTION `getParentList`()
-
-;;
-delimiter ;
-
--- ----------------------------
--- Procedure structure for splitString
--- ----------------------------
-DROP PROCEDURE IF EXISTS `splitString`;
-delimiter ;;
-CREATE PROCEDURE `splitString`()
-
-;;
-delimiter ;
 
 -- ----------------------------
 -- Triggers structure for table u_balance
