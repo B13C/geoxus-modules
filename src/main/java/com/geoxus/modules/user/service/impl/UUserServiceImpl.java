@@ -35,6 +35,8 @@ import com.geoxus.modules.user.mapper.UUserMapper;
 import com.geoxus.modules.user.service.SUserTokenService;
 import com.geoxus.modules.user.service.UBalanceService;
 import com.geoxus.modules.user.service.UUserService;
+import com.google.common.collect.HashBasedTable;
+import com.google.common.collect.Table;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -545,17 +547,17 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     public boolean unfreeze(Dict param) {
-        final int id = param.getInt(UUserConstants.PRIMARY_KEY);
-        final UUserEntity entity = getById(id);
-        int status = getSingleJSONFieldValue(entity, "ext.status", Integer.class);
-        status &= ~GXBusinessStatusCode.FREEZE.getCode();
-        return modifyStatus(Dict.create().set(UUserConstants.PRIMARY_KEY, param.getInt(UUserConstants.PRIMARY_KEY)), status);
+        final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
+        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), "~", condition);
     }
 
     @Override
     public boolean changeUserNewToOld(Dict param) {
-        final UUserEntity entity = getById(param.getInt(UUserConstants.PRIMARY_KEY));
-        return updateJSONFieldSingleValue(entity, "ext.is_new", 0);
+        final Table<String, String, Object> extData = HashBasedTable.create();
+        extData.put("ext", "is_new", 0);
+        final Dict data = Dict.create().set("ext", extData);
+        final Dict condition = Dict.create().set("user_id", param.getLong(UUserConstants.PRIMARY_KEY));
+        return updateFieldBySQL(UUserEntity.class, data, condition);
     }
 
     @Override

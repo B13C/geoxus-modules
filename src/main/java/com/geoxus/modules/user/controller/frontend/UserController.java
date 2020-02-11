@@ -99,7 +99,7 @@ public class UserController implements GXController<UUserEntity> {
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
-    @PostMapping("/login-by-username")
+    @PostMapping("/login-by-username-and-password")
     public GXResultUtils loginByUserNamePwd(@RequestBody Dict param) {
         final Dict dict = userService.loginByUserNamePwd(param);
         return GXResultUtils.ok().putData(dict);
