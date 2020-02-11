@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.GXResultCode;
@@ -31,7 +32,8 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
 
     @Override
     public boolean delete(Dict param) {
-        return modifyStatus(Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY)), GXBusinessStatusCode.DELETED.getCode());
+        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 
     @Override
@@ -78,11 +80,13 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
 
     @Override
     public boolean freeze(Dict param) {
-        return modifyStatus(Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY)), GXBusinessStatusCode.FREEZE.getCode());
+        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
-        return modifyStatus(Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY)), GXBusinessStatusCode.NORMAL.getCode());
+        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 }

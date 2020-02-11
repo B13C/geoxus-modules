@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.event.GXMediaLibraryEvent;
 import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
@@ -100,11 +101,13 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, BannerEntity> i
 
     @Override
     public boolean show(Dict param) {
-        return modifyStatus(Dict.create().set(BannerConstants.PRIMARY_KEY, param.getInt(BannerConstants.PRIMARY_KEY)), GXBusinessStatusCode.NORMAL.getCode());
+        final Dict condition = Dict.create().set(BannerConstants.PRIMARY_KEY, param.getInt(BannerConstants.PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), GXBaseBuilderConstants.OR_OPERATOR, condition);
     }
 
     @Override
     public boolean hidden(Dict param) {
-        return modifyStatus(Dict.create().set(BannerConstants.PRIMARY_KEY, param.getInt(BannerConstants.PRIMARY_KEY)), GXBusinessStatusCode.FREEZE.getCode());
+        final Dict condition = Dict.create().set(BannerConstants.PRIMARY_KEY, param.getInt(BannerConstants.PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 }

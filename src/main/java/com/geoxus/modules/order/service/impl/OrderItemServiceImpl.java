@@ -6,6 +6,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.goods.entity.GoodsEntity;
@@ -41,7 +42,8 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
     @Override
     @GXLoginAnnotation
     public boolean delete(Dict param) {
-        return modifyStatus(Dict.create().set("item_id", param.getInt("item_id")), GXBusinessStatusCode.DELETED.getCode());
+        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 
     @Override

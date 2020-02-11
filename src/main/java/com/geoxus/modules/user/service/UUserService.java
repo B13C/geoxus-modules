@@ -6,7 +6,6 @@ import com.geoxus.modules.user.entity.UUserEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
-import java.util.Map;
 
 public interface UUserService extends GXUUserService<UUserEntity> {
     /**

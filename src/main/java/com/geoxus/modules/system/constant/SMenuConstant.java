@@ -3,6 +3,9 @@ package com.geoxus.modules.system.constant;
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 
 public class SMenuConstant {
+    @GXFieldCommentAnnotation(zh = "主键ID")
+    public static final String PRIMARY_KEY = "menu_id";
+
     /**
      * 菜单类型
      */

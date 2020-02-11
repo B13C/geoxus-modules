@@ -7,26 +7,27 @@ import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.modules.order.constant.OrderConstants;
-import com.geoxus.modules.user.constant.UUserConstants;
-import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import com.geoxus.core.common.config.GXWeChatConfig;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.oauth.GXTokenManager;
-import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
+import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
-import com.geoxus.modules.pay.ali.config.AliPayConfig;
 import com.geoxus.modules.goods.entity.GoodsEntity;
 import com.geoxus.modules.goods.service.GoodsService;
+import com.geoxus.modules.order.constant.OrderConstants;
 import com.geoxus.modules.order.entity.OrderEntity;
 import com.geoxus.modules.order.event.OrderAfterEvent;
 import com.geoxus.modules.order.event.OrderBeforeEvent;
 import com.geoxus.modules.order.mapper.OrderMapper;
 import com.geoxus.modules.order.service.OrderItemService;
 import com.geoxus.modules.order.service.OrderService;
+import com.geoxus.modules.pay.ali.config.AliPayConfig;
+import com.geoxus.modules.user.constant.UUserConstants;
 import com.geoxus.modules.user.entity.UUserEntity;
 import com.geoxus.modules.user.service.UUserService;
+import com.github.binarywang.wxpay.bean.notify.WxPayOrderNotifyResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -86,7 +87,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
 
     @Override
     public boolean delete(Dict param) {
-        return modifyStatus(param, GXBusinessStatusCode.DELETED.getCode());
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, param);
     }
 
     @Override

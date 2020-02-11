@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
@@ -542,13 +543,14 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     public boolean frozen(Dict param) {
-        return modifyStatus(Dict.create().set(UUserConstants.PRIMARY_KEY, param.getInt(UUserConstants.PRIMARY_KEY)), GXBusinessStatusCode.FREEZE.getCode());
+        final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
+        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.OR_OPERATOR, condition);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), "~", condition);
+        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NEGATION_OPERATOR, condition);
     }
 
     @Override

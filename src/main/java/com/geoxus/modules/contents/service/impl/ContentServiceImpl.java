@@ -4,6 +4,7 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreModelService;
@@ -68,12 +69,14 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public boolean show(Dict param) {
-        return modifyStatus(Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY)), GXBusinessStatusCode.NORMAL.getCode());
+        final Dict condition = Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 
     @Override
     public boolean hidden(Dict param) {
-        return modifyStatus(Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY)), GXBusinessStatusCode.FREEZE.getCode());
+        final Dict condition = Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 
     @Override

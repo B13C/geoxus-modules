@@ -2,6 +2,7 @@ package com.geoxus.modules.system.service.impl;
 
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.system.entity.SRolesEntity;
@@ -25,13 +26,13 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
 
     @Override
     public boolean delete(Dict param) {
-        return modifyStatus(Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY)), GXBusinessStatusCode.DELETED.getCode());
+        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
     }
 
     @Override
     public GXPagination listOrSearch(Dict param) {
-        GXPagination page = generatePage(param);
-        return page;
+        return generatePage(param);
     }
 
     @Override
