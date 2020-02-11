@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * 百度编辑器
  */
 @RestController
-@RequestMapping("/generate/editor")
+@RequestMapping("/general/editor")
 @Slf4j
 public class EditorController {
     /**

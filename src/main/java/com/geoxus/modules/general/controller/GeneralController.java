@@ -13,8 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/common/mobile")
-public class CommonController {
+@RequestMapping("/general/mobile")
+public class GeneralController {
     @Autowired
     private GXApiIdempotentService apiIdempotentService;
 

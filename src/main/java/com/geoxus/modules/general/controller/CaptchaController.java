@@ -1,6 +1,7 @@
 package com.geoxus.modules.general.controller;
 
 import cn.hutool.core.lang.Dict;
+import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXSpringContextUtils;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(value = "/generate/captcha")
+@RequestMapping(value = "/general/captcha")
 public class CaptchaController {
     @Autowired
     private CaptchaService captchaService;
@@ -51,5 +52,20 @@ public class CaptchaController {
             return GXResultUtils.ok().putData(Dict.create().set("msg", "短信验证码验证成功"));
         }
         return GXResultUtils.ok(1).putData(Dict.create().set("msg", "短信验证码验证失败"));
+    }
+
+    @PostMapping("/get-email-captcha")
+    public GXResultUtils getEmailCaptcha(@RequestBody Dict param) {
+        final String email = param.getStr("email");
+        final boolean b = GXSpringContextUtils.getBean(GXEMailService.class).sendVerifyCode(email);
+        return GXResultUtils.ok().putData(Dict.create().set("status", b));
+    }
+
+    @PostMapping("/check-email-captcha")
+    public GXResultUtils checkEmailCaptcha(@RequestBody Dict param) {
+        final String email = param.getStr("email");
+        final String code = param.getStr("code");
+        final boolean b = GXSpringContextUtils.getBean(GXEMailService.class).verification(email, code);
+        return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 }

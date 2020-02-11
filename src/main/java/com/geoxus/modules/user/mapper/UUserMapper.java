@@ -21,7 +21,7 @@ public interface UUserMapper extends GXBaseMapper<UUserEntity> {
                     select = "com.geoxus.modules.user.mapper.UUserMapper.fansCount"
             ), javaType = Integer.class),
             @Result(column = "{model_id=user_id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.list"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })
     List<Dict> listOrSearch(IPage<Dict> page, Dict param);

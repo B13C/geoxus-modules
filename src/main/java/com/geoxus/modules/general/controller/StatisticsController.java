@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/generate/statistics")
+@RequestMapping("/general/statistics")
 public class StatisticsController {
     @Autowired
     private StatisticsService statisticsService;

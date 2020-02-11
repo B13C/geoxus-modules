@@ -10,6 +10,7 @@ import com.geoxus.core.framework.service.GXCoreModelService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
@@ -43,6 +44,9 @@ public class UUserEntity extends GXUUserEntity implements Serializable {
     private String nickName;
 
     private String phone;
+
+    @Email
+    private String email;
 
     private String path;
 

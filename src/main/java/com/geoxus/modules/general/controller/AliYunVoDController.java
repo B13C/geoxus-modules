@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/generate/ali-vod")
+@RequestMapping(value = "/general/ali-vod")
 @Slf4j
 public class AliYunVoDController {
     @Autowired

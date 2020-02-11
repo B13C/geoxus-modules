@@ -53,8 +53,8 @@ public class UserController implements GXController<UUserEntity> {
         return GXResultUtils.ok().putData(pagination);
     }
 
-    @PostMapping("/sub-level")
-    public GXResultUtils subLevel(@RequestBody Dict param) {
+    @PostMapping("/children")
+    public GXResultUtils children(@RequestBody Dict param) {
         final UUserEntity user = userService.getById(param.getInt(UUserConstants.PRIMARY_KEY));
         final List<Dict> dictList = userService.children(param, user);
         return GXResultUtils.ok().putData(dictList);

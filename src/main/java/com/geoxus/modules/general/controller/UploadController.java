@@ -2,15 +2,15 @@ package com.geoxus.modules.general.controller;
 
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.lang.Dict;
+import com.geoxus.core.common.config.UploadConfig;
 import com.geoxus.core.common.exception.GXException;
-import com.geoxus.core.common.vo.GXProgressData;
-import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.common.util.GXBase64DecodedMultipartFileUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXUploadUtils;
+import com.geoxus.core.common.vo.GXProgressData;
+import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.framework.entity.GXCoreMediaLibraryEntity;
 import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
-import com.geoxus.core.common.config.UploadConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/generate/upload")
+@RequestMapping("/general/upload")
 @Slf4j
 public class UploadController {
     @Autowired

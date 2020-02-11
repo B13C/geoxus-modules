@@ -8,6 +8,7 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
@@ -15,6 +16,7 @@ import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
+import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXSpringContextUtils;
 import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
@@ -60,6 +62,9 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Autowired
     private GXCoreModelService coreModelService;
 
+    @Autowired
+    private GXEMailService gxEMailService;
+
     @Override
     public Dict checkPhone(Dict param) {
         final UUserEntity entity = getUserByUserNameOrPhone(param);
@@ -96,10 +101,17 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean changePassword(Dict param, UUserEntity user) {
         if (null != user) {
-            final String password = param.getStr("password");
-            final String salt = generateSalt();
+            final String oldPassword = param.getStr("old_password");
+            final String newPassword = param.getStr("new_password");
+            if (!user.getPassword().equals(SecureUtil.md5(oldPassword + user.getSalt()))) {
+                throw new GXException("旧密码不正确");
+            }
+            if (user.getPassword().equals(SecureUtil.md5(newPassword + user.getSalt()))) {
+                throw new GXException("新密码与旧密码相同");
+            }
+            final String salt = RandomUtil.randomString(8);
             user.setSalt(salt);
-            user.setPassword(SecureUtil.md5(password + salt));
+            user.setPassword(SecureUtil.md5(newPassword + salt));
             return updateById(user);
         }
         return false;
@@ -109,7 +121,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     public boolean changePayPassword(Dict param, UUserEntity user) {
         if (null != user) {
             final String payPassword = param.getStr("pay_password");
-            final String salt = generateSalt();
+            final String salt = RandomUtil.randomString(8);
             user.setPaySalt(salt);
             user.setPayPassword(SecureUtil.md5(payPassword + salt));
             return updateById(user);
@@ -221,6 +233,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Dict binding(Dict param) {
         final String verifyCode = param.getStr("verify_code");
         final int verifyType = param.getInt("verify_type");
@@ -247,7 +260,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
                 entity = param.toBean(UUserEntity.class);
             }
             final String password = Optional.ofNullable(param.getStr("password")).orElse(RandomUtil.randomString(8));
-            final String salt = generateSalt();
+            final String salt = RandomUtil.randomString(8);
             entity.setPassword(SecureUtil.md5(password + salt));
             final long userId = create(entity, Dict.create());
             final String token = GXTokenManager.generateUserToken(userId, Dict.create().set("phone", Optional.ofNullable(entity.getPhone()).orElse("")));
@@ -288,20 +301,21 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Dict findBackPasswordByPhone(Dict param) {
-        final String codeName = "code";
         final String verifyCode = param.getStr("verify_code");
         final String phone = param.getStr("phone");
         final Dict condition = Dict.create().set("phone", phone);
         final String templateName = param.getStr("template_name");
         final UUserEntity user = getOne(new QueryWrapper<UUserEntity>().allEq(condition));
         if (getSendSMSService().verification(phone, verifyCode) && null != user) {
-            final String password = RandomUtil.randomString(6);
+            final String password = RandomUtil.randomString(8);
             final String salt = RandomUtil.randomString(8);
             user.setSalt(salt);
             user.setPassword(SecureUtil.md5(password + salt));
-            getSendSMSService().send(phone, templateName, Dict.create().set(codeName, password));
             final boolean status = updateById(user);
-            return Dict.create().set("status", status);
+            if (status) {
+                getSendSMSService().send(phone, templateName, Dict.create().set("code", password));
+                return Dict.create().set("status", status);
+            }
         }
         return Dict.create().set("status", false);
     }
@@ -311,8 +325,20 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         final String verifyCode = param.getStr("verify_code");
         final String email = param.getStr("email");
         final Dict condition = Dict.create().set("email", email);
-        if (null != getOne(new QueryWrapper<UUserEntity>().allEq(condition))) {
-            //修改密码或者发送验证码
+        final UUserEntity user = getOne(new QueryWrapper<UUserEntity>().allEq(condition));
+        if (gxEMailService.verification(email, verifyCode) && null != user) {
+            final String password = RandomUtil.randomString(8);
+            final String salt = RandomUtil.randomString(8);
+            user.setSalt(salt);
+            user.setPassword(SecureUtil.md5(password + salt));
+            final boolean status = updateById(user);
+            if (status) {
+                final String content = StrUtil.format("您的密码已经需改成功! 新密码为: {} , 请尽快登录系统修改!", password);
+                final String sendResult = MailUtil.send(user.getEmail(), "修改密码提醒", content, false);
+                if (StrUtil.isNotBlank(sendResult)) {
+                    return Dict.create().set("status", true);
+                }
+            }
         }
         return Dict.create().set("status", false);
     }
@@ -397,12 +423,12 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
             }
         }
         if (StrUtil.isNotBlank(target.getPassword())) {
-            final String salt = generateSalt();
+            final String salt = RandomUtil.randomString(8);
             target.setSalt(salt);
             target.setPassword(SecureUtil.md5(target.getPassword() + salt));
         }
         if (StrUtil.isNotBlank(target.getPayPassword())) {
-            final String salt = generateSalt();
+            final String salt = RandomUtil.randomString(8);
             target.setPaySalt(salt);
             target.setPayPassword(SecureUtil.md5(target.getPassword() + salt));
         }
@@ -431,12 +457,12 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
             }
         }
         if (StrUtil.isNotBlank(target.getPassword())) {
-            final String salt = generateSalt();
+            final String salt = RandomUtil.randomString(8);
             target.setSalt(salt);
             target.setPassword(SecureUtil.md5(target.getPassword() + salt));
         }
         if (StrUtil.isNotBlank(target.getPayPassword())) {
-            final String salt = generateSalt();
+            final String salt = RandomUtil.randomString(8);
             target.setPaySalt(salt);
             target.setPayPassword(SecureUtil.md5(target.getPassword() + salt));
         }
@@ -469,7 +495,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     public Dict detail(Dict param) {
         final Dict detail = baseMapper.detail(param);
         if (null != detail) {
-            for (String key : Arrays.asList("salt", "paySalt", "password", "payPassword")) {
+            for (String key : Arrays.asList("salt", "pay_salt", "password", "pay_password")) {
                 detail.remove(key);
             }
             return detail;
@@ -538,15 +564,6 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     /**
-     * 生成salt
-     *
-     * @return
-     */
-    private String generateSalt() {
-        return RandomUtil.randomString(8);
-    }
-
-    /**
      * 通过用户名或者手机号码获取用户信息
      *
      * @param param
@@ -554,7 +571,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
      */
     private UUserEntity getUserByUserNameOrPhone(Dict param) {
         final String value = Optional.ofNullable(param.getStr("phone")).orElse(param.getStr("username"));
-        if (null != value) {
+        if (null != value && StrUtil.isNotBlank(value)) {
             return Optional.ofNullable(getOne(new QueryWrapper<UUserEntity>().eq("phone", value))).orElse(getOne(new QueryWrapper<UUserEntity>().eq("username", value)));
         }
         return null;

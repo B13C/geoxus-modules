@@ -7,3 +7,4 @@ target
 /src/main/resources/ymls/local/
 /src/main/resources/rebel.xml
 /src/test/
+/src/main/resources/mail.setting

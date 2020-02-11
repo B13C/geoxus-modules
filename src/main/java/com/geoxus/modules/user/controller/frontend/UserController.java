@@ -2,8 +2,6 @@ package com.geoxus.modules.user.controller.frontend;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
-import cn.hutool.core.util.IdUtil;
-import cn.hutool.core.util.RandomUtil;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
@@ -49,10 +47,8 @@ public class UserController implements GXController<UUserEntity> {
     @Override
     @PostMapping("/create")
     public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation UUserEntity target) {
-        target.setUserId(IdUtil.getSnowflake(1, 1).nextId());
-        target.setInviteCode(RandomUtil.randomString(8));
-        final long i = userService.create(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
-        return GXResultUtils.ok().putData(Dict.create().set("id", i).set("user-token", GXTokenManager.generateUserToken(i, Dict.create().set("phone", Optional.ofNullable(target.getPhone()).orElse("")))));
+        final long userId = userService.create(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
+        return GXResultUtils.ok().putData(Dict.create().set(GXTokenManager.USER_ID, userId).set(GXTokenManager.USER_TOKEN, GXTokenManager.generateUserToken(userId, Dict.create().set("phone", Optional.ofNullable(target.getPhone()).orElse("")))));
     }
 
     @Override
@@ -63,8 +59,8 @@ public class UserController implements GXController<UUserEntity> {
         if (userId > 0) {
             target.setUserId(userId);
         }
-        final long i = userService.update(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
-        return GXResultUtils.ok().putData(Dict.create().set("id", i).set("user-token", GXTokenManager.generateUserToken(i, Dict.create().set("phone", Optional.ofNullable(target.getPhone()).orElse("")))));
+        userService.update(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
+        return GXResultUtils.ok().putData(Dict.create().set(GXTokenManager.USER_ID, userId).set(GXTokenManager.USER_TOKEN, GXTokenManager.generateUserToken(userId, Dict.create().set("phone", Optional.ofNullable(target.getPhone()).orElse("")))));
     }
 
     @Override
@@ -77,7 +73,7 @@ public class UserController implements GXController<UUserEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return null;
+        return GXResultUtils.ok().putData(Dict.create());
     }
 
     @Override
