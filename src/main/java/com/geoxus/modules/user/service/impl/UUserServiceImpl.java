@@ -497,13 +497,13 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean frozen(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.OR_OPERATOR, condition);
+        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.OR_OPERATOR);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NEGATION_OPERATOR, condition);
+        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NEGATION_OPERATOR);
     }
 
     @Override
