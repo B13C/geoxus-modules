@@ -1,11 +1,15 @@
 package com.geoxus.modules.user.service;
 
 import cn.hutool.core.lang.Dict;
+import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.service.GXUUserService;
+import com.geoxus.core.common.vo.GXResultCode;
+import com.geoxus.modules.user.constant.UUserConstants;
 import com.geoxus.modules.user.entity.UUserEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UUserService extends GXUUserService<UUserEntity> {
     /**
@@ -79,7 +83,7 @@ public interface UUserService extends GXUUserService<UUserEntity> {
      * @param param
      * @return
      */
-    Dict loginByVerificationCode(@RequestBody Dict param);
+    Dict loginByPhoneVerificationCode(@RequestBody Dict param);
 
     /**
      * 绑定用户信息
@@ -200,4 +204,8 @@ public interface UUserService extends GXUUserService<UUserEntity> {
      * @return
      */
     boolean logout(Dict param);
+
+    default boolean checkVerifyCode(Dict param) {
+        return true;
+    }
 }

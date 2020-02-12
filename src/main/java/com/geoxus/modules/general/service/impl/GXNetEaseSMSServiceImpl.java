@@ -3,14 +3,14 @@ package com.geoxus.modules.general.service.impl;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
-import com.alibaba.druid.util.StringUtils;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
-import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXRedisKeysUtils;
 import com.geoxus.core.common.util.GXRedisUtils;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.modules.general.config.NetEaseSMSConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -100,14 +100,13 @@ public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
      * @return boolean
      */
     public boolean verification(String phone, String code) {
-        if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(code)) {
+        if (StrUtil.isEmpty(phone) || StrUtil.isEmpty(code)) {
             return false;
         }
         String key = redisKeysUtils.getNetEaseSMSCodeConfigKey(phone);
         String s = redisUtils.get(key);
-        if (s.equals(code)) {
-            final boolean b = redisUtils.delete(key);
-            return b;
+        if (code.equalsIgnoreCase(s)) {
+            return redisUtils.delete(key);
         }
         return false;
     }

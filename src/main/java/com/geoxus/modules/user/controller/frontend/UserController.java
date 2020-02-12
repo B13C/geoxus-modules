@@ -2,6 +2,7 @@ package com.geoxus.modules.user.controller.frontend;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
+import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
@@ -33,12 +34,6 @@ public class UserController implements GXController<UUserEntity> {
     @Autowired
     private UBalanceService uBalanceService;
 
-    /**
-     * 检验手机号
-     *
-     * @param param
-     * @return
-     */
     @PostMapping("/check-phone")
     public GXResultUtils checkPhone(@RequestBody Dict param) {
         return GXResultUtils.ok().putData(Dict.create().set("status", userService.checkPhone(param)));
@@ -105,15 +100,19 @@ public class UserController implements GXController<UUserEntity> {
         return GXResultUtils.ok().putData(dict);
     }
 
-    @PostMapping("/login-by-phone")
+    @PostMapping("/login-by-phone-and-password")
     public GXResultUtils loginByPhonePwd(@RequestBody Dict param) {
         final Dict dict = userService.loginByPhonePwd(param);
+        final String token = dict.getStr(GXTokenManager.USER_TOKEN);
+        if (StrUtil.isEmpty(token)) {
+            return GXResultUtils.error("用户不存在");
+        }
         return GXResultUtils.ok().putData(dict);
     }
 
-    @PostMapping("/login-by-verification-code")
-    public GXResultUtils loginByVerificationCode(@RequestBody Dict param) {
-        final Dict dict = userService.loginByVerificationCode(param);
+    @PostMapping("/login-by-phone-verification-code")
+    public GXResultUtils loginByPhoneVerificationCode(@RequestBody Dict param) {
+        final Dict dict = userService.loginByPhoneVerificationCode(param);
         final String str = dict.getStr(GXTokenManager.USER_TOKEN);
         if (str.isEmpty()) {
             return GXResultUtils.error().putData(Dict.create().set("msg", "验证码错误或者用户不存在"));

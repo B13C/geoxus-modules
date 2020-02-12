@@ -5,7 +5,7 @@ import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXSpringContextUtils;
-import com.geoxus.modules.general.service.CaptchaService;
+import com.geoxus.core.common.service.GXCaptchaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequestMapping(value = "/general/captcha")
 public class CaptchaController {
     @Autowired
-    private CaptchaService captchaService;
+    private GXCaptchaService captchaService;
 
     @PostMapping("/get-graph-captcha")
     public GXResultUtils getGraphCaptcha() {

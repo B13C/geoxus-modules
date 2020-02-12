@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
-import com.geoxus.modules.general.service.CaptchaService;
+import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.modules.system.entity.SAdminEntity;
 import com.geoxus.modules.system.service.SAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class AdminController implements GXController<SAdminEntity> {
     private SAdminService adminService;
 
     @Autowired
-    private CaptchaService captchaService;
+    private GXCaptchaService captchaService;
 
     @Override
     @PostMapping("/create")

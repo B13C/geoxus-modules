@@ -63,8 +63,12 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
 
     @Override
     public boolean verification(String phone, String code) {
+        if (StrUtil.isEmpty(phone) || StrUtil.isEmpty(code)) {
+            return false;
+        }
         String key = redisKeysUtils.getAliYunSMSCodeConfigKey(phone);
-        if (code.equalsIgnoreCase(redisUtils.get(key))) {
+        final String s = redisUtils.get(key);
+        if (code.equalsIgnoreCase(s)) {
             return redisUtils.delete(key);
         }
         return false;

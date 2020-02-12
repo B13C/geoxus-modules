@@ -11,12 +11,14 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.annotation.GXCheckRequestVerifyCodeAnnotation;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
+import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXSpringContextUtils;
@@ -25,8 +27,6 @@ import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreModelService;
-import com.geoxus.modules.general.constant.CaptchaConstants;
-import com.geoxus.modules.general.service.CaptchaService;
 import com.geoxus.modules.user.constant.UBalanceConstants;
 import com.geoxus.modules.user.constant.UUserConstants;
 import com.geoxus.modules.user.entity.SUserTokenEntity;
@@ -54,7 +54,7 @@ import java.util.Optional;
 @Slf4j
 public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> implements UUserService {
     @Autowired
-    private CaptchaService captchaService;
+    private GXCaptchaService captchaService;
 
     @Autowired
     private SUserTokenService sUserTokenService;
@@ -133,16 +133,10 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    @GXCheckRequestVerifyCodeAnnotation()
     public Dict loginByUserNamePwd(Dict param) {
         final String username = param.getStr("username");
         final String password = param.getStr("password");
-        final int verifyType = Optional.ofNullable(param.getInt("verify_type")).orElse(0);
-        if (verifyType == UUserConstants.SMS_VERIFY && null != param.getStr("phone") && !getSendSMSService().verification(param.getStr("phone"), param.getStr("verify_code"))) {
-            throw new GXException(GXResultCode.NEED_CAPTCHA);
-        }
-        if (verifyType == UUserConstants.CAPTCHA_VERIFY && !captchaService.checkCaptcha(param.getStr("uuid"), param.getStr("verify_code"))) {
-            throw new GXException(GXResultCode.NEED_CAPTCHA);
-        }
         if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
             throw new GXException(GXResultCode.INPUT_TOO_SHORT);
         }
@@ -161,16 +155,10 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    @GXCheckRequestVerifyCodeAnnotation()
     public Dict loginByPhonePwd(Dict param) {
         final String phone = Optional.ofNullable(param.getStr("phone")).orElse(param.getStr("username"));
         final String password = param.getStr("password");
-        final int verifyType = Optional.ofNullable(param.getInt("verify_type")).orElse(0);
-        if (verifyType == UUserConstants.SMS_VERIFY && null != param.getStr("phone") && !getSendSMSService().verification(param.getStr("phone"), param.getStr("verify_code"))) {
-            return Dict.create().set("msg", "短信验证码错误");
-        }
-        if (verifyType == UUserConstants.CAPTCHA_VERIFY && !captchaService.checkCaptcha(param.getStr("uuid"), param.getStr("verify_code"))) {
-            return Dict.create().set("msg", "图形验证码错误");
-        }
         if (StrUtil.isNotBlank(phone) && StrUtil.isNotBlank(password)) {
             final UUserEntity entity = getUserByUserNameOrPhone(Dict.create().set("phone", phone).set("username", phone));
             if (null != entity && StrUtil.equals(entity.getPassword(), SecureUtil.md5(password + entity.getSalt()))) {
@@ -207,7 +195,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
-    public Dict loginByVerificationCode(Dict param) {
+    public Dict loginByPhoneVerificationCode(Dict param) {
         final String verificationCode = param.getStr("verify_code");
         final String phone = param.getStr("phone");
         if (StrUtil.isNotBlank(phone) && StrUtil.isNotBlank(verificationCode)) {
@@ -237,14 +225,8 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @GXCheckRequestVerifyCodeAnnotation()
     public Dict binding(Dict param) {
-        final String verifyCode = param.getStr("verify_code");
-        final int verifyType = param.getInt("verify_type");
-        if (verifyType == UUserConstants.SMS_VERIFY && null != param.getStr("phone") && !getSendSMSService().verification(param.getStr("phone"), verifyCode)) {
-            return Dict.create().set("msg", "短信验证码错误");
-        } else if (verifyType == UUserConstants.CAPTCHA_VERIFY && !captchaService.checkCaptcha(param.getStr("uuid"), verifyCode)) {
-            return Dict.create().set("msg", "图形验证码错误");
-        }
         final String bindType = param.getStr("bind_type");
         final String openId = param.getStr("open_id");
         UUserEntity entity = null;
@@ -288,14 +270,8 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    @GXCheckRequestVerifyCodeAnnotation()
     public Dict changePhone(Dict param, UUserEntity userEntity) {
-        final String verifyCode = param.getStr("verify_code");
-        final int verifyType = param.getInt("verify_type");
-        if (verifyType == UUserConstants.SMS_VERIFY && null != param.getStr("phone") && !getSendSMSService().verification(param.getStr("phone"), verifyCode)) {
-            return Dict.create().set("msg", "短信验证码错误");
-        } else if (verifyType == UUserConstants.CAPTCHA_VERIFY && !captchaService.checkCaptcha(param.getStr("uuid"), verifyCode)) {
-            return Dict.create().set("msg", "图形验证码错误");
-        }
         userEntity.setPhone(param.getStr("phone"));
         updateById(userEntity);
         return Dict.create().set("status", true);
@@ -390,18 +366,8 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    @GXCheckRequestVerifyCodeAnnotation()
     public long create(UUserEntity target, Dict param) {
-        if (null != param && null != param.getInt("captcha_type") && null != param.getStr("verify_code")) {
-            boolean verifyRet = true;
-            if (param.getInt("captcha_type") == GXSendSMSService.SMS_TYPE) {
-                verifyRet = getSendSMSService().verification(param.getStr("phone"), param.getStr("verify_code"));
-            } else if (param.getInt("captcha_type") == CaptchaConstants.GRAPH_TYPE) {
-                verifyRet = captchaService.checkCaptcha(param.getStr("uuid"), param.getStr("verify_code"));
-            }
-            if (!verifyRet) {
-                throw new GXException("验证码错误");
-            }
-        }
         final UUserEntity entity = getUserByUserNameOrPhone(Dict.create().set("phone", target.getPhone()).set("username", target.getUsername()));
         if (null != entity) {
             log.error("{}", GXResultCode.USER_NAME_EXIST.getMsg());
@@ -447,18 +413,8 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    @GXCheckRequestVerifyCodeAnnotation()
     public long update(UUserEntity target, Dict param) {
-        if (null != param && null != param.getInt("captcha_type") && null != param.getStr("verify_code")) {
-            boolean verifyRet = true;
-            if (param.getInt("captcha_type") == GXSendSMSService.SMS_TYPE) {
-                verifyRet = getSendSMSService().verification(param.getStr("phone"), param.getStr("verify_code"));
-            } else if (param.getInt("captcha_type") == CaptchaConstants.GRAPH_TYPE) {
-                verifyRet = captchaService.checkCaptcha(param.getStr("uuid"), param.getStr("verify_code"));
-            }
-            if (!verifyRet) {
-                throw new GXException("验证码错误");
-            }
-        }
         if (StrUtil.isNotBlank(target.getPassword())) {
             final String salt = RandomUtil.randomString(8);
             target.setSalt(salt);
