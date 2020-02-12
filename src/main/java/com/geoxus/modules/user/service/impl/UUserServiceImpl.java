@@ -12,13 +12,13 @@ import cn.hutool.extra.mail.MailUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.annotation.GXCheckRequestVerifyCodeAnnotation;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
-import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXSpringContextUtils;
@@ -53,8 +53,8 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> implements UUserService {
-    @Autowired
-    private GXCaptchaService captchaService;
+    @GXFieldCommentAnnotation(zh = "验证码字段的名字")
+    public static final String VERIFY_CODE = "verify_code";
 
     @Autowired
     private SUserTokenService sUserTokenService;
@@ -195,8 +195,9 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Dict loginByPhoneVerificationCode(Dict param) {
-        final String verificationCode = param.getStr("verify_code");
+        final String verificationCode = param.getStr(VERIFY_CODE);
         final String phone = param.getStr("phone");
         if (StrUtil.isNotBlank(phone) && StrUtil.isNotBlank(verificationCode)) {
             final boolean verification = getSendSMSService().verification(phone, verificationCode);
@@ -280,7 +281,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Dict findBackPasswordByPhone(Dict param) {
-        final String verifyCode = param.getStr("verify_code");
+        final String verifyCode = param.getStr(VERIFY_CODE);
         final String phone = param.getStr("phone");
         final Dict condition = Dict.create().set("phone", phone);
         final String templateName = param.getStr("template_name");
@@ -301,7 +302,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     public Dict findBackPasswordByEmail(Dict param) {
-        final String verifyCode = param.getStr("verify_code");
+        final String verifyCode = param.getStr(VERIFY_CODE);
         final String email = param.getStr("email");
         final Dict condition = Dict.create().set("email", email);
         final UUserEntity user = getOne(new QueryWrapper<UUserEntity>().allEq(condition));
@@ -437,12 +438,8 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     public boolean delete(Dict param) {
-        final int id = param.getInt(UUserConstants.PRIMARY_KEY);
-        final UUserEntity entity = getById(id);
-        if (null != entity) {
-            return updateJSONFieldSingleValue(entity, "ext.status", GXBusinessStatusCode.DELETED.getCode());
-        }
-        return false;
+        final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override

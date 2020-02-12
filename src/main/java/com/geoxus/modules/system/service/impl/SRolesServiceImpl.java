@@ -27,7 +27,7 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
     @Override
     public boolean delete(Dict param) {
         final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override

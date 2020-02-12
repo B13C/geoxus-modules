@@ -66,7 +66,7 @@ public class UUWithdrawServiceImpl extends ServiceImpl<UWithdrawMapper, UWithdra
     @Override
     public boolean delete(Dict param) {
         final Dict condition = Dict.create().set(UWithdrawConstants.PRIMARY_KEY, param.getInt(UWithdrawConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override

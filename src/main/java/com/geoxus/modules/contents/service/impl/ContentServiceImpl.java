@@ -70,13 +70,13 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
     @Override
     public boolean show(Dict param) {
         final Dict condition = Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
     public boolean hidden(Dict param) {
         final Dict condition = Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override

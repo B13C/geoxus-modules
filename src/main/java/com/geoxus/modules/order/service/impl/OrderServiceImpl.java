@@ -87,7 +87,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
 
     @Override
     public boolean delete(Dict param) {
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, param);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), param, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override

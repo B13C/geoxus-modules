@@ -58,7 +58,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     @PostMapping("/approve")
     public GXResultUtils approve(@RequestBody Dict param) {
         final Dict condition = Dict.create().set(UWithdrawConstants.PRIMARY_KEY, param.getInt(UWithdrawConstants.PRIMARY_KEY));
-        final boolean status = UWithdrawService.modifyStatus(GXBusinessStatusCode.APPROVE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        final boolean status = UWithdrawService.modifyStatus(GXBusinessStatusCode.APPROVE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
         return GXResultUtils.ok().putData(Dict.create().set("status", status));
     }
 

@@ -33,7 +33,7 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     @Override
     public boolean delete(Dict param) {
         final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
@@ -81,12 +81,12 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     @Override
     public boolean freeze(Dict param) {
         final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 }

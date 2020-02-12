@@ -83,21 +83,21 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     public boolean openStatus(Dict param) {
         final int id = param.getInt(SMenuConstant.PRIMARY_KEY);
         final Dict condition = Dict.create().set(SMenuConstant.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
     public boolean closeStatus(Dict param) {
         final int id = param.getInt(SMenuConstant.PRIMARY_KEY);
         final Dict condition = Dict.create().set(SMenuConstant.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.OFF_STATE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.OFF_STATE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
     public boolean freezeStatus(Dict param) {
         final int id = param.getInt(SMenuConstant.PRIMARY_KEY);
         final Dict condition = Dict.create().set(SMenuConstant.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     /**

@@ -102,12 +102,12 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, BannerEntity> i
     @Override
     public boolean show(Dict param) {
         final Dict condition = Dict.create().set(BannerConstants.PRIMARY_KEY, param.getInt(BannerConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), GXBaseBuilderConstants.OR_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.OR_OPERATOR);
     }
 
     @Override
     public boolean hidden(Dict param) {
         final Dict condition = Dict.create().set(BannerConstants.PRIMARY_KEY, param.getInt(BannerConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), GXBaseBuilderConstants.NON_OPERATOR, condition);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 }
