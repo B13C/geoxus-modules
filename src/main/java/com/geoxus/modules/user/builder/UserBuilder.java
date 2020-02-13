@@ -2,19 +2,32 @@ package com.geoxus.modules.user.builder;
 
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.builder.GXBaseBuilder;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.modules.user.constant.UUserConstants;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.util.HashSet;
 import java.util.List;
 
 public class UserBuilder implements GXBaseBuilder {
+    @GXFieldCommentAnnotation(zh = "模型的值")
+    public static final String MODEL_IDENTIFICATION_VALUE = "u_user";
+
+    @GXFieldCommentAnnotation(zh = "数据库表名")
+    public static final String TABLE_NAME = "u_user";
+
     @Override
     public String listOrSearch(Dict param) {
-        final SQL sql = new SQL().SELECT("*").FROM("u_user");
-        if (null != param.getStr("username")) {
-            sql.WHERE(StrUtil.format("username = '{}'", param.getStr("username")));
-        }
+        final HashSet<String> columns = new HashSet<>();
+        columns.add("salt");
+        columns.add("password");
+        columns.add("pay_salt");
+        columns.add("pay_password");
+        final String selectColumns = getSelectFieldStr(TABLE_NAME, columns, true);
+        final SQL sql = new SQL().SELECT(selectColumns).FROM("u_user");
+        mergeSearchConditionToSQL(sql, param);
         return sql.toString();
     }
 
@@ -55,5 +68,15 @@ public class UserBuilder implements GXBaseBuilder {
         }
         final SQL sql = new SQL().SELECT(StrUtil.format("{}", defaultField)).FROM("u_user").WHERE(StrUtil.format("id = {}", param.getLong("user_id")));
         return sql.toString();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return MODEL_IDENTIFICATION_VALUE;
+    }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create().set("name", GXBaseBuilderConstants.AFTER_LIKE);
     }
 }
