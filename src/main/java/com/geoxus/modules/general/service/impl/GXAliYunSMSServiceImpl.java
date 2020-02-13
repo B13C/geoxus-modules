@@ -10,7 +10,6 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
 import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.service.GXSendSMSService;
@@ -41,21 +40,25 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
     private AliYunSMSConfig aliYunSMSConfig;
 
     @Override
-    @GXApiIdempotentAnnotation(expires = 10)
+    //@GXApiIdempotentAnnotation(expires = 10)
     @GXDurationCountLimitAnnotation(key = "ali:yun:sms")
     public GXResultUtils send(String phone, String templateName, Dict param) {
         String codeConfigKey = redisKeysUtils.getAliYunSMSCodeConfigKey(phone);
         if (redisUtils.get(codeConfigKey) != null) {
             throw new GXException("操作频繁,请稍后再试....");
         }
-        if (null == aliYunSMSConfig.getTemplates().get(templateName)) {
+        final Dict aliYunTemplateConfig = aliYunSMSConfig.getTemplates().get(templateName);
+        if (null == aliYunTemplateConfig) {
             throw new GXException("阿里云短信模板不存在....");
         }
         String codeName = "code";
-        String code = Optional.ofNullable(param.getStr(codeName)).orElse(RandomStringUtils.randomNumeric(aliYunSMSConfig.getCodeLen()));
+        Integer codeLen = Optional.ofNullable(aliYunTemplateConfig.getInt("codeLen"))
+                .orElse(Optional.ofNullable(aliYunSMSConfig.getCodeLen()).orElse(6));
+        String code = Optional.ofNullable(param.getStr(codeName))
+                .orElse(RandomStringUtils.randomNumeric(codeLen));
         param.put(codeName, code);
         String templateParam = JSONUtil.toJsonStr(param);
-        final boolean sendResult = this.processSend(phone, aliYunSMSConfig.getTemplates().get(templateName).get("templateId").toString(), templateParam);
+        final boolean sendResult = this.processSend(phone, aliYunTemplateConfig, templateParam);
         if (sendResult) {
             storeCode(phone, code);
             return GXResultUtils.ok();
@@ -80,24 +83,29 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
      * 处理实际发送
      *
      * @param phone         手机号码
-     * @param templateCode  模板code
+     * @param templateData  短信模板的信息
      * @param templateParam 模板参数值
      * @return boolean
      */
-    private boolean processSend(String phone, String templateCode, String templateParam) {
+    private boolean processSend(String phone, Dict templateData, String templateParam) {
+        String templateCode = templateData.getStr("templateId");
         //可自助调整超时时间
         System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
         System.setProperty("sun.net.client.defaultReadTimeout", "10000");
         //初始化acsClient,暂不支持region化
-        IClientProfile profile = DefaultProfile.getProfile("cn-hangzhou", aliYunSMSConfig.getAccessKey(), aliYunSMSConfig.getAccessKeySecret());
-        DefaultProfile.addEndpoint("cn-hangzhou", "Dysmsapi", "dysmsapi.aliyuncs.com");
+        String regionId = Optional.ofNullable(templateData.getStr("endPoint")).orElse(aliYunSMSConfig.getEndpoint());
+        String accessKey = Optional.ofNullable(templateData.getStr("accessKey")).orElse(aliYunSMSConfig.getAccessKey());
+        String accessKeySecret = Optional.ofNullable(templateData.getStr("accessKeySecret")).orElse(aliYunSMSConfig.getAccessKeySecret());
+        IClientProfile profile = DefaultProfile.getProfile(regionId, accessKey, accessKeySecret);
+        DefaultProfile.addEndpoint(regionId, "Dysmsapi", "dysmsapi.aliyuncs.com");
         IAcsClient acsClient = new DefaultAcsClient(profile);
         //组装请求对象-具体描述见控制台-文档部分内容
         SendSmsRequest request = new SendSmsRequest();
         //必填:待发送手机号
         request.setPhoneNumbers(phone);
         //必填:短信签名-可在短信控制台中找到
-        request.setSignName(aliYunSMSConfig.getSignName());
+        String signName = Optional.ofNullable(templateData.getStr("signName")).orElse(aliYunSMSConfig.getSignName());
+        request.setSignName(signName);
         //必填:短信模板-可在短信控制台中找到SMS_157070109/SMS_156730092
         request.setTemplateCode(templateCode);
         //可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
