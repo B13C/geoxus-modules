@@ -68,8 +68,20 @@ public class UserController implements GXController<UUserEntity> {
 
     @PostMapping("/change-grade")
     public GXResultUtils changeGrade(@RequestBody Dict param) {
-        final UUserEntity user = userService.getById(param.getInt(UUserConstants.PRIMARY_KEY));
+        final UUserEntity user = userService.getById(param.getLong(UUserConstants.PRIMARY_KEY));
         final boolean b = userService.changeGrade(param, user);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
+    }
+
+    @PostMapping("/frozen")
+    public GXResultUtils frozen(@RequestBody Dict param) {
+        final boolean frozen = userService.frozen(param);
+        return GXResultUtils.ok().putData(Dict.create().set("status", frozen));
+    }
+
+    @PostMapping("/unfreeze")
+    public GXResultUtils unfreeze(@RequestBody Dict param) {
+        final boolean unfreeze = userService.unfreeze(param);
+        return GXResultUtils.ok().putData(Dict.create().set("status", unfreeze));
     }
 }

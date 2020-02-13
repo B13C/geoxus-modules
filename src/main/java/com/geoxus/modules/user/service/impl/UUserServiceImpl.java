@@ -45,7 +45,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.validation.ConstraintValidatorContext;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -147,6 +146,9 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         if (!StrUtil.equals(entity.getPassword(), SecureUtil.md5(password + entity.getSalt()))) {
             throw new GXException(GXResultCode.PASSWORD_ERROR);
         }
+        if (checkStatus(GXBusinessStatusCode.NORMAL.getCode(), entity.getStatus())) {
+            throw new GXException(GXResultCode.STATUS_ERROR);
+        }
         final String token = GXTokenManager.generateUserToken(entity.getUserId(), Dict.create().set("phone", Dict.create().set("phone", Optional.ofNullable(entity.getPhone()).orElse(""))));
         sUserTokenService.createOrUpdate(token, entity.getUserId());
         final UserLoginAfterEvent loginAfterEvent = new UserLoginAfterEvent("login", entity, Dict.create());
@@ -162,6 +164,9 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         if (StrUtil.isNotBlank(phone) && StrUtil.isNotBlank(password)) {
             final UUserEntity entity = getUserByUserNameOrPhone(Dict.create().set("phone", phone).set("username", phone));
             if (null != entity && StrUtil.equals(entity.getPassword(), SecureUtil.md5(password + entity.getSalt()))) {
+                if (checkStatus(GXBusinessStatusCode.NORMAL.getCode(), entity.getStatus())) {
+                    throw new GXException(GXResultCode.STATUS_ERROR);
+                }
                 final String token = GXTokenManager.generateUserToken(entity.getUserId(), Dict.create().set("phone", Optional.ofNullable(entity.getPhone()).orElse("")));
                 sUserTokenService.createOrUpdate(token, Convert.toLong(entity.getUserId()));
                 final UserLoginAfterEvent loginAfterEvent = new UserLoginAfterEvent("login", entity, Dict.create());
@@ -180,6 +185,9 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
             condition.set("wx_open_id", openId);
             final UUserEntity entity = getOne(new QueryWrapper<UUserEntity>().allEq(condition));
             if (null != entity) {
+                if (checkStatus(GXBusinessStatusCode.NORMAL.getCode(), entity.getStatus())) {
+                    throw new GXException(GXResultCode.STATUS_ERROR);
+                }
                 final String token = GXTokenManager.generateUserToken(Convert.toLong(entity.getUserId()), Dict.create().set("phone", Optional.ofNullable(entity.getPhone()).orElse("")));
                 final Dict dict = Dict.create().set(GXTokenManager.USER_TOKEN, token).set("bind_phone", true);
                 if (StrUtil.isBlank(entity.getPhone())) {
@@ -211,6 +219,9 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
                     userId = create(entity, Dict.create());
                 } else {
                     userId = entity.getUserId();
+                }
+                if (checkStatus(GXBusinessStatusCode.NORMAL.getCode(), entity.getStatus())) {
+                    throw new GXException(GXResultCode.STATUS_ERROR);
                 }
                 if (userId > 0) {
                     final String token = GXTokenManager.generateUserToken(userId, Dict.create().set("phone", Optional.ofNullable(entity.getPhone()).orElse("")));
@@ -345,7 +356,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     @GXLoginAnnotation
     public List<Dict> children(@RequestBody Dict param, @GXLoginUserAnnotation UUserEntity user) {
-        param.set("user_id", user.getUserId());
+        param.set(UUserConstants.PRIMARY_KEY, user.getUserId());
         return baseMapper.children(param);
     }
 
@@ -451,9 +462,6 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     public Dict detail(Dict param) {
         final Dict detail = baseMapper.detail(param);
         if (null != detail) {
-            for (String key : Arrays.asList("salt", "pay_salt", "password", "pay_password")) {
-                detail.remove(key);
-            }
             return detail;
         }
         return Dict.create();
@@ -497,13 +505,13 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean frozen(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.OR_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.OR_OPERATOR);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return updateStatusBySQL(UUserEntity.class, GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NEGATION_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NEGATION_OPERATOR);
     }
 
     @Override
@@ -518,6 +526,11 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean logout(Dict param) {
         return sUserTokenService.logout(param);
+    }
+
+    @Override
+    public boolean checkStatus(int expect, int actual) {
+        return expect == actual;
     }
 
     /**

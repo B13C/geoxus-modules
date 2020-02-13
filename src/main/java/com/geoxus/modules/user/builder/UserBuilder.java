@@ -33,7 +33,13 @@ public class UserBuilder implements GXBaseBuilder {
 
     @Override
     public String detail(Dict param) {
-        final SQL sql = new SQL().SELECT("*").FROM("u_user").WHERE(StrUtil.format("{} = {}", UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY)));
+        final HashSet<String> columns = new HashSet<>();
+        columns.add("salt");
+        columns.add("password");
+        columns.add("pay_salt");
+        columns.add("pay_password");
+        final String selectColumns = getSelectFieldStr(TABLE_NAME, columns, true);
+        final SQL sql = new SQL().SELECT(selectColumns).FROM(TABLE_NAME).WHERE(StrUtil.format("{} = {}", UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY)));
         return sql.toString();
     }
 
@@ -44,12 +50,12 @@ public class UserBuilder implements GXBaseBuilder {
     }
 
     public String fansCount(Dict param) {
-        final SQL sql = new SQL().SELECT("count(*) as count").FROM("u_user").WHERE(" FIND_IN_SET( '" + param.getLong("parent_id") + "', path)");
+        final SQL sql = new SQL().SELECT("count(*) as count").FROM(TABLE_NAME).WHERE(" FIND_IN_SET( '" + param.getLong("parent_id") + "', path)");
         return sql.toString();
     }
 
     public String countNumber(Dict param) {
-        final SQL sql = new SQL().SELECT("count(*) as count").FROM("u_user");
+        final SQL sql = new SQL().SELECT("count(*) as count").FROM(TABLE_NAME);
         if (null != param.get("identity_type")) {
             sql.WHERE(StrUtil.format("identity_type = '{}'", param.get("identity_type")));
         }
@@ -57,7 +63,7 @@ public class UserBuilder implements GXBaseBuilder {
     }
 
     public String specialInfo(Dict param) {
-        final SQL sql = new SQL().SELECT("core_model_id, id, username, nick_name, ext").FROM("u_user").WHERE(StrUtil.format("id = {}", param.getLong("user_id")));
+        final SQL sql = new SQL().SELECT("core_model_id, id, username, nick_name, ext").FROM(TABLE_NAME).WHERE(StrUtil.format("id = {}", param.getLong("user_id")));
         return sql.toString();
     }
 
@@ -66,7 +72,7 @@ public class UserBuilder implements GXBaseBuilder {
         if (null != fields && !fields.isEmpty()) {
             defaultField = String.join(",", fields);
         }
-        final SQL sql = new SQL().SELECT(StrUtil.format("{}", defaultField)).FROM("u_user").WHERE(StrUtil.format("id = {}", param.getLong("user_id")));
+        final SQL sql = new SQL().SELECT(StrUtil.format("{}", defaultField)).FROM(TABLE_NAME).WHERE(StrUtil.format("id = {}", param.getLong("user_id")));
         return sql.toString();
     }
 
