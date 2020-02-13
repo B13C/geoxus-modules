@@ -2,6 +2,7 @@ package com.geoxus.modules.general.controller;
 
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.lang.Dict;
+import com.geoxus.core.common.annotation.GXUploadFileLegalAnnotation;
 import com.geoxus.core.common.config.UploadConfig;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.util.GXBase64DecodedMultipartFileUtils;
@@ -45,6 +46,7 @@ public class UploadController {
      * @return
      */
     @PostMapping("/single-upload")
+    @GXUploadFileLegalAnnotation
     public GXResultUtils singleUpload(MultipartFile file) throws IOException {
         if (file.isEmpty() || null == FileTypeUtil.getType(file.getInputStream())) {
             return GXResultUtils.error(GXResultCode.FILE_ERROR);
@@ -52,7 +54,7 @@ public class UploadController {
         GXCoreMediaLibraryEntity entity = mediaLibraryService.saveFileInfo(file);
         Map<String, Object> map = new HashMap<>();
         map.put("mediaId", entity.getId());
-        map.put("mediaPath", entity.getFilePath());
+        map.put("mediaName", entity.getFilePath());
         return GXResultUtils.ok().putData(map);
     }
 
@@ -63,6 +65,7 @@ public class UploadController {
      * @return ResultUtil
      */
     @PostMapping("/single-base64-upload")
+    @GXUploadFileLegalAnnotation
     public GXResultUtils singleBase64Upload(@RequestBody Dict param) throws IOException {
         final GXBase64DecodedMultipartFileUtils file = new GXBase64DecodedMultipartFileUtils(param.getStr("file"));
         return singleUpload(file);
@@ -75,6 +78,7 @@ public class UploadController {
      * @return
      */
     @PostMapping("/single-upload-without-save-db")
+    @GXUploadFileLegalAnnotation
     public GXResultUtils singleUploadNotSave(MultipartFile file) throws IOException {
         if (file.isEmpty() || null == FileTypeUtil.getType(file.getInputStream())) {
             return GXResultUtils.error(GXResultCode.FILE_ERROR);
@@ -89,6 +93,7 @@ public class UploadController {
     }
 
     @PostMapping("/multi-upload-file")
+    @GXUploadFileLegalAnnotation
     public GXResultUtils multiUploadFile(MultipartFile... files) throws Exception {
         List<Dict> list = new ArrayList<>();
         final List<Dict> dicts = GXUploadUtils.multiUpload(files, uploadConfig.getDepositPath());
@@ -101,6 +106,7 @@ public class UploadController {
     }
 
     @PostMapping("/download-file")
+    @GXUploadFileLegalAnnotation
     public void downloadFile(@RequestBody Dict dict, HttpServletResponse response) {
         try {
             GXCoreMediaLibraryEntity entity = mediaLibraryService.getById(dict.getInt("id"));
@@ -124,6 +130,7 @@ public class UploadController {
      * @return int percent
      */
     @GetMapping("/get-percent")
+    @GXUploadFileLegalAnnotation
     public GXResultUtils getUploadPercent(HttpServletRequest request) {
         HttpSession session = request.getSession();
         GXProgressData percent = session.getAttribute("progress") == null ? null : (GXProgressData) session.getAttribute("progress");

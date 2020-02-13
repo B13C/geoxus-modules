@@ -6,23 +6,19 @@ import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.service.GXApiIdempotentService;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.framework.entity.GXCoreModelEntity;
-import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.user.entity.UUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/general/mobile")
+@RequestMapping("/general/general")
 public class GeneralController {
     @Autowired
     private GXApiIdempotentService apiIdempotentService;
 
     @Autowired
     private GXCoreModelService coreModelService;
-
-    @Autowired
-    private GXCoreMediaLibraryService coreMediaLibraryService;
 
     @PostMapping("/get-api-idempotent-token")
     @GXLoginAnnotation
