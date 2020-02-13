@@ -120,6 +120,15 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     }
 
     @Override
+    public boolean changePassword(Dict param) {
+        final String password = param.getStr("password");
+        final String salt = RandomUtil.randomString(8);
+        final Dict data = Dict.create().set("password", SecureUtil.md5(password.concat(salt))).set("salt", salt);
+        final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
+        return updateFieldBySQL(UUserEntity.class, data, condition);
+    }
+
+    @Override
     public boolean changePayPassword(Dict param, UUserEntity user) {
         if (null != user) {
             final String payPassword = param.getStr("pay_password");

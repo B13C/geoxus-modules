@@ -84,4 +84,10 @@ public class UserController implements GXController<UUserEntity> {
         final boolean unfreeze = userService.unfreeze(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", unfreeze));
     }
+
+    @PostMapping("/change-user-password")
+    public GXResultUtils changeUserPassword(@RequestBody Dict param) {
+        final boolean b = userService.changePassword(param);
+        return GXResultUtils.ok().putData(Dict.create().set("status", b));
+    }
 }

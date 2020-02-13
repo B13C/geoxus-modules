@@ -42,6 +42,14 @@ public interface UUserService extends GXUUserService<UUserEntity> {
     boolean changePassword(Dict param, UUserEntity user);
 
     /**
+     * 修改用户密码
+     *
+     * @param param
+     * @return
+     */
+    boolean changePassword(Dict param);
+
+    /**
      * 修改用户支付密码
      *
      * @param param
