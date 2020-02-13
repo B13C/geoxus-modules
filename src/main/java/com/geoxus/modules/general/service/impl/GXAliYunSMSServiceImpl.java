@@ -11,6 +11,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
+import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXRedisKeysUtils;
@@ -41,6 +42,7 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
 
     @Override
     @GXApiIdempotentAnnotation(expires = 10)
+    @GXDurationCountLimitAnnotation(key = "ali:yun:sms")
     public GXResultUtils send(String phone, String templateName, Dict param) {
         String codeConfigKey = redisKeysUtils.getAliYunSMSCodeConfigKey(phone);
         if (redisUtils.get(codeConfigKey) != null) {

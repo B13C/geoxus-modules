@@ -6,6 +6,7 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
+import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXRedisKeysUtils;
 import com.geoxus.core.common.util.GXRedisUtils;
@@ -41,10 +42,9 @@ public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
     @Autowired
     private NetEaseSMSConfig netEaseSMSConfig;
 
-    private String codeName = "code";
-
     @Override
     @GXApiIdempotentAnnotation(expires = 10)
+    @GXDurationCountLimitAnnotation(key = "net:ease:sms")
     public GXResultUtils send(String phone, String templateName, Dict param) {
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> result = new HashMap<>();
@@ -57,6 +57,7 @@ public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
         postParams.put("nonce", IdUtil.simpleUUID());
         postParams.put("mobile", phone);
         postParams.put("templateId", netEaseSMSConfig.getTemplateId());
+        String codeName = "code";
         String verificationCode = Optional.ofNullable(param.getStr(codeName)).orElse(RandomUtil.randomNumbers(netEaseSMSConfig.getCodeLen()));
         postParams.put("params", netEaseSMSConfig.getParams() + verificationCode);
         //需要上行的时候,这里需要设置为true
