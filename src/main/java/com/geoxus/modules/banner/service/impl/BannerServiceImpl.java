@@ -6,9 +6,6 @@ import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
-import com.geoxus.core.common.event.GXMediaLibraryEvent;
-import com.geoxus.core.common.util.GXHttpContextUtils;
-import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
@@ -38,17 +35,7 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, BannerEntity> i
     @Transactional(rollbackFor = Exception.class)
     public long create(BannerEntity target, Dict param) {
         save(target);
-        final List<?> mediaInfo = GXHttpContextUtils.getHttpParam("media_info", List.class);
-        if (null != mediaInfo) {
-            if (null != param) {
-                param.set("media", mediaInfo);
-            } else {
-                param = Dict.create().set("media", mediaInfo);
-            }
-            param.set("model_id", target.getBannerId());
-            final GXMediaLibraryEvent<BannerEntity> event = new GXMediaLibraryEvent<>(coreModelService.getModelTypeByModelId(target.getCoreModelId(), "Banner"), target, param);
-            GXSyncEventBusCenterUtils.getInstance().post(event);
-        }
+        handleMedia(target, target.getBannerId(), Dict.create());
         return target.getBannerId();
     }
 
@@ -56,17 +43,7 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, BannerEntity> i
     @Transactional(rollbackFor = Exception.class)
     public long update(BannerEntity target, Dict param) {
         updateById(target);
-        final List<?> mediaInfo = GXHttpContextUtils.getHttpParam("media_info", List.class);
-        if (null != mediaInfo) {
-            if (null != param) {
-                param.set("media", mediaInfo);
-            } else {
-                param = Dict.create().set("media", mediaInfo);
-            }
-            param.set("model_id", target.getBannerId());
-            final GXMediaLibraryEvent<BannerEntity> event = new GXMediaLibraryEvent<>(coreModelService.getModelTypeByModelId(target.getCoreModelId(), "Banner"), target, param);
-            GXSyncEventBusCenterUtils.getInstance().post(event);
-        }
+        handleMedia(target, target.getBannerId(), Dict.create());
         return target.getBannerId();
     }
 

@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.event.GXMediaLibraryEvent;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
-import com.geoxus.core.common.util.GXHttpContextUtils;
-import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.contents.constant.CommentConstants;
@@ -34,18 +31,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     public long create(CommentEntity target, Dict param) {
         target.setPath(getPath(target.getParentId()));
         target = modifyEntityJSONFieldSingleValue(target, "ext.status", GXBusinessStatusCode.NORMAL.getCode());
-        saveOrUpdate(target);
-        final List mediaInfo = GXHttpContextUtils.getHttpParam("media_info", List.class);
-        if (null != mediaInfo) {
-            if (null != param) {
-                param.set("media", mediaInfo);
-            } else {
-                param = Dict.create().set("media", mediaInfo);
-            }
-            param.set("model_id", target.getCommentId());
-            final GXMediaLibraryEvent<CommentEntity> event = new GXMediaLibraryEvent<>(coreModelService.getModelTypeByModelId(target.getCoreModelId(), "Comment"), target, param);
-            GXSyncEventBusCenterUtils.getInstance().post(event);
-        }
+        save(target);
+        handleMedia(target, target.getCommentId(), Dict.create());
         return target.getCommentId();
     }
 
@@ -53,18 +40,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     public long update(CommentEntity target, Dict param) {
         target.setPath(getPath(target.getParentId()));
         target = modifyEntityJSONFieldSingleValue(target, "ext.status", GXBusinessStatusCode.NORMAL.getCode());
-        saveOrUpdate(target);
-        final List mediaInfo = GXHttpContextUtils.getHttpParam("media_info", List.class);
-        if (null != mediaInfo) {
-            if (null != param) {
-                param.set("media", mediaInfo);
-            } else {
-                param = Dict.create().set("media", mediaInfo);
-            }
-            param.set("model_id", target.getCommentId());
-            final GXMediaLibraryEvent<CommentEntity> event = new GXMediaLibraryEvent<>(coreModelService.getModelTypeByModelId(target.getCoreModelId(), "Comment"), target, param);
-            GXSyncEventBusCenterUtils.getInstance().post(event);
-        }
+        updateById(target);
+        handleMedia(target, target.getCommentId(), Dict.create());
         return target.getCommentId();
     }
 

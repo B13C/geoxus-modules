@@ -3,6 +3,7 @@ package com.geoxus.modules.banner.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
+import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import lombok.Data;
@@ -19,7 +20,11 @@ public class BannerEntity extends GXBaseEntity {
     @TableId
     private int bannerId;
 
-    //@ValidateExtDataAnnotation(tableName = "s_banner", fieldName = "ext")
+    private String intro;
+
+    private String url;
+
+    @GXValidateExtDataAnnotation(tableName = "s_banner")
     private String ext;
 
     @NotNull
@@ -33,4 +38,10 @@ public class BannerEntity extends GXBaseEntity {
     private int status;
 
     private int position;
+
+    private int provinceId;
+
+    private int cityId;
+
+    private int areaId;
 }

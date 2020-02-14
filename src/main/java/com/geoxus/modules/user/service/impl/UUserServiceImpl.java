@@ -424,7 +424,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         }
         target.setUserId(IdUtil.getSnowflake(1, 1).nextId());
         final boolean save = save(target);
-        handleMedia(target, Convert.toLong(target.getUserId()), coreModelService.getModelTypeByModelId(target.getCoreModelId(), "Users"), Dict.create());
+        handleMedia(target, target.getUserId(), Dict.create());
         if (save) {
             sUserTokenService.createOrUpdate(GXTokenManager.generateUserToken(Convert.toLong(target.getUserId()), Dict.create().set("phone", Optional.ofNullable(target.getPhone()).orElse(""))), Convert.toLong(target.getUserId()));
         }
@@ -450,7 +450,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         GXSyncEventBusCenterUtils.getInstance().post(userUpdateBeforeEvent);
         target = userUpdateBeforeEvent.getTargetEntity();
         updateById(target);
-        handleMedia(target, Convert.toLong(target.getUserId()), coreModelService.getModelTypeByModelId(target.getCoreModelId(), "User"), Dict.create());
+        handleMedia(target, target.getUserId(), Dict.create());
         final UserUpdateAfterEvent userUpdateAfterEvent = new UserUpdateAfterEvent("user-update-after", target, param);
         GXSyncEventBusCenterUtils.getInstance().post(userUpdateAfterEvent);
         return Convert.toInt(target.getUserId());

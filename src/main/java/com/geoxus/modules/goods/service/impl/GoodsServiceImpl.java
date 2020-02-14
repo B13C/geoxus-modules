@@ -3,8 +3,6 @@ package com.geoxus.modules.goods.service.impl;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.event.GXMediaLibraryEvent;
-import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.goods.constant.GoodsConstants;
@@ -23,22 +21,16 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, GoodsEntity> impl
     @Override
     @Transactional
     public long create(GoodsEntity target, Dict param) {
-        final boolean save = saveOrUpdate(target);
-        final String modelType = coreModelService.getModelTypeByModelId(param.getInt("core_model_id"), "Goods");
-        final GXMediaLibraryEvent<GoodsEntity> event = new GXMediaLibraryEvent<>(modelType, target, param);
-        GXSyncEventBusCenterUtils.getInstance().post(event);
-        System.out.println("save : " + save);
+        final boolean save = save(target);
+        handleMedia(target, target.getGoodsId(), Dict.create());
         return target.getGoodsId();
     }
 
     @Override
     @Transactional
     public long update(GoodsEntity target, Dict param) {
-        final boolean save = saveOrUpdate(target);
-        final String modelType = coreModelService.getModelTypeByModelId(param.getInt("core_model_id"), "Goods");
-        final GXMediaLibraryEvent<GoodsEntity> event = new GXMediaLibraryEvent<>(modelType, target, param);
-        GXSyncEventBusCenterUtils.getInstance().post(event);
-        System.out.println("save : " + save);
+        final boolean save = updateById(target);
+        handleMedia(target, target.getGoodsId(), Dict.create());
         return target.getGoodsId();
     }
 
