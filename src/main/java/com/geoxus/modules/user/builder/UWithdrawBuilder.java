@@ -22,4 +22,14 @@ public class UWithdrawBuilder implements GXBaseBuilder {
         sql.WHERE(StrUtil.format("withdraw_number = {}", param.getLong("withdraw_number")));
         return sql.toString();
     }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "u_withdraw";
+    }
 }

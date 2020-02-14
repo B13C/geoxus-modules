@@ -24,4 +24,14 @@ public class SCategoryBuilder implements GXBaseBuilder {
         sql.WHERE(StrUtil.format("id = {}", param.getInt(SCategoryConstants.PRIMARY_KEY)));
         return sql.toString();
     }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "s_category";
+    }
 }

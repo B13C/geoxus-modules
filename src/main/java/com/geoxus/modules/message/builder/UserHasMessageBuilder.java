@@ -26,6 +26,16 @@ public class UserHasMessageBuilder implements GXBaseBuilder {
         return sql.toString();
     }
 
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "user_has_message";
+    }
+
     public String unReadMessage(Dict param) {
         final SQL sql = new SQL().SELECT("s_message.content,s_message.title,s_message.id,s_message.`status`,s_message.created_at as createdAt").FROM("s_message");
         sql.WHERE(StrUtil.format("NOT EXISTS (SELECT message_id from user_has_message where s_message.id=user_has_message.message_id and user_id = {} and s_message.status = {})", param.getInt(GXTokenManager.USER_ID), GXBusinessStatusCode.NORMAL.getCode()));

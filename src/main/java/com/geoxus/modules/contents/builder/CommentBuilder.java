@@ -19,6 +19,16 @@ public class CommentBuilder implements GXBaseBuilder {
     }
 
     @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "p_comment";
+    }
+
+    @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("comment.* , user.username, user.nick_name , media.file_name as user_head").FROM(StrUtil.format("{} as comment", tableName));
         sql.INNER_JOIN("u_user user on user.user_id = comment.user_id");

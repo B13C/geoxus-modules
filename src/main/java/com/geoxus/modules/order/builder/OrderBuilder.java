@@ -32,4 +32,9 @@ public class OrderBuilder implements GXBaseBuilder {
                 .set("user_id", GXBaseBuilderConstants.NUMBER_EQ)
                 .set("username", GXBaseBuilderConstants.AFTER_LIKE);
     }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "o_orders";
+    }
 }

@@ -25,6 +25,16 @@ public class SRolesBuilder implements GXBaseBuilder {
         return sql.toString();
     }
 
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "s_roles";
+    }
+
     public String getRoleNameByAdminId(long adminId) {
         SQL sql = new SQL().SELECT("s_roles.role_name").FROM("s_roles").INNER_JOIN("s_admin_has_roles ON s_admin_has_roles.role_id = s_roles.role_id").WHERE("s_admin_has_roles.admin_id=#{adminId}");
         return sql.toString();

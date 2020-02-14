@@ -22,4 +22,14 @@ public class MessageBuilder implements GXBaseBuilder {
         sql.WHERE(StrUtil.format("{} = {} AND status = {}", MessageService.PRIMARY_KEY, param.getInt(MessageService.PRIMARY_KEY), GXBusinessStatusCode.NORMAL.getCode()));
         return sql.toString();
     }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "s_message";
+    }
 }

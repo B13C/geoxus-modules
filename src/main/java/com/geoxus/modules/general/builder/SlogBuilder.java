@@ -30,4 +30,14 @@ public class SlogBuilder implements GXBaseBuilder {
         final SQL sql = new SQL().SELECT("*").FROM("s_log").WHERE(StrUtil.format("{} = {}", "id", param.getInt("id")));
         return sql.toString();
     }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "s_log";
+    }
 }

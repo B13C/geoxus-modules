@@ -31,4 +31,9 @@ public class ContentBuilder implements GXBaseBuilder {
                 .set("created_at", GXBaseBuilderConstants.TIME_RANGE_WITH_EQ)
                 .set("core_model_id", GXBaseBuilderConstants.NUMBER_EQ);
     }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "p_content";
+    }
 }

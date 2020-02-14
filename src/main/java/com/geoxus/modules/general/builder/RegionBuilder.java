@@ -2,8 +2,8 @@ package com.geoxus.modules.general.builder;
 
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
-import com.google.common.base.Joiner;
 import com.geoxus.core.common.builder.GXBaseBuilder;
+import com.google.common.base.Joiner;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.ArrayList;
@@ -17,6 +17,16 @@ public class RegionBuilder implements GXBaseBuilder {
     @Override
     public String detail(Dict param) {
         return null;
+    }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "s_region";
     }
 
     public String areaInfo(Dict param) {

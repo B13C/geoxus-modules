@@ -43,6 +43,16 @@ public class FeedBackBuilder implements GXBaseBuilder {
         return sql.toString();
     }
 
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "p_feedback";
+    }
+
     public String countByCondition(Dict param) {
         final SQL sql = new SQL().SELECT("count(*) as count").FROM("p_feedback");
         if (!param.isEmpty()) {

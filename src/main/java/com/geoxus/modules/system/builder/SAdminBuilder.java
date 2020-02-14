@@ -47,4 +47,14 @@ public class SAdminBuilder implements GXBaseBuilder {
         sql.WHERE(StrUtil.format("{} = {}", SAdminService.PRIMARY_KEY, param.getInt(SAdminService.PRIMARY_KEY)));
         return sql.toString();
     }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "s_admin";
+    }
 }

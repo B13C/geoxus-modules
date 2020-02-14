@@ -30,4 +30,9 @@ public class GoodsBuilder implements GXBaseBuilder {
     public Dict getDefaultSearchField() {
         return Dict.create();
     }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "o_goods";
+    }
 }

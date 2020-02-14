@@ -13,4 +13,14 @@ public class UBalanceBuilder implements GXBaseBuilder {
     public String detail(Dict param) {
         return null;
     }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "u_balance";
+    }
 }

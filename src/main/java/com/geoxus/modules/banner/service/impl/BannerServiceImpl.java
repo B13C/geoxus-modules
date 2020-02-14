@@ -53,7 +53,7 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, BannerEntity> i
         }, param.getObj(BannerConstants.PRIMARY_KEY));
         final ArrayList<BannerEntity> updateArrayList = new ArrayList<>();
         for (int id : list) {
-            BannerEntity entity = getOne(new QueryWrapper<BannerEntity>().allEq(Dict.create().set(BannerConstants.PRIMARY_KEY, id).set("user_id", param.getInt("user_id"))));
+            BannerEntity entity = getOne(new QueryWrapper<BannerEntity>().allEq(Dict.create().set(BannerConstants.PRIMARY_KEY, id)));
             if (null == entity) {
                 continue;
             }

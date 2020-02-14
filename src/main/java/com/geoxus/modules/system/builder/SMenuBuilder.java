@@ -14,4 +14,14 @@ public class SMenuBuilder implements GXBaseBuilder {
     public String detail(Dict param) {
         return new SQL().toString();
     }
+
+    @Override
+    public Dict getDefaultSearchField() {
+        return Dict.create();
+    }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "s_menu";
+    }
 }

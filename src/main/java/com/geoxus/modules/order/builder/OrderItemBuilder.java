@@ -37,4 +37,9 @@ public class OrderItemBuilder implements GXBaseBuilder {
                 .set(UUserConstants.PRIMARY_KEY, GXBaseBuilderConstants.NUMBER_EQ)
                 .set("status", GXBaseBuilderConstants.NUMBER_EQ);
     }
+
+    @Override
+    public String getModelIdentificationValue() {
+        return "o_order_item";
+    }
 }
