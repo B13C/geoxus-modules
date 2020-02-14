@@ -6,6 +6,7 @@ import com.geoxus.core.common.annotation.GXUploadFileLegalAnnotation;
 import com.geoxus.core.common.config.UploadConfig;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.util.GXBase64DecodedMultipartFileUtils;
+import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXUploadUtils;
 import com.geoxus.core.common.vo.GXProgressData;
@@ -51,7 +52,7 @@ public class UploadController {
         if (file.isEmpty() || null == FileTypeUtil.getType(file.getInputStream())) {
             return GXResultUtils.error(GXResultCode.FILE_ERROR);
         }
-        GXCoreMediaLibraryEntity entity = mediaLibraryService.saveFileInfo(file);
+        GXCoreMediaLibraryEntity entity = mediaLibraryService.saveFileInfo(file, getParamFromRequest());
         Map<String, Object> map = new HashMap<>();
         map.put("mediaId", entity.getId());
         map.put("mediaName", entity.getFilePath());
@@ -135,5 +136,24 @@ public class UploadController {
         HttpSession session = request.getSession();
         GXProgressData percent = session.getAttribute("progress") == null ? null : (GXProgressData) session.getAttribute("progress");
         return GXResultUtils.ok().putData(percent);
+    }
+
+    /**
+     * 从请求中获取额外的数据
+     *
+     * @return
+     */
+    private Dict getParamFromRequest() {
+        final String resourceType = GXHttpContextUtils.getHttpParam("resource_type", String.class);
+        final String modelType = GXHttpContextUtils.getHttpParam("model_type", String.class);
+        final String collectionName = GXHttpContextUtils.getHttpParam("collection_name", String.class);
+        final Long modelId = GXHttpContextUtils.getHttpParam("model_id", Long.class);
+        final Long coreModelId = GXHttpContextUtils.getHttpParam("core_model_id", Long.class);
+        return Dict.create()
+                .set("collection_name", collectionName)
+                .set("model_id", modelId)
+                .set("core_model_id", coreModelId)
+                .set("resource_type", resourceType)
+                .set("model_type", modelType);
     }
 }
