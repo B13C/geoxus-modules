@@ -7,7 +7,8 @@ import org.apache.ibatis.jdbc.SQL;
 public class SMenuBuilder implements GXBaseBuilder {
     @Override
     public String listOrSearch(Dict param) {
-        return new SQL().toString();
+        final SQL sql = new SQL().SELECT("*").FROM("s_menu");
+        return sql.toString();
     }
 
     @Override

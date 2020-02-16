@@ -14,6 +14,7 @@ import com.geoxus.modules.system.entity.SMenuEntity;
 import com.geoxus.modules.system.mapper.SMenuMapper;
 import com.geoxus.modules.system.service.SMenuService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
@@ -67,13 +68,14 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
      *
      * @return
      */
+    @Cacheable(value = "s_menu", key = "targetClass + methodName")
     public List<Dict> getTree(Dict param) {
         final Page<Dict> page = new Page<>(1, 10000);
         final List<Dict> list = baseMapper.listOrSearch(page, param);
         //把根分类区分出来
-        List<Dict> rootList = list.stream().filter(root -> root.getInt("parentId") == 0).collect(Collectors.toList());
+        List<Dict> rootList = list.stream().filter(root -> root.getInt("parent_id") == 0).collect(Collectors.toList());
         //把非根分类区分出来
-        List<Dict> subList = list.stream().filter(sub -> sub.getInt("parentId") != 0).collect(Collectors.toList());
+        List<Dict> subList = list.stream().filter(sub -> sub.getInt("parent_id") != 0).collect(Collectors.toList());
         //递归构建结构化的分类信息
         rootList.forEach(root -> buildSubs(root, subList));
         return rootList;
@@ -107,7 +109,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
      * @param subs   子集数据
      */
     private void buildSubs(Dict parent, List<Dict> subs) {
-        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parentId") == (int) parent.getInt(SMenuConstant.PRIMARY_KEY)).collect(Collectors.toList());
+        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parent_id") == (int) parent.getInt(SMenuConstant.PRIMARY_KEY)).collect(Collectors.toList());
         parent.set("children", children);
         if (!CollectionUtils.isEmpty(children)) {//有子分类的情况
             children.forEach(child -> buildSubs(child, subs));//再次递归构建
