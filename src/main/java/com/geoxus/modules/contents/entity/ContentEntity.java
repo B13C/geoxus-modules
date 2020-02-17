@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
+import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.contents.service.ContentService;
 import com.geoxus.modules.system.service.SCategoryService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +21,8 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 public class ContentEntity extends GXBaseEntity {
     @TableId
+    @GXValidateDBExistsAnnotation(service = ContentService.class, fieldName = "content_id", groups = GXUpdateGroup.class)
+    @NotNull(groups = {GXUpdateGroup.class})
     private int contentId;
 
     @GXValidateDBExistsAnnotation(service = SCategoryService.class, fieldName = "category_id")

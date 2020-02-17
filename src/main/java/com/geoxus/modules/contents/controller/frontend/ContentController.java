@@ -5,6 +5,7 @@ import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.modules.contents.constant.ContentConstants;
 import com.geoxus.modules.contents.entity.ContentEntity;
 import com.geoxus.modules.contents.service.ContentService;
@@ -39,11 +40,11 @@ public class ContentController implements GXController<ContentEntity> {
     }
 
     @Override
-    @PostMapping("/edit")
+    @PostMapping("/update")
     @GXLoginAnnotation
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation ContentEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXUpdateGroup.class}) ContentEntity target) {
         final long contentId = contentService.update(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("content_id", contentId));
+        return GXResultUtils.ok().putData(Dict.create().set(contentService.getPrimaryKey(), contentId));
     }
 
     @Override

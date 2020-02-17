@@ -15,9 +15,9 @@ import com.geoxus.modules.contents.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintValidatorContext;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity> implements ContentService {
@@ -33,7 +33,8 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public long update(ContentEntity target, Dict param) {
-        target.setCoreModelId(coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION));
+        final int coreModelId = coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION);
+        target.setCoreModelId(coreModelId);
         updateById(target);
         return target.getContentId();
     }
@@ -80,8 +81,13 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
     }
 
     @Override
-    public Dict testRPC(Dict param) {
-        Objects.requireNonNull(param.getInt("model_id"));
-        return Dict.create().set("cccc", "aaaa");
+    public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
+        final int contentId = Convert.toInt(value);
+        return null != getById(contentId);
+    }
+
+    @Override
+    public String getPrimaryKey() {
+        return ContentConstants.PRIMARY_KEY;
     }
 }
