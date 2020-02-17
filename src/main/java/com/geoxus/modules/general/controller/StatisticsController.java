@@ -3,7 +3,7 @@ package com.geoxus.modules.general.controller;
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.util.GXResultUtils;
-import com.geoxus.core.common.validator.group.GXAddGroup;
+import com.geoxus.core.common.validator.group.GXCreateGroup;
 import com.geoxus.modules.general.service.StatisticsService;
 import com.geoxus.modules.goods.listener.GoodsListener;
 import com.geoxus.modules.goods.service.GoodsService;
@@ -78,7 +78,7 @@ public class StatisticsController {
     @Data
     public static class CompositeData {
         @NotEmpty
-        @Length(min = 10, max = 20, groups = {GXAddGroup.class})
+        @Length(min = 10, max = 20, groups = {GXCreateGroup.class})
         private String name;
         @Max(100)
         @Min(10)

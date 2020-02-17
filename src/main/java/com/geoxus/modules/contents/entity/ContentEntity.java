@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
-import com.geoxus.core.common.validator.group.GXAddGroup;
+import com.geoxus.core.common.validator.group.GXCreateGroup;
 import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.contents.service.ContentService;
@@ -42,7 +42,7 @@ public class ContentEntity extends GXBaseEntity {
     private String keywords;
 
     @Valid
-    @GXValidateExtDataAnnotation(tableName = "p_content", fieldName = "ext", groups = {GXUpdateGroup.class, GXAddGroup.class})
+    @GXValidateExtDataAnnotation(tableName = "p_content", fieldName = "ext", groups = {GXUpdateGroup.class, GXCreateGroup.class})
     private String ext = "{}";
 
     private int status = 0;
