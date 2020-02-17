@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
-import com.geoxus.modules.system.service.SAdminService;
+import com.geoxus.modules.system.constant.SAdminConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -44,7 +44,7 @@ public class SAdminBuilder implements GXBaseBuilder {
     @Override
     public String detail(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("s_admin");
-        sql.WHERE(StrUtil.format("{} = {}", SAdminService.PRIMARY_KEY, param.getInt(SAdminService.PRIMARY_KEY)));
+        sql.WHERE(StrUtil.format("{} = {}", SAdminConstants.PRIMARY_KEY, param.getInt(SAdminConstants.PRIMARY_KEY)));
         return sql.toString();
     }
 

@@ -133,8 +133,8 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
     @Override
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
-        final int parentId = Convert.toInt(value);
-        return parentId == 0 || null != getById(parentId);
+        final int categoryId = Convert.toInt(value);
+        return categoryId == 0 || null != getById(categoryId);
     }
 
     /**

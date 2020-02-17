@@ -42,7 +42,7 @@ public class FeedBackServiceImpl extends ServiceImpl<FeedBackMapper, FeedBackEnt
 
     @Override
     public boolean replay(Dict param) {
-        FeedBackEntity feedBackEntity = getById(param.getLong(getPrimaryKey(false)));
+        FeedBackEntity feedBackEntity = getById(param.getLong(getPrimaryKey()));
         final boolean b = updateById(modifyEntityJSONFieldMultiValue(feedBackEntity, param));
         return b;
     }

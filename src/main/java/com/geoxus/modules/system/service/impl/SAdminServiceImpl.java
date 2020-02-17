@@ -32,7 +32,7 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
 
     @Override
     public boolean delete(Dict param) {
-        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        final Dict condition = Dict.create().set(getPrimaryKey(), param.getInt(getPrimaryKey()));
         return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
@@ -48,7 +48,7 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
 
     @Override
     public boolean changePassword(Dict param) {
-        final int id = param.getInt(SAdminService.PRIMARY_KEY);
+        final int id = param.getInt(getPrimaryKey());
         final SAdminEntity entity = getById(id);
         final String salt = RandomUtil.randomString(6);
         entity.setSalt(salt);
@@ -80,13 +80,13 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
 
     @Override
     public boolean freeze(Dict param) {
-        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        final Dict condition = Dict.create().set(getPrimaryKey(), param.getInt(getPrimaryKey()));
         return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
-        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        final Dict condition = Dict.create().set(getPrimaryKey(), param.getInt(getPrimaryKey()));
         return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 }

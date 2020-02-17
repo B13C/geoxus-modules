@@ -31,7 +31,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, MessageEntity
     @Override
     public boolean delete(Dict param) {
         final List<Integer> ids = Optional.ofNullable(Convert.convert(new TypeReference<List<Integer>>() {
-        }, param.getObj(PRIMARY_KEY))).orElse(new ArrayList<>());
+        }, param.getObj(getPrimaryKey()))).orElse(new ArrayList<>());
         return ids.isEmpty() || removeByIds(ids);
     }
 

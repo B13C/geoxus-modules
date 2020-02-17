@@ -1,7 +1,6 @@
 package com.geoxus.modules.banner.service;
 
 import cn.hutool.core.lang.Dict;
-import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.service.GXBusinessService;
 import com.geoxus.modules.banner.constant.BannerConstants;
 import com.geoxus.modules.banner.entity.BannerEntity;
@@ -24,7 +23,7 @@ public interface BannerService extends GXBusinessService<BannerEntity> {
     boolean hidden(Dict param);
 
     @Override
-    default String getPrimaryKey(boolean toCamelCase) {
-        return toCamelCase ? StrUtil.toCamelCase(BannerConstants.PRIMARY_KEY) : BannerConstants.PRIMARY_KEY;
+    default String getPrimaryKey() {
+        return BannerConstants.PRIMARY_KEY;
     }
 }

@@ -30,7 +30,7 @@ public class UserHasMessageServiceImpl extends ServiceImpl<UserHasMessageMapper,
         if (null != entity) {
             return entity.getId();
         }
-        final Dict detail = messageService.detail(Dict.create().set(MessageService.PRIMARY_KEY, target.getMessageId()));
+        final Dict detail = messageService.detail(Dict.create().set(getPrimaryKey(), target.getMessageId()));
         if (null == detail) {
             throw new GXException("消息不存在");
         }
