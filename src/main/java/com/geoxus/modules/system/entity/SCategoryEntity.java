@@ -31,10 +31,10 @@ public class SCategoryEntity extends GXBaseEntity implements Serializable {
     private int parentId;
 
     @Min(1)
-    private int sort;
+    private int sort = 1;
 
     @GXValidateExtDataAnnotation(tableName = "s_category", fieldName = "ext")
-    private String ext;
+    private String ext = "{}";
 
     private int status = 0;
 
@@ -43,4 +43,6 @@ public class SCategoryEntity extends GXBaseEntity implements Serializable {
     private int coreModelId;
 
     private String modelType = "default";
+
+    private String path = "0";
 }
