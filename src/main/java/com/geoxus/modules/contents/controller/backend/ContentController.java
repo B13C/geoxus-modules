@@ -4,7 +4,10 @@ import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.validator.group.GXCreateGroup;
+import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.core.common.vo.response.GXPagination;
+import com.geoxus.modules.contents.constant.ContentConstant;
 import com.geoxus.modules.contents.entity.ContentEntity;
 import com.geoxus.modules.contents.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +26,16 @@ public class ContentController implements GXController<ContentEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation() ContentEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXCreateGroup.class}) ContentEntity target) {
         contentService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", target.getContentId()));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation() ContentEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXUpdateGroup.class}) ContentEntity target) {
         contentService.update(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", target.getContentId()));
+        return GXResultUtils.ok().putData(Dict.create().set(ContentConstant.PRIMARY_KEY, target.getContentId()));
     }
 
     @Override

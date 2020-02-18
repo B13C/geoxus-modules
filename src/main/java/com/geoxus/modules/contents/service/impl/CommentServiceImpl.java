@@ -49,6 +49,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     public boolean delete(Dict param) {
         final List<Integer> ids = Convert.convert(new TypeReference<List<Integer>>() {
         }, param.getObj(CommentConstants.PRIMARY_KEY));
+        if (null == ids) {
+            return false;
+        }
         boolean b = true;
         if (!ids.isEmpty()) {
             final ArrayList<CommentEntity> commentEntities = new ArrayList<>();

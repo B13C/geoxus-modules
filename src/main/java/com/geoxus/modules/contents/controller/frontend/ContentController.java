@@ -5,18 +5,18 @@ import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.validator.group.GXCreateGroup;
 import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.core.common.vo.response.GXPagination;
-import com.geoxus.modules.contents.constant.ContentConstants;
+import com.geoxus.modules.contents.constant.ContentConstant;
 import com.geoxus.modules.contents.entity.ContentEntity;
 import com.geoxus.modules.contents.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @RestController("frontendContentController")
 @RequestMapping("/content/frontend")
@@ -27,9 +27,9 @@ public class ContentController implements GXController<ContentEntity> {
     @Override
     @PostMapping("/create")
     @GXLoginAnnotation
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation ContentEntity target) {
+    public GXResultUtils create(@Validated(value = {GXCreateGroup.class}) @GXRequestBodyToBeanAnnotation ContentEntity target) {
         contentService.create(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set(ContentConstants.PRIMARY_KEY, target.getContentId()));
+        return GXResultUtils.ok().putData(Dict.create().set(ContentConstant.PRIMARY_KEY, target.getContentId()));
     }
 
     @PostMapping("/modify-field")
@@ -43,7 +43,7 @@ public class ContentController implements GXController<ContentEntity> {
     @Override
     @PostMapping("/update")
     @GXLoginAnnotation
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXUpdateGroup.class}) ContentEntity target) {
+    public GXResultUtils update(@Validated(value = {GXUpdateGroup.class}) @GXRequestBodyToBeanAnnotation() ContentEntity target) {
         final long contentId = contentService.update(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(contentService.getPrimaryKey(), contentId));
     }
