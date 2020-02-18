@@ -22,7 +22,7 @@ public interface BannerMapper extends GXBaseMapper<BannerEntity> {
                     select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ), javaType = List.class)
     })
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = BannerBuilder.class, method = "detail")
     @Results({

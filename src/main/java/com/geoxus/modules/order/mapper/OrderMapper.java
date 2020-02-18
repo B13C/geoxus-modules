@@ -22,7 +22,7 @@ public interface OrderMapper extends GXBaseMapper<OrderEntity> {
                     select = "com.geoxus.modules.order.mapper.OrderItemMapper.listOrSearch"
             ))
     })
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = OrderBuilder.class, method = "detail")
     @Results({

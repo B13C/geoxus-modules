@@ -71,7 +71,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     @Cacheable(value = "s_menu", key = "targetClass + methodName")
     public List<Dict> getTree(Dict param) {
         final Page<Dict> page = new Page<>(1, 10000);
-        final List<Dict> list = baseMapper.listOrSearch(page, param);
+        final List<Dict> list = baseMapper.listOrSearchPage(page, param);
         //把根分类区分出来
         List<Dict> rootList = list.stream().filter(root -> root.getInt("parent_id") == 0).collect(Collectors.toList());
         //把非根分类区分出来

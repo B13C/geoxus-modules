@@ -20,7 +20,7 @@ public interface UWithdrawMapper extends GXBaseMapper<UWithdrawEntity> {
     @Results({
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class)
     })
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = UWithdrawBuilder.class, method = "detail")
     @Results({

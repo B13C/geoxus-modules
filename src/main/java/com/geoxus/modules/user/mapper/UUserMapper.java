@@ -24,7 +24,7 @@ public interface UUserMapper extends GXBaseMapper<UUserEntity> {
                     select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = UserBuilder.class, method = "children")
     @ResultMap("userResult")
@@ -43,8 +43,8 @@ public interface UUserMapper extends GXBaseMapper<UUserEntity> {
     @SelectProvider(type = UserBuilder.class, method = "specialInfo")
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
-            @Result(column = "{model_id=id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.list"
+            @Result(column = "{model_id=user_id,core_model_id=core_model_id}", property = "media", many = @Many(
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })
     Dict specialInfo(Dict param);

@@ -17,7 +17,7 @@ import java.util.List;
 public interface SAdminMapper extends GXBaseMapper<SAdminEntity> {
     @Override
     @SelectProvider(type = SAdminBuilder.class, method = "listOrSearch")
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = SAdminBuilder.class, method = "detail")
     Dict detail(Dict param);

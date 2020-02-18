@@ -18,7 +18,7 @@ public interface GoodsMapper extends GXBaseMapper<GoodsEntity> {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
             @Result(column = "other", property = "other", typeHandler = GXJsonToListTypeHandler.class),
             @Result(column = "{model_id=goods_id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.mobile.core.framework.mapper.GXCoreMediaLibraryMapper.list"
+                    select = "com.geoxus.mobile.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })
     Dict detail(Dict param);
@@ -26,12 +26,12 @@ public interface GoodsMapper extends GXBaseMapper<GoodsEntity> {
     @Override
     @SelectProvider(type = GoodsBuilder.class, method = "listOrSearch")
     @ResultMap("goodsResult")
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = GoodsBuilder.class, method = "basicInfo")
     @Results(id = "goodsMediaResult", value = {
             @Result(column = "{model_id=goods_id,core_model_id=core_model_id}", property = "media", many = @Many(
-                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.list"
+                    select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })
     Dict basicInfo(Dict param);

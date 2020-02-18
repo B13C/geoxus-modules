@@ -7,11 +7,13 @@ import com.geoxus.modules.system.entity.SMenuEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 
+import java.util.List;
+
 @Mapper
 public interface SMenuMapper extends GXBaseMapper<SMenuEntity> {
     @SelectProvider(type = SMenuBuilder.class, method = "detail")
     Dict detail(Dict param);
 
     @SelectProvider(type = SMenuBuilder.class, method = "listOrSearch")
-    Dict listOrSearch(Dict param);
+    List<Dict> listOrSearch(Dict param);
 }

@@ -5,19 +5,22 @@ import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
+import com.geoxus.modules.contents.constant.ContentConstants;
 import org.apache.ibatis.jdbc.SQL;
 
 public class ContentBuilder implements GXBaseBuilder {
     @Override
     public String detail(Dict param) {
-        return new SQL().SELECT("*").FROM("p_content").WHERE("id = " + param.getInt("id")).toString();
+        final SQL sql = new SQL().SELECT("*").FROM("p_content");
+        sql.WHERE(StrUtil.format("{} = {}", ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY)));
+        return sql.toString();
     }
 
     @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("p_content");
+        putConditionToSearchCondition(param, "status", GXBusinessStatusCode.NORMAL.getCode());
         mergeSearchConditionToSQL(sql, param);
-        sql.WHERE(StrUtil.format("status = {}", GXBusinessStatusCode.NORMAL.getCode()));
         return sql.toString();
     }
 

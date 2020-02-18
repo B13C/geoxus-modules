@@ -14,7 +14,7 @@ import java.util.List;
 public interface SRolesMapper extends GXBaseMapper<SRolesEntity> {
     @Override
     @SelectProvider(type = SRolesBuilder.class, method = "listOrSearch")
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = SRolesBuilder.class, method = "detail")
     Dict detail(Dict param);

@@ -21,7 +21,7 @@ public interface OrderItemMapper extends GXBaseMapper<OrderItemEntity> {
                     select = "com.geoxus.modules.goods.mapper.GoodsMapper.basicInfo"
             ), javaType = Map.class)
     })
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = OrderItemBuilder.class, method = "detail")
     @ResultMap("orderItemResult")

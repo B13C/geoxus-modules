@@ -17,7 +17,7 @@ public interface SlogMapper extends GXBaseMapper<SlogEntity> {
     @Results(id = "slogResult", value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class)
     })
-    List<Dict> listOrSearch(IPage<Dict> page, Dict param);
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = SlogBuilder.class, method = "detail")
     @ResultMap("slogResult")

@@ -6,6 +6,7 @@ import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.validator.group.GXUpdateGroup;
+import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.contents.constant.ContentConstants;
 import com.geoxus.modules.contents.entity.ContentEntity;
 import com.geoxus.modules.contents.service.ContentService;
@@ -51,7 +52,8 @@ public class ContentController implements GXController<ContentEntity> {
     @PostMapping("/list-or-search")
     @GXLoginAnnotation
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return null;
+        final GXPagination pagination = contentService.listOrSearch(param);
+        return GXResultUtils.ok().putData(pagination);
     }
 
     @Override
