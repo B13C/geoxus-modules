@@ -8,12 +8,10 @@ import com.geoxus.modules.contents.builder.ContentBuilder;
 import com.geoxus.modules.contents.entity.ContentEntity;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.FetchType;
-import org.springframework.context.annotation.Primary;
 
 import java.util.List;
 
 @Mapper
-@Primary
 public interface ContentMapper extends GXBaseMapper<ContentEntity> {
     @SelectProvider(type = ContentBuilder.class, method = "detail")
     @Results(value = {
