@@ -5,6 +5,7 @@ import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.modules.contents.constant.CommentConstants;
 import com.geoxus.modules.contents.entity.CommentEntity;
 import com.geoxus.modules.contents.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,14 @@ public class CommentController implements GXController<CommentEntity> {
     @PostMapping("/create")
     public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation CommentEntity target) {
         final long param = commentService.create(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
-        return GXResultUtils.ok().putData(Dict.create().set("id", param));
+        return GXResultUtils.ok().putData(Dict.create().set(CommentConstants.PRIMARY_KEY, param));
     }
 
     @Override
     @PostMapping("/update")
     public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation CommentEntity target) {
         final long param = commentService.update(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
-        return GXResultUtils.ok().putData(Dict.create().set("id", param));
+        return GXResultUtils.ok().putData(Dict.create().set(CommentConstants.PRIMARY_KEY, param));
     }
 
     @Override

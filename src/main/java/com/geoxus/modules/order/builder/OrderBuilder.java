@@ -12,7 +12,7 @@ public class OrderBuilder implements GXBaseBuilder {
     @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("o_orders");
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, "");
         sql.WHERE(StrUtil.format("status !={}", GXBusinessStatusCode.DELETED.getCode()));
         return sql.toString();
     }

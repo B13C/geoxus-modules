@@ -9,7 +9,7 @@ public class GoodsBuilder implements GXBaseBuilder {
     @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("o_goods");
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, "");
         return sql.toString();
     }
 

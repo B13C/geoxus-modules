@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -74,7 +73,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
 
     @Override
     public Dict detail(Dict param) {
-        return Optional.ofNullable(baseMapper.detail(param)).orElse(Dict.create());
+        return baseMapper.detail(param);
     }
 
     /**

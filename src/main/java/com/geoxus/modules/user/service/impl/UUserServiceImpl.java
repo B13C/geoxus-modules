@@ -481,7 +481,10 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         }
         Dict dict = GXTokenManager.decodeUserToken(token);
         if (dict != null && !dict.isEmpty()) {
-            long userId = dict.getLong(GXTokenManager.USER_ID);
+            Long userId = dict.getLong(GXTokenManager.USER_ID);
+            if (null == userId) {
+                return null;
+            }
             SUserTokenEntity entity = sUserTokenService.getOne(new QueryWrapper<SUserTokenEntity>().eq("user_id", userId).eq("type", 2));
             if (null == entity) {
                 final String phone = dict.getStr("phone");

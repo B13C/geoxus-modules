@@ -27,7 +27,7 @@ public class UserBuilder implements GXBaseBuilder {
         columns.add("pay_password");
         final String selectColumns = getSelectFieldStr(TABLE_NAME, columns, true);
         final SQL sql = new SQL().SELECT(selectColumns).FROM("u_user");
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, "");
         return sql.toString();
     }
 

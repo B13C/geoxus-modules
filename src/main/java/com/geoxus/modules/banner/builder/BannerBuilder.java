@@ -13,7 +13,7 @@ public class BannerBuilder implements GXBaseBuilder {
 
     public String listOrSearch(Dict param) {
         SQL sql = new SQL().SELECT("*").FROM("s_banner");
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, MODEL_IDENTIFICATION_VALUE);
         sql.ORDER_BY("sort desc , created_at desc");
         return sql.toString();
     }
@@ -21,7 +21,7 @@ public class BannerBuilder implements GXBaseBuilder {
     public String detail(Dict param) {
         SQL sql = new SQL().SELECT("*").FROM("s_banner");
         sql.WHERE("banner_id = " + param.getInt(BannerConstants.PRIMARY_KEY));
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, MODEL_IDENTIFICATION_VALUE);
         return sql.toString();
     }
 

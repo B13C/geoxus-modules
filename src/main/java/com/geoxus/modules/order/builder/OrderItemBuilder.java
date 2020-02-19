@@ -12,20 +12,20 @@ public class OrderItemBuilder implements GXBaseBuilder {
     @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("o_order_item");
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, "");
         return sql.toString();
     }
 
     @Override
     public String detail(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("o_order_item");
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, "");
         return sql.toString();
     }
 
     public String orderItemBasicInfo(Dict param) {
         final SQL sql = new SQL().SELECT("goods_id , quantity , consumer_code ,consumer_at,status").FROM("o_order_item");
-        mergeSearchConditionToSQL(sql, param);
+        mergeSearchConditionToSQL(sql, param, "");
         return sql.toString();
     }
 

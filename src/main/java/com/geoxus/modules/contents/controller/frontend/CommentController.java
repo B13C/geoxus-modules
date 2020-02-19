@@ -6,7 +6,9 @@ import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
+import com.geoxus.core.common.util.GXCommonUtils;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
 import com.geoxus.modules.contents.constant.CommentConstants;
@@ -63,6 +65,7 @@ public class CommentController implements GXController<CommentEntity> {
     @PostMapping("/list-or-search")
     @GXLoginAnnotation
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
+        param = GXCommonUtils.addConditionToSearchCondition(param, "comment.status", GXBusinessStatusCode.NORMAL.getCode(), true);
         final GXPagination pagination = commentService.listOrSearch(param);
         return GXResultUtils.ok().putData(pagination);
     }
