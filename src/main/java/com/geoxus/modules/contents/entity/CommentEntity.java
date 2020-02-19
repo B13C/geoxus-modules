@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 import javax.validation.constraints.NotNull;
 
 @Data
-@TableName("p_comment")
+@TableName(CommentConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class CommentEntity extends GXBaseEntity {
     @TableId

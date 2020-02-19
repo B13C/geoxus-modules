@@ -7,11 +7,12 @@ import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.user.constant.UWithdrawConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@TableName("u_withdraw")
+@TableName(UWithdrawConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class UWithdrawEntity extends GXBaseEntity {
     private int withdrawId;

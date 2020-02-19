@@ -8,6 +8,7 @@ import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.common.validator.group.GXCreateGroup;
 import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.contents.constant.ContentConstants;
 import com.geoxus.modules.contents.service.ContentService;
 import com.geoxus.modules.system.service.SCategoryService;
 import lombok.Data;
@@ -18,7 +19,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Data
-@TableName("p_content")
+@TableName(ContentConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class ContentEntity extends GXBaseEntity {
     @TableId

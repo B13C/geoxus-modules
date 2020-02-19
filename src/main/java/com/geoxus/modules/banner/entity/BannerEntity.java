@@ -6,6 +6,7 @@ import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.banner.constant.BannerConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -13,7 +14,7 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotNull;
 
 @Data
-@TableName("s_banner")
+@TableName(BannerConstants.TABLE_NAME)
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 public class BannerEntity extends GXBaseEntity {

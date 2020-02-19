@@ -8,6 +8,7 @@ import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.entity.GXCoreMediaLibraryEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.goods.constant.GoodsConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -17,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
-@TableName(value = "o_goods")
+@TableName(value = GoodsConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class GoodsEntity extends GXBaseEntity {
     private static final long serialVersionUID = 1L;

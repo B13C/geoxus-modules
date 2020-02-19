@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.entity.GXSPermissionsEntity;
+import com.geoxus.modules.system.constant.SPermissionsConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +14,7 @@ import java.util.List;
  * 权限列表
  */
 @Data
-@TableName("s_permissions")
+@TableName(SPermissionsConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class SPermissionsEntity extends GXSPermissionsEntity {
     private static final long serialVersionUID = 1L;

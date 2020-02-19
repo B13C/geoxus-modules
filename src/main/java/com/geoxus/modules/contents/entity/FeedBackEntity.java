@@ -6,11 +6,12 @@ import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.contents.constant.FeedBackConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@TableName("p_feedback")
+@TableName(FeedBackConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class FeedBackEntity extends GXBaseEntity {
     @TableId

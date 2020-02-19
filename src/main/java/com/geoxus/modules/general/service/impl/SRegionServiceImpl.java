@@ -9,6 +9,7 @@ import com.geoxus.modules.general.entity.SRegionEntity;
 import com.geoxus.modules.general.mapper.SRegionMapper;
 import com.geoxus.modules.general.service.SRegionService;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
     private static final String TYPE_TAG = "type";
 
     @Override
+    @Cacheable(value = "region", key = "targetClass + methodName")
     public List<SRegionEntity> getRegionTree() {
         List<SRegionEntity> list = list(new QueryWrapper<>());
         //把根分类区分出来
@@ -41,14 +43,17 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
      * @param subs   子集数据
      */
     private void buildSubs(SRegionEntity parent, List<SRegionEntity> subs) {
-        List<SRegionEntity> children = subs.stream().filter(sub -> sub.getParentId() == parent.getId()).collect(Collectors.toList());
+        List<SRegionEntity> children = subs.stream().filter(sub -> sub.getParentId() == parent.getRegionId()).collect(Collectors.toList());
         parent.setChildren(children);
-        if (!CollectionUtils.isEmpty(children)) {//有子分类的情况
-            children.forEach(child -> buildSubs(child, subs));//再次递归构建
+        //有子分类的情况
+        if (!CollectionUtils.isEmpty(children)) {
+            //再次递归构建
+            children.forEach(child -> buildSubs(child, subs));
         }
     }
 
     @Override
+    @Cacheable(value = "region", key = "targetClass + methodName + #p0.getStr('name')")
     public List<SRegionEntity> getRegion(Dict param) {
         QueryWrapper<SRegionEntity> queryWrapper = new QueryWrapper<>();
         final String name = param.getStr(NAME_TAG);

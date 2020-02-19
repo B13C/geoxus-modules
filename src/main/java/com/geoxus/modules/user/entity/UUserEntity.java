@@ -7,6 +7,7 @@ import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXUUserEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.user.constant.UUserConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,7 +16,7 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Data
-@TableName("u_user")
+@TableName(UUserConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class UUserEntity extends GXUUserEntity implements Serializable {
     private static final long serialVersionUID = 1L;

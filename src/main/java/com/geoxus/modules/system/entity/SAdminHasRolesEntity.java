@@ -3,6 +3,7 @@ package com.geoxus.modules.system.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.entity.GXSAdminHasRolesEntity;
+import com.geoxus.modules.system.constant.SAdminHasRolesConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,7 +13,7 @@ import java.io.Serializable;
  * 角色与管理员对应表
  */
 @Data
-@TableName("s_admin_has_roles")
+@TableName(SAdminHasRolesConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class SAdminHasRolesEntity extends GXSAdminHasRolesEntity implements Serializable {
     private static final long serialVersionUID = 1L;

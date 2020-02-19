@@ -3,6 +3,7 @@ package com.geoxus.modules.system.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.entity.GXSAdminEntity;
+import com.geoxus.modules.system.constant.SAdminConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,7 +11,7 @@ import lombok.EqualsAndHashCode;
  * 管理员
  */
 @Data
-@TableName("s_admin")
+@TableName(SAdminConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class SAdminEntity extends GXSAdminEntity {
     private static final long serialVersionUID = 1L;

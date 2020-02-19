@@ -7,11 +7,12 @@ import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.order.constant.OrderConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@TableName("o_orders")
+@TableName(OrderConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class OrderEntity extends GXBaseEntity {
     @TableId(type = IdType.AUTO)

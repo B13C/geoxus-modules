@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.general.constant.SlogConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -12,12 +13,12 @@ import lombok.experimental.Accessors;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-@TableName("s_log")
+@TableName(SlogConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class SlogEntity extends GXBaseEntity {
     @TableId
-    private int id;
+    private int logId;
 
     @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
     @NotEmpty

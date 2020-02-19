@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.entity.GXBaseEntity;
+import com.geoxus.modules.user.constant.SUserTokenConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +14,7 @@ import java.io.Serializable;
  * 用户Token
  */
 @Data
-@TableName("s_user_token")
+@TableName(SUserTokenConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class SUserTokenEntity extends GXBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;

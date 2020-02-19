@@ -3,11 +3,12 @@ package com.geoxus.modules.user.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.entity.GXBaseEntity;
+import com.geoxus.modules.user.constant.UserLogConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Data
-@TableName("user_log")
+@TableName(UserLogConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class UserLogEntity extends GXBaseEntity {
     @TableId

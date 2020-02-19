@@ -6,6 +6,7 @@ import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.framework.service.GXCoreModelService;
+import com.geoxus.modules.message.constant.MessageConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,7 +14,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Data
-@TableName("s_message")
+@TableName(MessageConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class MessageEntity extends GXBaseEntity {
     @TableId

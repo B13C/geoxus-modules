@@ -3,6 +3,7 @@ package com.geoxus.modules.general.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.geoxus.modules.general.constant.SRegionConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,7 +11,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Data
-@TableName("s_region")
+@TableName(SRegionConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
 public class SRegionEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -19,7 +20,7 @@ public class SRegionEntity implements Serializable {
      * 主键ID
      */
     @TableId
-    private int id;
+    private int regionId;
 
     /**
      * 父ID

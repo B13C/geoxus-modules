@@ -30,7 +30,7 @@ public class SlogServiceImpl extends ServiceImpl<SlogMapper, SlogEntity> impleme
         param.set("status", GXBusinessStatusCode.NORMAL.getCode());
         target = modifyEntityJSONFieldMultiValue(target, Dict.create().set("ext", param));
         saveOrUpdate(target);
-        return target.getId();
+        return target.getLogId();
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SlogServiceImpl extends ServiceImpl<SlogMapper, SlogEntity> impleme
         param.set("status", GXBusinessStatusCode.NORMAL.getCode());
         target = modifyEntityJSONFieldMultiValue(target, Dict.create().set("ext", param));
         saveOrUpdate(target);
-        return target.getId();
+        return target.getLogId();
     }
 
     @Override
