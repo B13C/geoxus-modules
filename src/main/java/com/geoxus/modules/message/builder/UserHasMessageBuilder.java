@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
-import com.geoxus.modules.message.constant.UserHasMessageConstant;
+import com.geoxus.modules.message.constant.UserHasMessageConstants;
 import org.apache.ibatis.jdbc.SQL;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class UserHasMessageBuilder implements GXBaseBuilder {
     @Override
     public String detail(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM("s_message");
-        sql.WHERE(StrUtil.format("{} = {} AND status = {}", UserHasMessageConstant.PRIMARY_KEY, param.getInt(UserHasMessageConstant.PRIMARY_KEY), GXBusinessStatusCode.DELETED.getCode()));
+        sql.WHERE(StrUtil.format("{} = {} AND status = {}", UserHasMessageConstants.PRIMARY_KEY, param.getInt(UserHasMessageConstants.PRIMARY_KEY), GXBusinessStatusCode.DELETED.getCode()));
         return sql.toString();
     }
 

@@ -6,22 +6,22 @@ import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
-import com.geoxus.modules.contents.constant.ContentConstant;
+import com.geoxus.modules.contents.constant.ContentConstants;
 import org.apache.ibatis.jdbc.SQL;
 
 public class ContentBuilder implements GXBaseBuilder {
     @Override
     public String detail(Dict param) {
-        final SQL sql = new SQL().SELECT("*").FROM(ContentConstant.TABLE_NAME);
-        final int contentId = Convert.toInt(param.getInt(ContentConstant.PRIMARY_KEY), 0);
-        sql.WHERE(StrUtil.format("{} = {}", ContentConstant.PRIMARY_KEY, contentId));
+        final SQL sql = new SQL().SELECT("*").FROM(ContentConstants.TABLE_NAME);
+        final int contentId = Convert.toInt(param.getInt(ContentConstants.PRIMARY_KEY), 0);
+        sql.WHERE(StrUtil.format("{} = {}", ContentConstants.PRIMARY_KEY, contentId));
         return sql.toString();
     }
 
     @Override
     public String listOrSearch(Dict param) {
-        final SQL sql = new SQL().SELECT("*").FROM(ContentConstant.TABLE_NAME);
-        putConditionToSearchCondition(param, "status", GXBusinessStatusCode.NORMAL.getCode());
+        final SQL sql = new SQL().SELECT("*").FROM(ContentConstants.TABLE_NAME);
+        addConditionToSearchCondition(param, "status", GXBusinessStatusCode.NORMAL.getCode());
         mergeSearchConditionToSQL(sql, param);
         return sql.toString();
     }
@@ -39,6 +39,6 @@ public class ContentBuilder implements GXBaseBuilder {
 
     @Override
     public String getModelIdentificationValue() {
-        return ContentConstant.TABLE_NAME;
+        return ContentConstants.TABLE_NAME;
     }
 }

@@ -8,6 +8,7 @@ import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.response.GXPagination;
+import com.geoxus.modules.contents.constant.CommentConstants;
 import com.geoxus.modules.contents.entity.CommentEntity;
 import com.geoxus.modules.contents.service.CommentService;
 import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
@@ -37,7 +38,7 @@ public class CommentController implements GXController<CommentEntity> {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         target.setUserId(userId);
         final long i = commentService.create(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", i));
+        return GXResultUtils.ok().putData(Dict.create().set(CommentConstants.PRIMARY_KEY, i));
     }
 
     @Override

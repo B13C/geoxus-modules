@@ -26,7 +26,6 @@ import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.common.vo.response.GXPagination;
-import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.user.constant.UBalanceConstants;
 import com.geoxus.modules.user.constant.UUserConstants;
 import com.geoxus.modules.user.entity.SUserTokenEntity;
@@ -60,9 +59,6 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Autowired
     private UBalanceService uBalanceService;
-
-    @Autowired
-    private GXCoreModelService coreModelService;
 
     @Autowired
     private GXEMailService gxEMailService;
@@ -559,7 +555,9 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
-        return null != getById(Convert.toInt(value));
+        final long userId = Convert.toLong(value, 0L);
+        final Integer exists = checkRecordIsExists(UUserEntity.class, Dict.create().set(UUserConstants.PRIMARY_KEY, userId));
+        return null != exists;
     }
 
     private GXSendSMSService getSendSMSService() {

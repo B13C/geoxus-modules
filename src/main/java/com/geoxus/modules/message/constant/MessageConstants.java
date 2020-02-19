@@ -2,7 +2,7 @@ package com.geoxus.modules.message.constant;
 
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 
-public class MessageConstant {
+public class MessageConstants {
     @GXFieldCommentAnnotation(zh = "主键")
     public static final String PRIMARY_KEY = "message_id";
     

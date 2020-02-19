@@ -8,7 +8,7 @@ import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreModelService;
-import com.geoxus.modules.contents.constant.ContentConstant;
+import com.geoxus.modules.contents.constant.ContentConstants;
 import com.geoxus.modules.contents.entity.ContentEntity;
 import com.geoxus.modules.contents.mapper.ContentMapper;
 import com.geoxus.modules.contents.service.ContentService;
@@ -26,14 +26,14 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public long create(ContentEntity target, Dict param) {
-        target.setCoreModelId(coreModelService.getModelIdByModelIdentification(ContentConstant.MODEL_IDENTIFICATION));
+        target.setCoreModelId(coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION));
         save(target);
         return target.getContentId();
     }
 
     @Override
     public long update(ContentEntity target, Dict param) {
-        final int coreModelId = coreModelService.getModelIdByModelIdentification(ContentConstant.MODEL_IDENTIFICATION);
+        final int coreModelId = coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION);
         target.setCoreModelId(coreModelId);
         updateById(target);
         return target.getContentId();
@@ -70,13 +70,13 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public boolean show(Dict param) {
-        final Dict condition = Dict.create().set(ContentConstant.PRIMARY_KEY, param.getInt(ContentConstant.PRIMARY_KEY));
+        final Dict condition = Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY));
         return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
     public boolean hidden(Dict param) {
-        final Dict condition = Dict.create().set(ContentConstant.PRIMARY_KEY, param.getInt(ContentConstant.PRIMARY_KEY));
+        final Dict condition = Dict.create().set(ContentConstants.PRIMARY_KEY, param.getInt(ContentConstants.PRIMARY_KEY));
         return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
@@ -88,6 +88,6 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public String getPrimaryKey() {
-        return ContentConstant.PRIMARY_KEY;
+        return ContentConstants.PRIMARY_KEY;
     }
 }

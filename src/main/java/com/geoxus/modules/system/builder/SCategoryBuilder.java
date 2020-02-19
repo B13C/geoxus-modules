@@ -18,7 +18,7 @@ public class SCategoryBuilder implements GXBaseBuilder {
     @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM(TABLE_NAME);
-        putConditionToSearchCondition(param, "status", GXBusinessStatusCode.NORMAL.getCode());
+        addConditionToSearchCondition(param, "status", GXBusinessStatusCode.NORMAL.getCode());
         mergeSearchConditionToSQL(sql, param);
         return sql.toString();
     }

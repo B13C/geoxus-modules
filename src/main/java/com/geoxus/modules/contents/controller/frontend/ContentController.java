@@ -8,7 +8,7 @@ import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.validator.group.GXCreateGroup;
 import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.core.common.vo.response.GXPagination;
-import com.geoxus.modules.contents.constant.ContentConstant;
+import com.geoxus.modules.contents.constant.ContentConstants;
 import com.geoxus.modules.contents.entity.ContentEntity;
 import com.geoxus.modules.contents.service.ContentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class ContentController implements GXController<ContentEntity> {
     @GXLoginAnnotation
     public GXResultUtils create(@Validated(value = {GXCreateGroup.class}) @GXRequestBodyToBeanAnnotation ContentEntity target) {
         contentService.create(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set(ContentConstant.PRIMARY_KEY, target.getContentId()));
+        return GXResultUtils.ok().putData(Dict.create().set(ContentConstants.PRIMARY_KEY, target.getContentId()));
     }
 
     @PostMapping("/modify-field")

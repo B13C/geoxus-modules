@@ -2,7 +2,7 @@ package com.geoxus.modules.contents.constant;
 
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 
-public class ContentConstant {
+public class ContentConstants {
     @GXFieldCommentAnnotation(zh = "模型标识")
     public static final String MODEL_IDENTIFICATION = "p_content";
 
@@ -12,6 +12,6 @@ public class ContentConstant {
     @GXFieldCommentAnnotation(zh = "主键ID")
     public static final String PRIMARY_KEY = "content_id";
 
-    private ContentConstant() {
+    private ContentConstants() {
     }
 }
