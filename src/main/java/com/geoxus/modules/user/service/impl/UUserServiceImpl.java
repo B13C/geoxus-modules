@@ -21,6 +21,7 @@ import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
+import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXSpringContextUtils;
 import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
@@ -555,7 +556,10 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
-        final long userId = Convert.toLong(value, 0L);
+        long userId = Convert.toLong(value, 0L);
+        if (userId == 0L) {
+            userId = GXHttpContextUtils.getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
+        }
         final Integer exists = checkRecordIsExists(UUserEntity.class, Dict.create().set(UUserConstants.PRIMARY_KEY, userId));
         return null != exists;
     }

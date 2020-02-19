@@ -4,7 +4,7 @@ import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 
 public class CommentConstants {
     @GXFieldCommentAnnotation(zh = "主键ID名字")
-    public static final String PRIMARY_KEY = "id";
+    public static final String PRIMARY_KEY = "comment_id";
 
     @GXFieldCommentAnnotation(zh = "表名")
     public static final String TABLE_NAME = "p_comment";

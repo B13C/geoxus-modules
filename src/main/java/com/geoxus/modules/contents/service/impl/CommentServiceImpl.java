@@ -25,12 +25,13 @@ import java.util.stream.Collectors;
 @Service
 public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity> implements CommentService {
     @Autowired
-    private GXCoreModelService coreModelService;
+    private GXCoreModelService gxCoreModelService;
 
     @Override
     public long create(CommentEntity target, Dict param) {
         target.setPath(getPath(target.getParentId()));
-        target = modifyEntityJSONFieldSingleValue(target, "ext.status", GXBusinessStatusCode.NORMAL.getCode());
+        target.setStatus(GXBusinessStatusCode.NORMAL.getCode());
+        target.setModelType(gxCoreModelService.getModelTypeByModelId(target.getTargetCoreModelId(), ""));
         save(target);
         handleMedia(target, target.getCommentId(), Dict.create());
         return target.getCommentId();
@@ -39,7 +40,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     @Override
     public long update(CommentEntity target, Dict param) {
         target.setPath(getPath(target.getParentId()));
-        target = modifyEntityJSONFieldSingleValue(target, "ext.status", GXBusinessStatusCode.NORMAL.getCode());
+        target.setStatus(GXBusinessStatusCode.NORMAL.getCode());
+        target.setModelType(gxCoreModelService.getModelTypeByModelId(target.getTargetCoreModelId(), ""));
         updateById(target);
         handleMedia(target, target.getCommentId(), Dict.create());
         return target.getCommentId();
@@ -57,7 +59,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
             final ArrayList<CommentEntity> commentEntities = new ArrayList<>();
             for (int id : ids) {
                 CommentEntity entity = getById(id);
-                entity = modifyEntityJSONFieldSingleValue(entity, "ext.status", GXBusinessStatusCode.DELETED.getCode());
+                entity.setStatus(GXBusinessStatusCode.DELETED.getCode());
                 commentEntities.add(entity);
             }
             b = updateBatchById(commentEntities);
@@ -84,9 +86,9 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
         final IPage<Dict> page = new Page<>(1, 10000);
         final List<Dict> list = baseMapper.listOrSearchPage(page, param);
         //把根分类区分出来
-        List<Dict> rootList = list.stream().filter(root -> root.getInt("parentId") == 0).collect(Collectors.toList());
+        List<Dict> rootList = list.stream().filter(root -> root.getInt("parent_id") == 0).collect(Collectors.toList());
         //把非根分类区分出来
-        List<Dict> subList = list.stream().filter(sub -> sub.getInt("parentId") != 0).collect(Collectors.toList());
+        List<Dict> subList = list.stream().filter(sub -> sub.getInt("parent_id") != 0).collect(Collectors.toList());
         //递归构建结构化的分类信息
         rootList.forEach(root -> buildSubs(root, subList));
         return rootList;
@@ -99,7 +101,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
      * @param subs   子集数据
      */
     private void buildSubs(Dict parent, List<Dict> subs) {
-        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parentId") == (int) parent.getInt(CommentConstants.PRIMARY_KEY)).collect(Collectors.toList());
+        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parent_id") == (int) parent.getInt(CommentConstants.PRIMARY_KEY)).collect(Collectors.toList());
         parent.set("children", children);
         if (!CollectionUtils.isEmpty(children)) {//有子分类的情况
             children.forEach(child -> buildSubs(child, subs));//再次递归构建
