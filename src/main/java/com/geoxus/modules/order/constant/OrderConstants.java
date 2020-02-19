@@ -6,6 +6,12 @@ public class OrderConstants {
     @GXFieldCommentAnnotation(zh = "主键ID名字")
     public static final String PRIMARY_KEY = "order_sn";
 
+    @GXFieldCommentAnnotation(zh = "数据表名")
+    public static final String TABLE_NAME = "o_orders";
+
+    @GXFieldCommentAnnotation(zh = "数据表的别名")
+    public static final String TABLE_ALIAS_NAME = "orders";
+
     @GXFieldCommentAnnotation(zh = "订单核心模型ID")
     public static final int CORE_MODEL_ID = 40000;
 

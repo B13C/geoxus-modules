@@ -6,6 +6,12 @@ public class SMenuConstants {
     @GXFieldCommentAnnotation(zh = "主键ID")
     public static final String PRIMARY_KEY = "menu_id";
 
+    @GXFieldCommentAnnotation(zh = "数据表名")
+    public static final String TABLE_NAME = "s_menu";
+
+    @GXFieldCommentAnnotation(zh = "数据表的别名")
+    public static final String TABLE_ALIAS_NAME = "menu";
+
     /**
      * 菜单类型
      */

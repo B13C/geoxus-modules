@@ -9,6 +9,9 @@ public class ContentConstants {
     @GXFieldCommentAnnotation(zh = "表名")
     public static final String TABLE_NAME = "p_content";
 
+    @GXFieldCommentAnnotation(zh = "数据表的别名")
+    public static final String TABLE_ALIAS_NAME = "content";
+
     @GXFieldCommentAnnotation(zh = "主键ID")
     public static final String PRIMARY_KEY = "content_id";
 

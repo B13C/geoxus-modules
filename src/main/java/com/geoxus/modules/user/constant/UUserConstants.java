@@ -9,6 +9,12 @@ public class UUserConstants {
     @GXFieldCommentAnnotation(value = "主键ID字段名")
     public static final String PRIMARY_KEY = "user_id";
 
+    @GXFieldCommentAnnotation(zh = "数据表名")
+    public static final String TABLE_NAME = "u_user";
+
+    @GXFieldCommentAnnotation(zh = "数据表的别名")
+    public static final String TABLE_ALIAS_NAME = "user";
+
     @GXFieldCommentAnnotation(value = "核心模型名字")
     public static final String MODEL_IDENTIFICATION = "u_user";
 

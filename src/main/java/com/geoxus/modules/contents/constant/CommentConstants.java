@@ -9,6 +9,9 @@ public class CommentConstants {
     @GXFieldCommentAnnotation(zh = "表名")
     public static final String TABLE_NAME = "p_comment";
 
+    @GXFieldCommentAnnotation(zh = "数据表的别名")
+    public static final String TABLE_ALIAS_NAME = "comment";
+
     private CommentConstants() {
     }
 }

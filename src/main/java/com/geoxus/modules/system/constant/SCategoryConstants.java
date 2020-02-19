@@ -6,6 +6,12 @@ public class SCategoryConstants {
     @GXFieldCommentAnnotation(zh = "主键ID")
     public static final String PRIMARY_KEY = "category_id";
 
+    @GXFieldCommentAnnotation(zh = "数据表名")
+    public static final String TABLE_NAME = "s_category";
+
+    @GXFieldCommentAnnotation(zh = "数据表的别名")
+    public static final String TABLE_ALIAS_NAME = "category";
+
     private SCategoryConstants() {
     }
 }

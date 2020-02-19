@@ -6,6 +6,12 @@ public class UBalanceConstants {
     @GXFieldCommentAnnotation(zh = "主键ID")
     public static final String PRIMARY_KEY = "balance_id";
 
+    @GXFieldCommentAnnotation(zh = "数据表名")
+    public static final String TABLE_NAME = "u_balance";
+
+    @GXFieldCommentAnnotation(zh = "数据表的别名")
+    public static final String TABLE_ALIAS_NAME = "balance";
+
     @GXFieldCommentAnnotation(zh = "余额核心模型")
     public static final int CORE_MODEL_ID = 200000;
 
