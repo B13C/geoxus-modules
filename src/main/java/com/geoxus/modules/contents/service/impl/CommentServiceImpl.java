@@ -67,7 +67,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return generatePage(param);
     }
 

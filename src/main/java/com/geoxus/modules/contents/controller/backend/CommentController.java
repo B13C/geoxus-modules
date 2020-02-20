@@ -45,7 +45,7 @@ public class CommentController implements GXController<CommentEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(commentService.listOrSearch(param));
+        return GXResultUtils.ok().putData(commentService.listOrSearchPage(param));
     }
 
     @Override

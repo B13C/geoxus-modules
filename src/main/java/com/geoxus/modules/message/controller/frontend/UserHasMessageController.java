@@ -48,7 +48,7 @@ public class UserHasMessageController implements GXController<UserHasMessageEnti
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         param.set(GXTokenManager.USER_ID, userId);
-        return GXResultUtils.ok().putData(userHasMessageService.listOrSearch(param));
+        return GXResultUtils.ok().putData(userHasMessageService.listOrSearchPage(param));
     }
 
     @Override

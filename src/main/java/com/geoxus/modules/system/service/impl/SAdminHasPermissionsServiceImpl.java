@@ -8,6 +8,8 @@ import com.geoxus.modules.system.mapper.SAdminHasPermissionsMapper;
 import com.geoxus.modules.system.service.SAdminHasPermissionsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SAdminHasPermissionsServiceImpl extends ServiceImpl<SAdminHasPermissionsMapper, SAdminHasPermissionsEntity> implements SAdminHasPermissionsService {
     @Override
@@ -26,8 +28,13 @@ public class SAdminHasPermissionsServiceImpl extends ServiceImpl<SAdminHasPermis
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return null;
+    }
+
+    @Override
+    public List<Dict> listOrSearch(Dict param) {
+        return baseMapper.listOrSearch(param);
     }
 
     @Override

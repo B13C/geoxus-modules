@@ -22,7 +22,7 @@ public class WebSiteController {
         final Dict dict = Dict.create().set("type", BannerConstants.WEBSITE_TYPE)
                 .set("status", GXBusinessStatusCode.NORMAL.getCode())
                 .set("core_model_id", param.getInt("core_model_id"));
-        return GXResultUtils.ok().putData(bannerService.listOrSearch(dict));
+        return GXResultUtils.ok().putData(bannerService.listOrSearchPage(dict));
     }
 
     @PostMapping("/detail")

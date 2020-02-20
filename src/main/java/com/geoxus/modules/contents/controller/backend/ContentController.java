@@ -48,7 +48,7 @@ public class ContentController implements GXController<ContentEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final GXPagination page = contentService.listOrSearch(param);
+        final GXPagination page = contentService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(page);
     }
 

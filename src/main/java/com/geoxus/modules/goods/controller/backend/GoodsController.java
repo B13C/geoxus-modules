@@ -27,7 +27,7 @@ public class GoodsController implements GXController<GoodsEntity> {
 
     @PostMapping("/get-goods-list")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final GXPagination page = goodsService.listOrSearch(param);
+        final GXPagination page = goodsService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(page);
     }
 

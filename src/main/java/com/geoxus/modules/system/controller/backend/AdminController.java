@@ -3,9 +3,10 @@ package com.geoxus.modules.system.controller.backend;
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
-import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.service.GXCaptchaService;
+import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.modules.system.entity.SAdminEntity;
+import com.geoxus.modules.system.service.SAdminHasPermissionsService;
 import com.geoxus.modules.system.service.SAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/backend")
@@ -23,6 +25,9 @@ public class AdminController implements GXController<SAdminEntity> {
 
     @Autowired
     private GXCaptchaService captchaService;
+
+    @Autowired
+    private SAdminHasPermissionsService sAdminHasPermissionsService;
 
     @Override
     @PostMapping("/create")
@@ -48,7 +53,7 @@ public class AdminController implements GXController<SAdminEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(adminService.listOrSearch(param));
+        return GXResultUtils.ok().putData(adminService.listOrSearchPage(param));
     }
 
     @Override

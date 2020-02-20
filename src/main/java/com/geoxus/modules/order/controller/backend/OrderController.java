@@ -48,7 +48,7 @@ public class OrderController implements GXController<OrderEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final GXPagination page = orderService.listOrSearch(param);
+        final GXPagination page = orderService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(page);
     }
 

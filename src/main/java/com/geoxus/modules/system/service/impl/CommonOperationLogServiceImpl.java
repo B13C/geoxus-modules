@@ -26,7 +26,7 @@ public class CommonOperationLogServiceImpl extends ServiceImpl<CommonOperationLo
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return null;
     }
 

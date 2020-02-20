@@ -44,7 +44,7 @@ public class RoleController implements GXController<SRolesEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(rolesService.listOrSearch(param));
+        return GXResultUtils.ok().putData(rolesService.listOrSearchPage(param));
     }
 
     @Override

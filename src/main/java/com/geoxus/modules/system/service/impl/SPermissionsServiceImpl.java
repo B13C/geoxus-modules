@@ -6,21 +6,18 @@ import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXShiroUtils;
-import com.geoxus.modules.system.entity.SAdminHasRolesEntity;
 import com.geoxus.modules.system.entity.SPermissionsEntity;
 import com.geoxus.modules.system.entity.SRoleHasPermissionsEntity;
 import com.geoxus.modules.system.mapper.SPermissionsMapper;
-import com.geoxus.modules.system.service.SAdminHasRolesService;
+import com.geoxus.modules.system.service.SAdminHasPermissionsService;
 import com.geoxus.modules.system.service.SPermissionsService;
 import com.geoxus.modules.system.service.SRoleHasPermissionsService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPermissionsEntity> implements SPermissionsService {
     @Autowired
-    private SAdminHasRolesService adminHasRolesService;
+    private SAdminHasPermissionsService sAdminHasPermissionsService;
 
     @Autowired
     private SRoleHasPermissionsService roleHasPermissionsService;
@@ -54,48 +51,33 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     private void buildSubs(SPermissionsEntity parent, List<SPermissionsEntity> subs) {
         List<SPermissionsEntity> children = subs.stream().filter(sub -> sub.getParentId() == parent.getPermissionId()).collect(Collectors.toList());
         parent.setChildren(children);
-        if (!CollectionUtils.isEmpty(children)) {//有子分类的情况
-            children.forEach(child -> buildSubs(child, subs));//再次递归构建
+        //有子分类的情况
+        if (!CollectionUtils.isEmpty(children)) {
+            //再次递归构建
+            children.forEach(child -> buildSubs(child, subs));
         }
     }
 
     @Override
-    public Set<String> getAdminPermissions(long adminId) {
+    public Set<String> getAdminAllPermissions(long adminId) {
         long id;
         if (adminId != 0) {
             id = adminId;
         } else {
             id = GXShiroUtils.getAdminId();
         }
-        Set<String> codeSet = new HashSet<>();
-        SAdminHasRolesEntity adminHasRoles = adminHasRolesService.getOne(new QueryWrapper<SAdminHasRolesEntity>().eq("admin_id", id));
-        if (null != adminHasRoles) {
-            //获取角色与权限的对应
-            List<SRoleHasPermissionsEntity> roleHasPermissionsList = roleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", adminHasRoles.getRoleId()));
-            //获得权限ID
-            List<Integer> permissionIdList = roleHasPermissionsList.stream().map(SRoleHasPermissionsEntity::getPermissionId).collect(Collectors.toList());
-            if (!permissionIdList.isEmpty()) {
-                List<SPermissionsEntity> list = super.list(new QueryWrapper<SPermissionsEntity>().in("permission_id", permissionIdList));
-                //组装权限CODE
-                list.forEach(x -> {
-                    if (StringUtils.isNotBlank(x.getPermissionCode())) {
-                        codeSet.addAll(Arrays.asList(x.getPermissionCode().trim().split(",")));
-                    }
-                });
-            }
-        }
-        return codeSet;
+        return baseMapper.getAdminAllPermissions(Dict.create().set(GXTokenManager.ADMIN_ID, id));
     }
 
     @Override
     @Transactional
-    public void updateRolePermissions(Dict param) {
-        final Integer roleId = param.getInt("role_id");
+    public void updateRolePermissions(Dict requestParam) {
+        final Integer roleId = requestParam.getInt("role_id");
         //删除之前的权限
         roleHasPermissionsService.remove(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
         //保存权限
         final List<Integer> permissionIds = Convert.convert(new TypeReference<List<Integer>>() {
-        }, param.getObj("permission_ids"));
+        }, requestParam.getObj("permission_ids"));
         if (permissionIds != null && !permissionIds.isEmpty()) {
             permissionIds.forEach(id -> {
                 SRoleHasPermissionsEntity entity = new SRoleHasPermissionsEntity();
@@ -111,5 +93,10 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
         List<SRoleHasPermissionsEntity> list = roleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
         List<Integer> permissionIdList = list.stream().map(x -> x.getPermissionId()).collect(Collectors.toList());
         return permissionIdList;
+    }
+
+    @Override
+    public List<Integer> getAdminPermissions(long adminId) {
+        return null;
     }
 }

@@ -49,7 +49,7 @@ public class UserController implements GXController<UUserEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final GXPagination pagination = userService.listOrSearch(param);
+        final GXPagination pagination = userService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(pagination);
     }
 

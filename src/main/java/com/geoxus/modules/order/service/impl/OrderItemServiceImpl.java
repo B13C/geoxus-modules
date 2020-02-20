@@ -48,7 +48,7 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
 
     @Override
     @GXLoginAnnotation
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return generatePage(param);
     }
 

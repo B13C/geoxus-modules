@@ -70,7 +70,7 @@ public class UUWithdrawServiceImpl extends ServiceImpl<UWithdrawMapper, UWithdra
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         final GXPagination pagination = generatePage(param);
         return pagination;
     }

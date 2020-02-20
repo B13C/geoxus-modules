@@ -45,7 +45,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(UWithdrawService.listOrSearch(param));
+        return GXResultUtils.ok().putData(UWithdrawService.listOrSearchPage(param));
     }
 
     @Override

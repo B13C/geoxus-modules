@@ -63,7 +63,7 @@ public class OrderController implements GXController<OrderEntity> {
     @GXLoginAnnotation
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         param.set(GXTokenManager.USER_ID, getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID));
-        final GXPagination page = orderService.listOrSearch(param);
+        final GXPagination page = orderService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(page);
     }
 

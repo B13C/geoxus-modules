@@ -67,7 +67,7 @@ public class BannerServiceImpl extends ServiceImpl<BannerMapper, BannerEntity> i
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return generatePage(param);
     }
 

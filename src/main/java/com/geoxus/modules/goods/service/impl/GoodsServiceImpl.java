@@ -42,7 +42,7 @@ public class GoodsServiceImpl extends ServiceImpl<GoodsMapper, GoodsEntity> impl
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return generatePage(param);
     }
 

@@ -56,7 +56,7 @@ public class UserHasMessageServiceImpl extends ServiceImpl<UserHasMessageMapper,
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return null;
     }
 

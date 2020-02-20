@@ -46,7 +46,7 @@ public class BannerController implements GXController<BannerEntity> {
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         param.set("status", GXBusinessStatusCode.NORMAL.getCode());
-        return GXResultUtils.ok().putData(bannerService.listOrSearch(param));
+        return GXResultUtils.ok().putData(bannerService.listOrSearchPage(param));
     }
 
     @Override

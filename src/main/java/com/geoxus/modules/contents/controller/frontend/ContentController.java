@@ -52,7 +52,7 @@ public class ContentController implements GXController<ContentEntity> {
     @PostMapping("/list-or-search")
     @GXLoginAnnotation
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final GXPagination pagination = contentService.listOrSearch(param);
+        final GXPagination pagination = contentService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(pagination);
     }
 

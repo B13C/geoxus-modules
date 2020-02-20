@@ -10,7 +10,7 @@ import org.apache.ibatis.jdbc.SQL;
 
 public class SAdminBuilder implements GXBaseBuilder {
     public String listOrSearch(Dict param) {
-        StringBuffer sql = new StringBuffer("select");
+        StringBuilder sql = new StringBuilder("select");
         sql.append(" s_admin.id as id,s_admin.nick_name as nickName,s_admin.username as username,s_admin.remark as remark,");
         sql.append(" s_admin.status as status,s_roles.id as roleId,s_roles.name as roleName,s_admin.created_at as created_at");
         sql.append(" from s_admin s_admin");
@@ -55,6 +55,6 @@ public class SAdminBuilder implements GXBaseBuilder {
 
     @Override
     public String getModelIdentificationValue() {
-        return "s_admin";
+        return SAdminConstants.TABLE_NAME;
     }
 }

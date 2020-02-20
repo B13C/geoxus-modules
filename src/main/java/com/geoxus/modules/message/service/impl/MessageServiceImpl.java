@@ -36,7 +36,7 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, MessageEntity
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return generatePage(param);
     }
 

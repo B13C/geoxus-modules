@@ -45,7 +45,7 @@ public class MessageController implements GXController<MessageEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(messageService.listOrSearch(param));
+        return GXResultUtils.ok().putData(messageService.listOrSearchPage(param));
     }
 
     @Override

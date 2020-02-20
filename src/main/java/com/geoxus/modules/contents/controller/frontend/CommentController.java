@@ -66,7 +66,7 @@ public class CommentController implements GXController<CommentEntity> {
     @GXLoginAnnotation
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         param = GXCommonUtils.addConditionToSearchCondition(param, "comment.status", GXBusinessStatusCode.NORMAL.getCode(), true);
-        final GXPagination pagination = commentService.listOrSearch(param);
+        final GXPagination pagination = commentService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(pagination);
     }
 

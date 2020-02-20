@@ -56,7 +56,7 @@ public class FeedBackController implements GXController<FeedBackEntity> {
     @GXLoginAnnotation
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         param.set("user_id", getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID));
-        return GXResultUtils.ok().putData(feedBackService.listOrSearch(param));
+        return GXResultUtils.ok().putData(feedBackService.listOrSearchPage(param));
     }
 
     @Override

@@ -8,6 +8,8 @@ import com.geoxus.modules.system.mapper.SRoleHasPermissionsMapper;
 import com.geoxus.modules.system.service.SRoleHasPermissionsService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SRoleHasPermissionsServiceImpl extends ServiceImpl<SRoleHasPermissionsMapper, SRoleHasPermissionsEntity> implements SRoleHasPermissionsService {
     @Override
@@ -26,8 +28,13 @@ public class SRoleHasPermissionsServiceImpl extends ServiceImpl<SRoleHasPermissi
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return null;
+    }
+
+    @Override
+    public List<Dict> listOrSearch(Dict param) {
+        return baseMapper.listOrSearch(param);
     }
 
     @Override

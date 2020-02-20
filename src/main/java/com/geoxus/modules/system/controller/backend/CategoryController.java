@@ -46,7 +46,7 @@ public class CategoryController implements GXController<SCategoryEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final GXPagination pagination = categoryService.listOrSearch(param);
+        final GXPagination pagination = categoryService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(pagination);
     }
 

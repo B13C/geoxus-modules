@@ -44,7 +44,7 @@ public class FeedBackController implements GXController<FeedBackEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(feedBackService.listOrSearch(param));
+        return GXResultUtils.ok().putData(feedBackService.listOrSearchPage(param));
     }
 
     @Override
@@ -69,17 +69,17 @@ public class FeedBackController implements GXController<FeedBackEntity> {
     @PostMapping("/list-or-search-business")
     public GXResultUtils listOrSearchBusiness(@RequestBody Dict param) {
         param.set("account_type",2);
-        return GXResultUtils.ok().putData(feedBackService.listOrSearch(param));
+        return GXResultUtils.ok().putData(feedBackService.listOrSearchPage(param));
     }
     @PostMapping("/list-or-search-entrust")
     public GXResultUtils listOrSearchEntrust(@RequestBody Dict param) {
         param.set("account_type",3);
-        return GXResultUtils.ok().putData(feedBackService.listOrSearch(param));
+        return GXResultUtils.ok().putData(feedBackService.listOrSearchPage(param));
     }
     @PostMapping("/list-or-search-customer")
     public GXResultUtils listOrSearchCustomer(@RequestBody Dict param) {
         param.set("account_type",1);
-        return GXResultUtils.ok().putData(feedBackService.listOrSearch(param));
+        return GXResultUtils.ok().putData(feedBackService.listOrSearchPage(param));
     }
 
     @PostMapping("/detail-business")

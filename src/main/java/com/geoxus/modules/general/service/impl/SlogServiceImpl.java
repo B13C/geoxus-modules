@@ -47,7 +47,7 @@ public class SlogServiceImpl extends ServiceImpl<SlogMapper, SlogEntity> impleme
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return generatePage(param);
     }
 

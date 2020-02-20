@@ -69,7 +69,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
     }
 
     @Override
-    public GXPagination listOrSearch(Dict param) {
+    public GXPagination listOrSearchPage(Dict param) {
         return generatePage(param);
     }
 

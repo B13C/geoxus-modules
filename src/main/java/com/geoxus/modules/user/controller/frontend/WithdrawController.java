@@ -74,7 +74,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         final UUserEntity info = uUserService.getUserInfoByToken(GXHttpContextUtils.getHttpServletRequest().getHeader(GXTokenManager.USER_TOKEN));
         param.set(GXTokenManager.USER_ID, info.getUserId());
-        return GXResultUtils.ok().putData(UWithdrawService.listOrSearch(param));
+        return GXResultUtils.ok().putData(UWithdrawService.listOrSearchPage(param));
     }
 
     @Override
