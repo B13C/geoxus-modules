@@ -16,4 +16,7 @@ import java.util.Set;
 public interface SPermissionsMapper extends GXBaseMapper<SPermissionsEntity> {
     @SelectProvider(type = SPermissionsBuilder.class, method = "getAdminAllPermissions")
     Set<String> getAdminAllPermissions(Dict param);
+
+    @SelectProvider(type = SPermissionsBuilder.class, method = "getAllPermissionCode")
+    Set<String> getAllPermissionCode();
 }

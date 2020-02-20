@@ -4,6 +4,8 @@ import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.modules.system.constant.SAdminConstants;
+import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SPermissionsEntity;
 import com.geoxus.modules.system.service.SAdminHasPermissionsService;
 import com.geoxus.modules.system.service.SPermissionsService;
@@ -27,7 +29,7 @@ public class PermissionsController {
     private SAdminHasPermissionsService sAdminHasPermissionsService;
 
     /**
-     * 获取权限树
+     * 获取所有权限的树状结构
      *
      * @return
      */
@@ -39,17 +41,23 @@ public class PermissionsController {
     }
 
     /**
-     * 获取角色的权限id
+     * 获取分配给角色的权限
      *
      * @return
      */
     @PostMapping("/get-role-permissions")
     @RequiresPermissions("sys-permissions-get-role-permissions")
     public GXResultUtils getRolePermissions(@RequestBody Dict param) {
-        List<Integer> list = sPermissionsService.getRolePermissions(param.getInt("role_id"));
+        List<Long> list = sPermissionsService.getRolePermissions(param.getLong(SRolesConstants.PRIMARY_KEY));
         return GXResultUtils.ok().putData(list);
     }
 
+    /**
+     * 获取直接分配给管理员的权限
+     *
+     * @param param
+     * @return
+     */
     @PostMapping("/get-admin-permissions")
     public GXResultUtils getAdminPermissions(@RequestBody Dict param) {
         final List<Dict> list = sAdminHasPermissionsService.listOrSearch(param);
@@ -57,26 +65,20 @@ public class PermissionsController {
     }
 
     /**
-     * 修改权限
-     *
-     * @param param
-     * @return
-     */
-    @PostMapping("/update-role-permissions")
-    @RequiresPermissions("sys-permissions-update-role-permissions")
-    public GXResultUtils updateRolePermissions(@RequestBody Dict param) {
-        sPermissionsService.updateRolePermissions(param);
-        return GXResultUtils.ok();
-    }
-
-    /**
-     * 获取当前登录人的所有权限码集合
+     * 获取指定登录人的所有权限码集合
+     * 权限包括:
+     * <p>
+     * 1、角色权限
+     * 2、直接分配的权限
      *
      * @return GXResultUtils
      */
     @PostMapping("/get-admin-all-permissions")
-    public GXResultUtils getAdminAllPermissions() {
-        final long adminId = GXHttpContextUtils.getUserIdFromToken(GXTokenManager.ADMIN_TOKEN, GXTokenManager.ADMIN_ID);
+    public GXResultUtils getAdminAllPermissions(@RequestBody Dict param) {
+        Long adminId = param.getLong(SAdminConstants.PRIMARY_KEY);
+        if (null == adminId) {
+            adminId = GXHttpContextUtils.getUserIdFromToken(GXTokenManager.ADMIN_TOKEN, GXTokenManager.ADMIN_ID);
+        }
         Set<String> set = sPermissionsService.getAdminAllPermissions(adminId);
         return GXResultUtils.ok().putData(set);
     }

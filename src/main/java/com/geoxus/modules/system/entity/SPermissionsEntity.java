@@ -3,6 +3,7 @@ package com.geoxus.modules.system.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.entity.GXSPermissionsEntity;
 import com.geoxus.modules.system.constant.SPermissionsConstants;
 import lombok.Data;
@@ -24,6 +25,9 @@ public class SPermissionsEntity extends GXSPermissionsEntity {
      */
     @TableId
     private int permissionId;
+
+    @GXValidateDBExistsAnnotation
+    private int coreModelId;
 
     /**
      * 权限码
@@ -49,16 +53,6 @@ public class SPermissionsEntity extends GXSPermissionsEntity {
      * 当前层级(1-2-3)
      */
     private String path;
-
-    /**
-     * 请求的url, 可以填正则表达式
-     */
-    private String url;
-
-    /**
-     * 类型，1：菜单，2：按钮，3：其他
-     */
-    private int type;
 
     /**
      * 状态，1：正常，0：冻结

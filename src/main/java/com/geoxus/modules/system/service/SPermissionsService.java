@@ -1,6 +1,5 @@
 package com.geoxus.modules.system.service;
 
-import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.service.GXSPermissionsService;
 import com.geoxus.modules.system.entity.SPermissionsEntity;
 
@@ -16,18 +15,15 @@ public interface SPermissionsService extends GXSPermissionsService<SPermissionsE
     List<SPermissionsEntity> getPermissionsTree();
 
     /**
-     * 修改角色权限
-     *
-     * @param requestParam 请求参数
-     */
-    void updateRolePermissions(Dict requestParam);
-
-    /**
-     * 获取管理员的权限列表
+     * 获取管理员的所有权限列表
+     * 权限包括:
+     * <p>
+     * 1、分配给角色的权限
+     * 2、直接分配给管理员的权限
      *
      * @param adminId 为NULL是获取当前登录人的
      * @return
      */
-    Set<String> getAdminAllPermissions(long adminId);
+    Set<String> getAdminAllPermissions(Long adminId);
 }
 

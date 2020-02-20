@@ -1,12 +1,11 @@
 package com.geoxus.modules.system.service.impl;
 
-import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
-import cn.hutool.core.lang.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.oauth.GXTokenManager;
+import com.geoxus.core.common.util.GXCommonUtils;
 import com.geoxus.core.common.util.GXShiroUtils;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.constant.SRolesConstants;
@@ -19,7 +18,6 @@ import com.geoxus.modules.system.service.SPermissionsService;
 import com.geoxus.modules.system.service.SRoleHasPermissionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -62,33 +60,13 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     }
 
     @Override
-    public Set<String> getAdminAllPermissions(long adminId) {
-        long id;
-        if (adminId != 0) {
-            id = adminId;
-        } else {
-            id = GXShiroUtils.getAdminId();
+    public Set<String> getAdminAllPermissions(Long adminId) {
+        adminId = adminId == null ? GXShiroUtils.getAdminId() : adminId;
+        final Long superAdminId = GXCommonUtils.getEnvironmentValue("super.admin.id", Long.class);
+        if (0 == adminId.compareTo(superAdminId)) {
+            return baseMapper.getAllPermissionCode();
         }
-        return baseMapper.getAdminAllPermissions(Dict.create().set(GXTokenManager.ADMIN_ID, id));
-    }
-
-    @Override
-    @Transactional
-    public void updateRolePermissions(Dict requestParam) {
-        final Integer roleId = requestParam.getInt("role_id");
-        //删除之前的权限
-        sRoleHasPermissionsService.remove(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
-        //保存权限
-        final List<Integer> permissionIds = Convert.convert(new TypeReference<List<Integer>>() {
-        }, requestParam.getObj("permission_ids"));
-        if (permissionIds != null && !permissionIds.isEmpty()) {
-            permissionIds.forEach(id -> {
-                SRoleHasPermissionsEntity entity = new SRoleHasPermissionsEntity();
-                entity.setPermissionId(id);
-                entity.setRoleId(roleId);
-                sRoleHasPermissionsService.save(entity);
-            });
-        }
+        return baseMapper.getAdminAllPermissions(Dict.create().set(GXTokenManager.ADMIN_ID, adminId));
     }
 
     @Override
