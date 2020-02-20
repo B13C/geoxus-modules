@@ -8,6 +8,9 @@ import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXShiroUtils;
+import com.geoxus.modules.system.constant.SAdminConstants;
+import com.geoxus.modules.system.constant.SRolesConstants;
+import com.geoxus.modules.system.entity.SAdminHasPermissionsEntity;
 import com.geoxus.modules.system.entity.SPermissionsEntity;
 import com.geoxus.modules.system.entity.SRoleHasPermissionsEntity;
 import com.geoxus.modules.system.mapper.SPermissionsMapper;
@@ -28,7 +31,7 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     private SAdminHasPermissionsService sAdminHasPermissionsService;
 
     @Autowired
-    private SRoleHasPermissionsService roleHasPermissionsService;
+    private SRoleHasPermissionsService sRoleHasPermissionsService;
 
     @Override
     public List<SPermissionsEntity> getPermissionsTree() {
@@ -74,7 +77,7 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     public void updateRolePermissions(Dict requestParam) {
         final Integer roleId = requestParam.getInt("role_id");
         //删除之前的权限
-        roleHasPermissionsService.remove(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
+        sRoleHasPermissionsService.remove(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
         //保存权限
         final List<Integer> permissionIds = Convert.convert(new TypeReference<List<Integer>>() {
         }, requestParam.getObj("permission_ids"));
@@ -83,19 +86,20 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
                 SRoleHasPermissionsEntity entity = new SRoleHasPermissionsEntity();
                 entity.setPermissionId(id);
                 entity.setRoleId(roleId);
-                roleHasPermissionsService.save(entity);
+                sRoleHasPermissionsService.save(entity);
             });
         }
     }
 
     @Override
-    public List<Long> getRolePermissions(Integer roleId) {
-        List<SRoleHasPermissionsEntity> list = roleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
+    public List<Long> getRolePermissions(Long roleId) {
+        List<SRoleHasPermissionsEntity> list = sRoleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq(SRolesConstants.PRIMARY_KEY, roleId));
         return list.stream().map(SRoleHasPermissionsEntity::getPermissionId).collect(Collectors.toList());
     }
 
     @Override
-    public List<Integer> getAdminPermissions(long adminId) {
-        return null;
+    public List<Long> getAdminPermissions(long adminId) {
+        List<SAdminHasPermissionsEntity> list = sAdminHasPermissionsService.list(new QueryWrapper<SAdminHasPermissionsEntity>().eq(SAdminConstants.PRIMARY_KEY, adminId));
+        return list.stream().map(SAdminHasPermissionsEntity::getPermissionId).collect(Collectors.toList());
     }
 }

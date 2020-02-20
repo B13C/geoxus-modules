@@ -24,12 +24,12 @@ public class SAdminHasRolesEntity extends GXSAdminHasRolesEntity implements Seri
     /**
      * 角色ID
      */
-    private int roleId;
+    private long roleId;
 
     /**
      * 管理员ID
      */
-    private int adminId;
+    private long adminId;
 
     /**
      * 模型类型(使用的模型,主要用于PHP)

@@ -13,11 +13,19 @@ import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.system.entity.SAdminEntity;
 import com.geoxus.modules.system.mapper.SAdminMapper;
+import com.geoxus.modules.system.service.SAdminHasRolesService;
 import com.geoxus.modules.system.service.SAdminService;
+import com.geoxus.modules.system.service.SRolesService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> implements SAdminService {
+    @Autowired
+    private SAdminHasRolesService sAdminHasRolesService;
+
     @Override
     public long create(SAdminEntity target, Dict param) {
         save(target);
@@ -88,5 +96,10 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(getPrimaryKey(), param.getInt(getPrimaryKey()));
         return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+    }
+
+    @Override
+    public boolean addRoleToAdmin(Long adminId, List<Long> roleIds) {
+        return sAdminHasRolesService.addRoleToAdmin(adminId, roleIds);
     }
 }

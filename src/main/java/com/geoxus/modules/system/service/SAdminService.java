@@ -4,6 +4,8 @@ import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.service.GXSAdminService;
 import com.geoxus.modules.system.entity.SAdminEntity;
 
+import java.util.List;
+
 public interface SAdminService extends GXSAdminService<SAdminEntity> {
     /**
      * 修改密码
@@ -36,5 +38,14 @@ public interface SAdminService extends GXSAdminService<SAdminEntity> {
      * @return
      */
     boolean unfreeze(Dict param);
+
+    /**
+     * 给管理员新增角色
+     *
+     * @param adminId 管理员ID
+     * @param roleIds 角色ID
+     * @return
+     */
+    boolean addRoleToAdmin(Long adminId, List<Long> roleIds);
 }
 

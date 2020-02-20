@@ -8,11 +8,10 @@ import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SAdminEntity;
-import com.geoxus.modules.system.service.SAdminHasPermissionsService;
-import com.geoxus.modules.system.service.SAdminService;
-import com.geoxus.modules.system.service.SRoleHasPermissionsService;
+import com.geoxus.modules.system.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,10 +25,13 @@ import java.util.List;
 @RequestMapping("/admin/backend")
 public class AdminController implements GXController<SAdminEntity> {
     @Autowired
-    private SAdminService adminService;
+    private SAdminService sAdminService;
 
     @Autowired
     private GXCaptchaService captchaService;
+
+    @Autowired
+    private SRolesService sRolesService;
 
     @Autowired
     private SAdminHasPermissionsService sAdminHasPermissionsService;
@@ -37,43 +39,46 @@ public class AdminController implements GXController<SAdminEntity> {
     @Autowired
     private SRoleHasPermissionsService sRoleHasPermissionsService;
 
+    @Autowired
+    private SAdminHasRolesService sAdminHasRolesService;
+
     @Override
     @PostMapping("/create")
     public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation SAdminEntity target) {
-        final long i = adminService.create(target, Dict.create());
+        final long i = sAdminService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
 
     @Override
     @PostMapping("/update")
     public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation SAdminEntity target) {
-        final long i = adminService.update(target, Dict.create());
+        final long i = sAdminService.update(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
 
     @Override
     @PostMapping("/delete")
     public GXResultUtils delete(@RequestBody Dict param) {
-        final boolean b = adminService.delete(param);
+        final boolean b = sAdminService.delete(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(adminService.listOrSearchPage(param));
+        return GXResultUtils.ok().putData(sAdminService.listOrSearchPage(param));
     }
 
     @Override
     @PostMapping("/detail")
     public GXResultUtils detail(@RequestBody Dict param) {
-        final Dict detail = adminService.detail(param);
+        final Dict detail = sAdminService.detail(param);
         return GXResultUtils.ok().putData(detail);
     }
 
     @PostMapping("/change-password")
     public GXResultUtils changePassword(@RequestBody Dict param) {
-        final boolean b = adminService.changePassword(param);
+        final boolean b = sAdminService.changePassword(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
@@ -83,7 +88,7 @@ public class AdminController implements GXController<SAdminEntity> {
         if (!flag) {
             return GXResultUtils.error("验证码不正确");
         }
-        final Dict dict = adminService.login(param);
+        final Dict dict = sAdminService.login(param);
         if (null != dict.getInt("code")) {
             return GXResultUtils.error(dict.getInt("code"), "账号或密码错误");
         }
@@ -108,15 +113,24 @@ public class AdminController implements GXController<SAdminEntity> {
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
+    @PostMapping("/assign-role-to-admin")
+    public GXResultUtils assignRoleToAdmin(@RequestBody Dict param) {
+        final List<Long> roleIds = Convert.convert(new TypeReference<List<Long>>() {
+        }, param.getObj(SRolesConstants.PRIMARY_KEY));
+        final Long adminId = param.getLong(SAdminConstants.PRIMARY_KEY);
+        final boolean b = sAdminService.addRoleToAdmin(adminId, roleIds);
+        return GXResultUtils.ok().addKeyValue("status", b);
+    }
+
     @PostMapping("/freeze")
     public GXResultUtils freeze(@RequestBody Dict param) {
-        final boolean b = adminService.freeze(param);
+        final boolean b = sAdminService.freeze(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
     @PostMapping("/unfreeze")
     public GXResultUtils unfreeze(@RequestBody Dict param) {
-        final boolean b = adminService.unfreeze(param);
+        final boolean b = sAdminService.unfreeze(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 }
