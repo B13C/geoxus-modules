@@ -5,7 +5,7 @@ import com.geoxus.core.common.constant.GXSAdminConstants;
 
 public class SAdminConstants extends GXSAdminConstants {
     @GXFieldCommentAnnotation(zh = "主键")
-    public static final String PRIMARY_KEY = "id";
+    public static final String PRIMARY_KEY = "admin_id";
 
     @GXFieldCommentAnnotation(zh = "数据表名")
     public static final String TABLE_NAME = "s_admin";

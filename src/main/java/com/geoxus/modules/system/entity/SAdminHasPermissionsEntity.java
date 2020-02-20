@@ -21,12 +21,12 @@ public class SAdminHasPermissionsEntity implements Serializable {
     @TableId(type = IdType.AUTO)
     private int id;
 
-    private int permissionId;
+    private long permissionId;
 
     /**
      * 管理员ID
      */
-    private int adminId;
+    private long adminId;
 
     /**
      * 模型类型(用户获取用户权限,主要用于PHP)

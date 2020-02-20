@@ -89,10 +89,9 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     }
 
     @Override
-    public List<Integer> getRolePermissions(Integer roleId) {
+    public List<Long> getRolePermissions(Integer roleId) {
         List<SRoleHasPermissionsEntity> list = roleHasPermissionsService.list(new QueryWrapper<SRoleHasPermissionsEntity>().eq("role_id", roleId));
-        List<Integer> permissionIdList = list.stream().map(x -> x.getPermissionId()).collect(Collectors.toList());
-        return permissionIdList;
+        return list.stream().map(SRoleHasPermissionsEntity::getPermissionId).collect(Collectors.toList());
     }
 
     @Override

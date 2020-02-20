@@ -20,13 +20,13 @@ public class SRoleHasPermissionsEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(type = IdType.AUTO)
-    private int id;
+    private long id;
 
     @GXFieldCommentAnnotation(zh = "权限ID")
-    private int permissionId;
+    private long permissionId;
 
     @GXFieldCommentAnnotation(zh = "角色ID")
-    private int roleId;
+    private long roleId;
 
     @GXFieldCommentAnnotation(zh = "模型类型")
     private String modelType = "default";
