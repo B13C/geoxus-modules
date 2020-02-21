@@ -8,6 +8,7 @@ import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SAdminEntity;
@@ -46,14 +47,14 @@ public class AdminController implements GXController<SAdminEntity> {
     @PostMapping("/create")
     public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation SAdminEntity target) {
         final long i = sAdminService.create(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", i));
+        return GXResultUtils.ok().putData(Dict.create().set(SAdminConstants.PRIMARY_KEY, i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation SAdminEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXUpdateGroup.class}) SAdminEntity target) {
         final long i = sAdminService.update(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", i));
+        return GXResultUtils.ok().putData(Dict.create().set(SAdminConstants.PRIMARY_KEY, i));
     }
 
     @Override

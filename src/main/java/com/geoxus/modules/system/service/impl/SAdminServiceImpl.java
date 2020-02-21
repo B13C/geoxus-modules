@@ -11,14 +11,15 @@ import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.core.common.vo.response.GXPagination;
+import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.entity.SAdminEntity;
 import com.geoxus.modules.system.mapper.SAdminMapper;
 import com.geoxus.modules.system.service.SAdminHasRolesService;
 import com.geoxus.modules.system.service.SAdminService;
-import com.geoxus.modules.system.service.SRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintValidatorContext;
 import java.util.List;
 
 @Service
@@ -28,12 +29,18 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
 
     @Override
     public long create(SAdminEntity target, Dict param) {
+        final String salt = RandomUtil.randomString(8);
+        target.setSalt(salt);
+        target.setPassword(SecureUtil.md5(target.getPassword() + salt));
         save(target);
         return target.getAdminId();
     }
 
     @Override
     public long update(SAdminEntity target, Dict param) {
+        final String salt = RandomUtil.randomString(8);
+        target.setSalt(salt);
+        target.setPassword(SecureUtil.md5(target.getPassword() + salt));
         updateById(target);
         return target.getAdminId();
     }
@@ -101,5 +108,20 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     @Override
     public boolean addRoleToAdmin(Long adminId, List<Long> roleIds) {
         return sAdminHasRolesService.addRoleToAdmin(adminId, roleIds);
+    }
+
+    @Override
+    public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
+        if (0 == Long.parseLong(value.toString())) {
+            return true;
+        }
+        final Dict condition = Dict.create().set(SAdminConstants.PRIMARY_KEY, value);
+        return null != checkRecordIsExists(SAdminEntity.class, condition);
+    }
+
+    @Override
+    public boolean validateUnique(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) {
+        final Dict condition = Dict.create().set("username", value);
+        return null != checkRecordIsExists(SAdminEntity.class, condition);
     }
 }
