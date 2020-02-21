@@ -4,6 +4,9 @@ import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.validator.group.GXCreateGroup;
+import com.geoxus.core.common.validator.group.GXUpdateGroup;
+import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SRolesEntity;
 import com.geoxus.modules.system.service.SRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +25,16 @@ public class RoleController implements GXController<SRolesEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation SRolesEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXCreateGroup.class}) SRolesEntity target) {
         final long i = rolesService.create(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", i));
+        return GXResultUtils.ok().putData(Dict.create().set(SRolesConstants.PRIMARY_KEY, i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation SRolesEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXUpdateGroup.class}) SRolesEntity target) {
         final long i = rolesService.update(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", i));
+        return GXResultUtils.ok().putData(Dict.create().set(SRolesConstants.PRIMARY_KEY, i));
     }
 
     @Override
