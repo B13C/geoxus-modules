@@ -49,7 +49,7 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
 
     @Override
     public boolean delete(Dict param) {
-        final Dict condition = Dict.create().set(PRIMARY_KEY, param.getInt(PRIMARY_KEY));
+        final Dict condition = Dict.create().set(SRolesConstants.PRIMARY_KEY, param.getObj(SRolesConstants.PRIMARY_KEY));
         return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
@@ -73,5 +73,17 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         final Integer exists = checkRecordIsExists(SRolesEntity.class, Dict.create().set(SRolesConstants.PRIMARY_KEY, value));
         return null != exists;
+    }
+
+    @Override
+    public boolean freeze(Dict param) {
+        final Dict condition = Dict.create().set(SRolesConstants.PRIMARY_KEY, param.getObj(SRolesConstants.PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+    }
+
+    @Override
+    public boolean unfreeze(Dict param) {
+        final Dict condition = Dict.create().set(SRolesConstants.PRIMARY_KEY, param.getObj(SRolesConstants.PRIMARY_KEY));
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 }

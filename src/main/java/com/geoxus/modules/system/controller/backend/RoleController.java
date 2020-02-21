@@ -37,12 +37,18 @@ public class RoleController implements GXController<SRolesEntity> {
         return GXResultUtils.ok().putData(Dict.create().set(SRolesConstants.PRIMARY_KEY, i));
     }
 
-    @Override
-    @PostMapping("/delete")
-    public GXResultUtils delete(@RequestBody Dict param) {
-        final boolean b = rolesService.delete(param);
+    @PostMapping("/freeze")
+    public GXResultUtils freeze(@RequestBody Dict param) {
+        final boolean b = rolesService.freeze(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
+
+    @PostMapping("/unfreeze")
+    public GXResultUtils unfreeze(@RequestBody Dict param) {
+        final boolean b = rolesService.unfreeze(param);
+        return GXResultUtils.ok().putData(Dict.create().set("status", b));
+    }
+
 
     @Override
     @PostMapping("/list-or-search")
