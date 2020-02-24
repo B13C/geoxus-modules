@@ -12,7 +12,9 @@ import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SAdminEntity;
-import com.geoxus.modules.system.service.*;
+import com.geoxus.modules.system.service.SAdminHasPermissionsService;
+import com.geoxus.modules.system.service.SAdminService;
+import com.geoxus.modules.system.service.SRoleHasPermissionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,16 +34,10 @@ public class AdminController implements GXController<SAdminEntity> {
     private GXCaptchaService captchaService;
 
     @Autowired
-    private SRolesService sRolesService;
-
-    @Autowired
     private SAdminHasPermissionsService sAdminHasPermissionsService;
 
     @Autowired
     private SRoleHasPermissionsService sRoleHasPermissionsService;
-
-    @Autowired
-    private SAdminHasRolesService sAdminHasRolesService;
 
     @Override
     @PostMapping("/create")

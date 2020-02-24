@@ -8,7 +8,7 @@ import cn.hutool.http.HttpUtil;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
 import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
 import com.geoxus.core.common.service.GXSendSMSService;
-import com.geoxus.core.common.util.GXRedisKeysUtils;
+import com.geoxus.core.common.util.GXCacheKeysUtils;
 import com.geoxus.core.common.util.GXRedisUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.GXResultCode;
@@ -37,7 +37,7 @@ public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
     private GXRedisUtils redisUtils;
 
     @Autowired
-    private GXRedisKeysUtils redisKeysUtils;
+    private GXCacheKeysUtils redisKeysUtils;
 
     @Autowired
     private NetEaseSMSConfig netEaseSMSConfig;

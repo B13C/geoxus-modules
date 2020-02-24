@@ -13,7 +13,7 @@ import com.aliyuncs.profile.IClientProfile;
 import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.service.GXSendSMSService;
-import com.geoxus.core.common.util.GXRedisKeysUtils;
+import com.geoxus.core.common.util.GXCacheKeysUtils;
 import com.geoxus.core.common.util.GXRedisUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.GXResultCode;
@@ -34,7 +34,7 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
     private GXRedisUtils redisUtils;
 
     @Autowired
-    private GXRedisKeysUtils redisKeysUtils;
+    private GXCacheKeysUtils redisKeysUtils;
 
     @Autowired
     private AliYunSMSConfig aliYunSMSConfig;
