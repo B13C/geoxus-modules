@@ -75,6 +75,7 @@ public class AdminController implements GXController<SAdminEntity> {
 
     @PostMapping("/change-password")
     public GXResultUtils changePassword(@RequestBody Dict param) {
+        param.set(SAdminConstants.PRIMARY_KEY, getUserIdFromToken(GXTokenManager.ADMIN_TOKEN, GXTokenManager.ADMIN_ID));
         final boolean b = sAdminService.changePassword(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
@@ -115,7 +116,7 @@ public class AdminController implements GXController<SAdminEntity> {
         final List<Long> roleIds = Convert.convert(new TypeReference<List<Long>>() {
         }, param.getObj(SRolesConstants.PRIMARY_KEY));
         final Long adminId = param.getLong(SAdminConstants.PRIMARY_KEY);
-        final boolean b = sAdminService.addRoleToAdmin(adminId, roleIds);
+        final boolean b = sAdminService.assignRolesToAdmin(adminId, roleIds);
         return GXResultUtils.ok().addKeyValue("status", b);
     }
 

@@ -46,6 +46,6 @@ public interface SAdminService extends GXSAdminService<SAdminEntity> {
      * @param roleIds 角色ID
      * @return
      */
-    boolean addRoleToAdmin(Long adminId, List<Long> roleIds);
+    boolean assignRolesToAdmin(Long adminId, List<Long> roleIds);
 }
 

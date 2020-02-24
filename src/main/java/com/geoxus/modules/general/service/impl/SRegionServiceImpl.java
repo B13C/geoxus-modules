@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 
 @Service
 public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity> implements SRegionService {
-    private static final String NAME_TAG = "name";
+    private static final String NAME_FIELD = "name";
 
-    private static final String PARENT_TAG = "parent_id";
+    private static final String PARENT_ID_FIELD = "parent_id";
 
-    private static final String TYPE_TAG = "type";
+    private static final String TYPE_FIELD = "type";
 
     @Override
     @Cacheable(value = "region", key = "targetClass + methodName")
@@ -56,16 +56,16 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
     @Cacheable(value = "region", key = "targetClass + methodName + #p0.getStr('name')")
     public List<SRegionEntity> getRegion(Dict param) {
         QueryWrapper<SRegionEntity> queryWrapper = new QueryWrapper<>();
-        final String name = param.getStr(NAME_TAG);
-        final Integer parentId = param.getInt(PARENT_TAG);
-        final Short type = param.getShort(TYPE_TAG);
+        final String name = param.getStr(NAME_FIELD);
+        final Integer parentId = param.getInt(PARENT_ID_FIELD);
+        final Short type = param.getShort(TYPE_FIELD);
         if (!StringUtils.isBlank(name)) {
             queryWrapper.like("name", name);
         } else {
             if (null != parentId) {
-                queryWrapper.eq("parent_id", parentId);
+                queryWrapper.eq(PARENT_ID_FIELD, parentId);
             }
-            queryWrapper.eq("type", type == null ? 1 : type);
+            queryWrapper.eq(TYPE_FIELD, type == null ? 1 : type);
         }
         return list(queryWrapper);
     }

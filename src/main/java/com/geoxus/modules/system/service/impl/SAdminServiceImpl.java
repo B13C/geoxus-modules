@@ -7,6 +7,7 @@ import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
+import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.GXResultCode;
@@ -16,6 +17,8 @@ import com.geoxus.modules.system.entity.SAdminEntity;
 import com.geoxus.modules.system.mapper.SAdminMapper;
 import com.geoxus.modules.system.service.SAdminHasRolesService;
 import com.geoxus.modules.system.service.SAdminService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,18 +66,32 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
 
     @Override
     public boolean changePassword(Dict param) {
-        final int id = param.getInt(getPrimaryKey());
+        final String oldPassword = param.getStr("old_password");
+        final String newPassword = param.getStr("new_password");
+        if (StrUtil.isBlank(oldPassword) || StrUtil.isBlank(newPassword)) {
+            throw new GXException("新密码或旧密码不能为空!");
+        }
+        if (StrUtil.equals(oldPassword, newPassword)) {
+            throw new GXException("新旧密码相同!");
+        }
+        if (StrUtil.length(newPassword) < 8) {
+            throw new GXException("密码长度不能小于8位!");
+        }
+        final long id = param.getLong(getPrimaryKey());
         final SAdminEntity entity = getById(id);
-        final String salt = RandomUtil.randomString(6);
+        if (entity.getStatus() != GXBusinessStatusCode.NORMAL.getCode()) {
+            throw new GXException("账号状态不正常,请联系管理员!");
+        }
+        final String salt = RandomUtil.randomString(RandomUtil.randomInt(6, 8));
         entity.setSalt(salt);
-        String pwd = SecureUtil.md5(param.getStr("password") + salt);
+        String pwd = SecureUtil.md5(newPassword + salt);
         entity.setPassword(pwd);
         return updateById(entity);
     }
 
     @Override
     public Dict login(Dict param) {
-        SAdminEntity adminEntity = getOne(new QueryWrapper<SAdminEntity>().eq("username", param.getStr("username")).ne("status", 2));
+        SAdminEntity adminEntity = getOne(new QueryWrapper<SAdminEntity>().eq("username", param.getStr("username")).eq("status", GXBusinessStatusCode.NORMAL.getCode()));
         if (null == adminEntity) {
             return Dict.create().set("code", GXResultCode.LOGIN_ERROR.getCode()).set("msg", GXResultCode.LOGIN_ERROR.getMsg());
         }
@@ -89,24 +106,29 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
         }
         //生成token
         String token = GXTokenManager.generateAdminToken(adminEntity.getAdminId(), Dict.create().set("username", adminEntity.getUsername()));
-        final Dict dict = Dict.create().set("nickName", adminEntity.getNickName()).set(GXTokenManager.ADMIN_TOKEN, token);
-        return dict;
+        return Dict.create().set("nick_name", adminEntity.getNickName()).set(GXTokenManager.ADMIN_TOKEN, token);
     }
 
     @Override
+    @RequiresPermissions("sys:admin:freeze")
+    @RequiresRoles("administrator")
     public boolean freeze(Dict param) {
         final Dict condition = Dict.create().set(getPrimaryKey(), param.getInt(getPrimaryKey()));
         return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
+    @RequiresPermissions("sys:admin:unfreeze")
+    @RequiresRoles("administrator")
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(getPrimaryKey(), param.getInt(getPrimaryKey()));
         return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
-    public boolean addRoleToAdmin(Long adminId, List<Long> roleIds) {
+    @RequiresPermissions("sys:admin:assign:roles:to:admin")
+    @RequiresRoles("administrator")
+    public boolean assignRolesToAdmin(Long adminId, List<Long> roleIds) {
         return sAdminHasRolesService.addRoleToAdmin(adminId, roleIds);
     }
 
@@ -123,5 +145,10 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     public boolean validateUnique(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) {
         final Dict condition = Dict.create().set("username", value);
         return null != checkRecordIsExists(SAdminEntity.class, condition);
+    }
+
+    @Override
+    public String getPrimaryKey() {
+        return SAdminConstants.PRIMARY_KEY;
     }
 }

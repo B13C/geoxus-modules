@@ -21,7 +21,7 @@ public class RegionController {
     /**
      * 获取所有区域树
      *
-     * @return
+     * @return GXResultUtils
      */
     @PostMapping("/get-region-tree")
     public GXResultUtils getRegionTree() {
@@ -32,8 +32,8 @@ public class RegionController {
     /**
      * 通过条件获取区域
      *
-     * @param param
-     * @return
+     * @param param 参数
+     * @return GXResultUtils
      */
     @PostMapping("/get-region")
     public GXResultUtils getRegion(@RequestBody Dict param) {
