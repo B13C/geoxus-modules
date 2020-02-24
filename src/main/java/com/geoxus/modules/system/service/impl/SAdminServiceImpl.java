@@ -1,5 +1,6 @@
 package com.geoxus.modules.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -150,5 +151,11 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     @Override
     public String getPrimaryKey() {
         return SAdminConstants.PRIMARY_KEY;
+    }
+
+    @Override
+    public Dict getStatus(long adminId) {
+        final Dict condition = Dict.create().set(SAdminConstants.PRIMARY_KEY, adminId);
+        return getFieldBySQL(SAdminEntity.class, CollUtil.newHashSet("admin_id", "status", "is_super_admin"), condition);
     }
 }
