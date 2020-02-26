@@ -39,9 +39,9 @@ public class CaptchaController {
     public GXResultUtils checkGraphCaptcha(@RequestBody Dict param) {
         final boolean b = captchaService.checkCaptcha(param.getStr("uuid"), param.getStr("code"));
         if (b) {
-            return GXResultUtils.ok().putData(Dict.create().set("msg", "图形验证码验证成功"));
+            return GXResultUtils.ok().putData(Dict.create().set("status", 0));
         }
-        return GXResultUtils.ok(1).putData(Dict.create().set("msg", "图形验证码验证失败"));
+        return GXResultUtils.ok().putData(Dict.create().set("status", 1));
     }
 
     @PostMapping("/check-sms-captcha")
@@ -49,9 +49,9 @@ public class CaptchaController {
         GXSendSMSService sendSMSService = GXSpringContextUtils.getBean(GXSendSMSService.class);
         final boolean b = sendSMSService.verification(param.getStr("phone"), param.getStr("code"));
         if (b) {
-            return GXResultUtils.ok().putData(Dict.create().set("msg", "短信验证码验证成功"));
+            return GXResultUtils.ok().putData(Dict.create().set("status", 0));
         }
-        return GXResultUtils.ok(1).putData(Dict.create().set("msg", "短信验证码验证失败"));
+        return GXResultUtils.ok().putData(Dict.create().set("status", 1));
     }
 
     @PostMapping("/get-email-captcha")

@@ -14,10 +14,10 @@ import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXCacheKeysUtils;
-import com.geoxus.core.common.util.GXRedisUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.modules.general.config.AliYunSMSConfig;
+import com.google.common.cache.Cache;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,20 +31,20 @@ import java.util.Optional;
 @ConditionalOnExpression("'${sms-provider}'.equals('aliyun-sms')")
 public class GXAliYunSMSServiceImpl implements GXSendSMSService {
     @Autowired
-    private GXRedisUtils redisUtils;
-
-    @Autowired
-    private GXCacheKeysUtils redisKeysUtils;
+    private GXCacheKeysUtils gxCacheKeysUtils;
 
     @Autowired
     private AliYunSMSConfig aliYunSMSConfig;
+
+    @Autowired
+    private Cache<String, String> captchaCache;
 
     @Override
     //@GXApiIdempotentAnnotation(expires = 10)
     @GXDurationCountLimitAnnotation(key = "ali:yun:sms")
     public GXResultUtils send(String phone, String templateName, Dict param) {
-        String codeConfigKey = redisKeysUtils.getAliYunSMSCodeConfigKey(phone);
-        if (redisUtils.get(codeConfigKey) != null) {
+        String cacheKey = gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone);
+        if (captchaCache.getIfPresent(cacheKey) != null) {
             throw new GXException("操作频繁,请稍后再试....");
         }
         final Dict aliYunTemplateConfig = aliYunSMSConfig.getTemplates().get(templateName);
@@ -71,10 +71,11 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
         if (StrUtil.isEmpty(phone) || StrUtil.isEmpty(code)) {
             return false;
         }
-        String key = redisKeysUtils.getAliYunSMSCodeConfigKey(phone);
-        final String s = redisUtils.get(key);
+        String key = gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone);
+        final String s = captchaCache.getIfPresent(key);
         if (code.equalsIgnoreCase(s)) {
-            return redisUtils.delete(key);
+            captchaCache.invalidate(key);
+            return true;
         }
         return false;
     }
@@ -132,6 +133,6 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
      * @param code
      */
     private void storeCode(String phone, String code) {
-        redisUtils.set(redisKeysUtils.getAliYunSMSCodeConfigKey(phone), code, 5L * 60);
+        captchaCache.put(gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone), code);
     }
 }
