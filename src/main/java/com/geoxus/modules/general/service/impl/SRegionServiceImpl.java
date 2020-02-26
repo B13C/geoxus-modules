@@ -4,7 +4,7 @@ import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.util.GXCacheKeysUtils;
-import com.geoxus.core.common.util.GXCommonUtils;
+import com.geoxus.core.common.util.GXGuavaUtils;
 import com.geoxus.modules.general.entity.SRegionEntity;
 import com.geoxus.modules.general.mapper.SRegionMapper;
 import com.geoxus.modules.general.service.SRegionService;
@@ -28,7 +28,7 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
     private static final String TYPE_FIELD = "type";
 
     static {
-        guavaCache = GXCommonUtils.getGuavaCache(20000, 24, TimeUnit.HOURS, false);
+        guavaCache = GXGuavaUtils.getGuavaCacheExpireAfterWrite(20000, 24, TimeUnit.HOURS);
     }
 
     @Autowired
