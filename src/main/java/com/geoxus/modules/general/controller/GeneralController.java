@@ -30,7 +30,7 @@ public class GeneralController {
     public GXResultUtils getModelAttribute(@RequestBody Dict param) {
         final Integer coreModelId = param.getInt("coreModelId");
         final String fieldName = param.getStr("fieldName");
-        final GXCoreModelEntity modelEntity = coreModelService.getModelDetailByModelId(coreModelId, fieldName);
+        final GXCoreModelEntity modelEntity = coreModelService.getCoreModelByModelId(coreModelId, fieldName);
         return GXResultUtils.ok().putData(modelEntity);
     }
 }
