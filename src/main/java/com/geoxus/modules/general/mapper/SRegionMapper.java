@@ -7,8 +7,10 @@ import com.geoxus.modules.general.entity.SRegionEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 
+import java.util.List;
+
 @Mapper
 public interface SRegionMapper extends GXBaseMapper<SRegionEntity> {
-    @SelectProvider(type = RegionBuilder.class, method = "areaInfo")
-    Dict areaInfo(Dict param);
+    @SelectProvider(type = RegionBuilder.class, method = "listOrSearch")
+    List<Dict> listOrSearch(Dict param);
 }

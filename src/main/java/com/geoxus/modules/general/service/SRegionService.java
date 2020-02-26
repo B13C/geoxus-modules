@@ -10,23 +10,9 @@ public interface SRegionService extends GXBaseService<SRegionEntity> {
     /**
      * 获取所有区域树
      *
-     * @return
+     * @param param 参数
+     * @return List
      */
-    List<SRegionEntity> getRegionTree();
-
-    /**
-     * 通过条件获取区域
-     *
-     * @param param
-     * @return
-     */
-    List<SRegionEntity> getRegion(Dict param);
-
-    /**
-     * 转换名字到拼音
-     *
-     * @return
-     */
-    boolean convertNameToPinYin();
+    List<Dict> getRegionTree(Dict param);
 }
 

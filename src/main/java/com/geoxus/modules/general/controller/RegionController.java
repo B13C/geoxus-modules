@@ -2,7 +2,6 @@ package com.geoxus.modules.general.controller;
 
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.util.GXResultUtils;
-import com.geoxus.modules.general.entity.SRegionEntity;
 import com.geoxus.modules.general.service.SRegionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,20 +23,8 @@ public class RegionController {
      * @return GXResultUtils
      */
     @PostMapping("/get-region-tree")
-    public GXResultUtils getRegionTree() {
-        List<SRegionEntity> list = regionService.getRegionTree();
-        return GXResultUtils.ok().putData(list);
-    }
-
-    /**
-     * 通过条件获取区域
-     *
-     * @param param 参数
-     * @return GXResultUtils
-     */
-    @PostMapping("/get-region")
-    public GXResultUtils getRegion(@RequestBody Dict param) {
-        List<SRegionEntity> list = regionService.getRegion(param);
+    public GXResultUtils getRegionTree(@RequestBody Dict param) {
+        List<Dict> list = regionService.getRegionTree(param);
         return GXResultUtils.ok().putData(list);
     }
 }

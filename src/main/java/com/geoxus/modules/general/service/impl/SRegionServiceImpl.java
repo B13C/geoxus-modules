@@ -1,39 +1,53 @@
 package com.geoxus.modules.general.service.impl;
 
 import cn.hutool.core.lang.Dict;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.util.GXChineseToPinYinUtils;
+import com.geoxus.core.common.util.GXCacheKeysUtils;
+import com.geoxus.core.common.util.GXCommonUtils;
 import com.geoxus.modules.general.entity.SRegionEntity;
 import com.geoxus.modules.general.mapper.SRegionMapper;
 import com.geoxus.modules.general.service.SRegionService;
-import org.apache.commons.lang3.StringUtils;
+import com.google.common.cache.Cache;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
 public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity> implements SRegionService {
+    private static final Cache<String, List<Dict>> guavaCache;
+
     private static final String NAME_FIELD = "name";
 
     private static final String PARENT_ID_FIELD = "parent_id";
 
     private static final String TYPE_FIELD = "type";
 
+    static {
+        guavaCache = GXCommonUtils.getGuavaCache(20000, 24, TimeUnit.HOURS, false);
+    }
+
+    @Autowired
+    private GXCacheKeysUtils gxCacheKeysUtils;
+
     @Override
     @Cacheable(value = "region", key = "targetClass + methodName")
-    public List<SRegionEntity> getRegionTree() {
-        List<SRegionEntity> list = list(new QueryWrapper<>());
-        //把根分类区分出来
-        List<SRegionEntity> rootList = list.stream().filter(root -> root.getParentId() == 100000).collect(Collectors.toList());
-        //把非根分类区分出来
-        List<SRegionEntity> subList = list.stream().filter(sub -> sub.getParentId() != 100000).collect(Collectors.toList());
-        //递归构建结构化的分类信息
-        rootList.forEach(root -> buildSubs(root, subList));
-        return rootList;
+    public List<Dict> getRegionTree(Dict param) {
+        final String cacheKey = gxCacheKeysUtils.getCacheKey("", "region:tree");
+        return getCacheValueFromLoader(guavaCache, cacheKey, () -> {
+            List<Dict> list = baseMapper.listOrSearch(param);
+            //把根分类区分出来
+            List<Dict> rootList = list.stream().filter(root -> root.getInt("parent_id") == 100000).collect(Collectors.toList());
+            //把非根分类区分出来
+            List<Dict> subList = list.stream().filter(sub -> sub.getInt("parent_id") != 100000).collect(Collectors.toList());
+            //递归构建结构化的分类信息
+            rootList.forEach(root -> buildSubs(root, subList));
+            return rootList;
+        });
     }
 
     /**
@@ -42,44 +56,13 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
      * @param parent 父级ID
      * @param subs   子集数据
      */
-    private void buildSubs(SRegionEntity parent, List<SRegionEntity> subs) {
-        List<SRegionEntity> children = subs.stream().filter(sub -> sub.getParentId() == parent.getRegionId()).collect(Collectors.toList());
-        parent.setChildren(children);
+    private void buildSubs(Dict parent, List<Dict> subs) {
+        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parent_id").equals(parent.getInt("region_id"))).collect(Collectors.toList());
+        parent.set("children", children);
         //有子分类的情况
         if (!CollectionUtils.isEmpty(children)) {
             //再次递归构建
             children.forEach(child -> buildSubs(child, subs));
         }
-    }
-
-    @Override
-    @Cacheable(value = "region", key = "targetClass + methodName + #p0.getStr('name')")
-    public List<SRegionEntity> getRegion(Dict param) {
-        QueryWrapper<SRegionEntity> queryWrapper = new QueryWrapper<>();
-        final String name = param.getStr(NAME_FIELD);
-        final Integer parentId = param.getInt(PARENT_ID_FIELD);
-        final Short type = param.getShort(TYPE_FIELD);
-        if (!StringUtils.isBlank(name)) {
-            queryWrapper.like("name", name);
-        } else {
-            if (null != parentId) {
-                queryWrapper.eq(PARENT_ID_FIELD, parentId);
-            }
-            queryWrapper.eq(TYPE_FIELD, type == null ? 1 : type);
-        }
-        return list(queryWrapper);
-    }
-
-    @Override
-    public boolean convertNameToPinYin() {
-        final List<SRegionEntity> list = list(new QueryWrapper<>());
-        for (SRegionEntity entity : list) {
-            final String firstLetter = GXChineseToPinYinUtils.getFirstLetter(entity.getName());
-            final String fullLetter = GXChineseToPinYinUtils.getFullLetter(entity.getName());
-            entity.setFirstLetter(firstLetter);
-            entity.setPinyin(fullLetter);
-            updateById(entity);
-        }
-        return false;
     }
 }
