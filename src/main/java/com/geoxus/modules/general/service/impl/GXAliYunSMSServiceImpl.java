@@ -11,6 +11,7 @@ import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
 import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXCacheKeysUtils;
@@ -18,26 +19,32 @@ import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.modules.general.config.AliYunSMSConfig;
 import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.util.Optional;
 
 @Service
 @Slf4j
 @ConditionalOnExpression("'${sms-provider}'.equals('aliyun-sms')")
 public class GXAliYunSMSServiceImpl implements GXSendSMSService {
+    @GXFieldCommentAnnotation(zh = "Guava缓存组件")
+    private static final Cache<String, String> captchaCache;
+
+    static {
+        captchaCache = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(Duration.ofSeconds(300L)).build();
+    }
+
     @Autowired
     private GXCacheKeysUtils gxCacheKeysUtils;
 
     @Autowired
     private AliYunSMSConfig aliYunSMSConfig;
-
-    @Autowired
-    private Cache<String, String> captchaCache;
 
     @Override
     //@GXApiIdempotentAnnotation(expires = 10)
