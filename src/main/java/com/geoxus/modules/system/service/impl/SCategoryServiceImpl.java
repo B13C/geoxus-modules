@@ -19,6 +19,7 @@ import com.geoxus.modules.system.mapper.SCategoryMapper;
 import com.geoxus.modules.system.service.SCategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
@@ -81,7 +82,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
     /**
      * 获取树状结构
      *
-     * @return
+     * @return List
      */
     public List<Dict> getTree(Dict param) {
         final Page<Dict> page = new Page<>(1, 10000);
@@ -131,6 +132,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
     }
 
     @Override
+    @Cacheable(value = "category", key = "targetClass + methodName + #value + #field")
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
         final int categoryId = Convert.toInt(value);
@@ -140,10 +142,11 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
     /**
      * 获取路径
      *
-     * @param parentId
-     * @param coreModelId
-     * @return
+     * @param parentId    父级ID
+     * @param coreModelId 　核心模型ID
+     * @return String
      */
+    @Cacheable(value = "category", key = "targetClass + methodName + #parentId + #coreModelId")
     private String getParentPath(int parentId, int coreModelId) {
         if (parentId == 0) {
             return "0";
