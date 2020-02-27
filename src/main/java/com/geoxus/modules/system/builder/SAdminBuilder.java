@@ -38,6 +38,6 @@ public class SAdminBuilder implements GXBaseBuilder {
 
     @Override
     public String getModelIdentificationValue() {
-        return SAdminConstants.MODEL_IDENTIFICATION;
+        return SAdminConstants.MODEL_IDENTIFICATION_VALUE;
     }
 }

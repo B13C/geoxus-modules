@@ -26,14 +26,14 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
 
     @Override
     public long create(ContentEntity target, Dict param) {
-        target.setCoreModelId(coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION));
+        target.setCoreModelId(coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION_VALUE));
         save(target);
         return target.getContentId();
     }
 
     @Override
     public long update(ContentEntity target, Dict param) {
-        final int coreModelId = coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION);
+        final int coreModelId = coreModelService.getModelIdByModelIdentification(ContentConstants.MODEL_IDENTIFICATION_VALUE);
         target.setCoreModelId(coreModelId);
         updateById(target);
         return target.getContentId();

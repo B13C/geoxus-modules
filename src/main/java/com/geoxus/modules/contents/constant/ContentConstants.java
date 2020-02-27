@@ -4,7 +4,7 @@ import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 
 public class ContentConstants {
     @GXFieldCommentAnnotation(zh = "模型标识")
-    public static final String MODEL_IDENTIFICATION = "p_content";
+    public static final String MODEL_IDENTIFICATION_VALUE = "p_content";
 
     @GXFieldCommentAnnotation(zh = "表名")
     public static final String TABLE_NAME = "p_content";

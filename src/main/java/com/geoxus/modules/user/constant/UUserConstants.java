@@ -15,9 +15,6 @@ public class UUserConstants {
     @GXFieldCommentAnnotation(zh = "数据表的别名")
     public static final String TABLE_ALIAS_NAME = "user";
 
-    @GXFieldCommentAnnotation(value = "核心模型名字")
-    public static final String MODEL_IDENTIFICATION = "u_user";
-
     @GXFieldCommentAnnotation(zh = "手机验证码验证")
     public static final int SMS_VERIFY = 1;
 

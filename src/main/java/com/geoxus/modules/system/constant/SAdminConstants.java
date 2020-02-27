@@ -14,7 +14,7 @@ public class SAdminConstants extends GXSAdminConstants {
     public static final String TABLE_ALIAS_NAME = "admin";
 
     @GXFieldCommentAnnotation(zh = "模型在数据库中的标识")
-    public static final String MODEL_IDENTIFICATION = "s_admin";
+    public static final String MODEL_IDENTIFICATION_VALUE = "s_admin";
 
     private SAdminConstants() {
         super();
