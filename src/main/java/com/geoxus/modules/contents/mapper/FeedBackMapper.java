@@ -27,7 +27,4 @@ public interface FeedBackMapper extends GXBaseMapper<FeedBackEntity> {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
     })
     Dict detail(Dict pram);
-
-    @SelectProvider(type = FeedBackBuilder.class, method = "countByCondition")
-    int countByCondition(Dict param);
 }

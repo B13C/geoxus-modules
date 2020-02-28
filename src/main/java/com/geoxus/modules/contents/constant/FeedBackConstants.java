@@ -21,6 +21,12 @@ public class FeedBackConstants {
     @GXFieldCommentAnnotation(zh = "其他类型")
     public static final int OTHER_TYPE = 10;
 
+    @GXFieldCommentAnnotation(zh = "已经回复")
+    public static final int REPLY = 0;
+
+    @GXFieldCommentAnnotation(zh = "未回复")
+    public static final int NO_REPLY = 1;
+
     private FeedBackConstants() {
 
     }

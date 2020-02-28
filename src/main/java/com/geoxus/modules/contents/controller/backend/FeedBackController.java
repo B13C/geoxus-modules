@@ -46,4 +46,10 @@ public class FeedBackController implements GXController<FeedBackEntity> {
     public GXResultUtils detail(@RequestBody Dict param) {
         return GXResultUtils.ok().putData(feedBackService.detail(param));
     }
+
+    @PostMapping("/reply")
+    public GXResultUtils reply(@RequestBody Dict param) {
+        final boolean replay = feedBackService.replay(param);
+        return GXResultUtils.ok().addKeyValue("status", replay);
+    }
 }

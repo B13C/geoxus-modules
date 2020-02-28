@@ -1,5 +1,6 @@
 package com.geoxus.modules.contents.service.impl;
 
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
@@ -44,7 +45,12 @@ public class FeedBackServiceImpl extends ServiceImpl<FeedBackMapper, FeedBackEnt
 
     @Override
     public boolean replay(Dict param) {
-        FeedBackEntity feedBackEntity = getById(param.getLong(getPrimaryKey()));
+        final Long remove = Convert.convert(Long.class, param.remove(getPrimaryKey()));
+        FeedBackEntity feedBackEntity = getById(remove);
+        if (feedBackEntity.getStatus() == FeedBackConstants.REPLY) {
+            return false;
+        }
+        feedBackEntity.setStatus(FeedBackConstants.REPLY);
         return updateById(modifyEntityJSONFieldMultiValue(feedBackEntity, param));
     }
 }

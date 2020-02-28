@@ -6,6 +6,7 @@ import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.modules.contents.constant.FeedBackConstants;
 import com.geoxus.modules.contents.entity.FeedBackEntity;
 import com.geoxus.modules.contents.service.FeedBackService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class FeedBackController implements GXController<FeedBackEntity> {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         target.setUserId(userId);
         final long i = feedBackService.create(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", i));
+        return GXResultUtils.ok().putData(Dict.create().set(FeedBackConstants.PRIMARY_KEY, i));
     }
 
     @Override

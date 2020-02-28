@@ -9,11 +9,12 @@ public interface FeedBackService extends GXBusinessService<FeedBackEntity> {
     /**
      * 回复
      *
-     * @param param
-     * @return
+     * @param param 参数
+     * @return boolean
      */
     boolean replay(Dict param);
 
+    @Override
     default String getPrimaryKey() {
         return FeedBackConstants.PRIMARY_KEY;
     }
