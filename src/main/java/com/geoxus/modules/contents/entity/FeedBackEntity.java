@@ -24,7 +24,7 @@ public class FeedBackEntity extends GXBaseEntity {
     @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
     private int coreModelId;
 
-    private long modelId;
+    private long objectId;
 
     @GXValidateExtDataAnnotation(tableName = "p_feedback", fieldName = "ext")
     private String ext;

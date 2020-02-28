@@ -132,7 +132,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
     }
 
     @Override
-    @Cacheable(value = "category", key = "targetClass + methodName + #value + #field")
+    @Cacheable(value = "__DEFAULT__", key = "targetClass + methodName + #value + #field")
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
         final int categoryId = Convert.toInt(value);
@@ -146,7 +146,6 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
      * @param coreModelId 　核心模型ID
      * @return String
      */
-    @Cacheable(value = "category", key = "targetClass + methodName + #parentId + #coreModelId")
     private String getParentPath(int parentId, int coreModelId) {
         if (parentId == 0) {
             return "0";

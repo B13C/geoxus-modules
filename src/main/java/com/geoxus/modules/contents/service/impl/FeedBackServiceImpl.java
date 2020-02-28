@@ -2,6 +2,7 @@ package com.geoxus.modules.contents.service.impl;
 
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.contents.constant.FeedBackConstants;
@@ -14,20 +15,21 @@ import org.springframework.stereotype.Service;
 public class FeedBackServiceImpl extends ServiceImpl<FeedBackMapper, FeedBackEntity> implements FeedBackService {
     @Override
     public long create(FeedBackEntity target, Dict param) {
-        saveOrUpdate(target);
+        save(target);
         return target.getFeedbackId();
     }
 
     @Override
     public long update(FeedBackEntity target, Dict param) {
-        saveOrUpdate(target);
+        updateById(target);
         return target.getFeedbackId();
     }
 
     @Override
     public boolean delete(Dict param) {
         final int feedbackId = param.getInt(FeedBackConstants.PRIMARY_KEY);
-        return updateJSONFieldSingleValue(getById(feedbackId), "ext.status", GXBusinessStatusCode.DELETED.getCode());
+        final Dict condition = Dict.create().set(FeedBackConstants.PRIMARY_KEY, feedbackId);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
     }
 
     @Override
@@ -43,7 +45,6 @@ public class FeedBackServiceImpl extends ServiceImpl<FeedBackMapper, FeedBackEnt
     @Override
     public boolean replay(Dict param) {
         FeedBackEntity feedBackEntity = getById(param.getLong(getPrimaryKey()));
-        final boolean b = updateById(modifyEntityJSONFieldMultiValue(feedBackEntity, param));
-        return b;
+        return updateById(modifyEntityJSONFieldMultiValue(feedBackEntity, param));
     }
 }

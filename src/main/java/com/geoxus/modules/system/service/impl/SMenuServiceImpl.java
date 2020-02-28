@@ -68,7 +68,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
      *
      * @return
      */
-    @Cacheable(value = "s_menu", key = "targetClass + methodName")
+    @Cacheable(value = "__DEFAULT__", key = "targetClass + methodName")
     public List<Dict> getTree(Dict param) {
         final Page<Dict> page = new Page<>(1, 10000);
         final List<Dict> list = baseMapper.listOrSearchPage(page, param);

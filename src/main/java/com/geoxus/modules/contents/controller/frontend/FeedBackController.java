@@ -28,27 +28,8 @@ public class FeedBackController implements GXController<FeedBackEntity> {
     public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation FeedBackEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         target.setUserId(userId);
-        target.setStatus(1);
         final long i = feedBackService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
-    }
-
-    @Override
-//    @PostMapping("/update")
-    @GXLoginAnnotation
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation FeedBackEntity target) {
-        final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
-        target.setUserId(userId);
-        final long i = feedBackService.update(target, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("id", i));
-    }
-
-    @Override
-//    @PostMapping("/delete")
-    @GXLoginAnnotation
-    public GXResultUtils delete(@RequestBody Dict param) {
-        final boolean b = feedBackService.delete(param);
-        return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
     @Override
