@@ -135,8 +135,8 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
     @Cacheable(value = "__DEFAULT__", key = "targetClass + methodName + #value + #field")
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
-        final int categoryId = Convert.toInt(value);
-        return categoryId == 0 || null != getById(categoryId);
+        final int categoryId = Convert.toInt(value, 0);
+        return 1 == checkRecordIsExists(SCategoryEntity.class, Dict.create().set(SCategoryConstants.PRIMARY_KEY, categoryId));
     }
 
     /**
