@@ -1,12 +1,13 @@
 package com.geoxus.modules.banner.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.modules.banner.entity.BannerEntity;
-import com.geoxus.modules.banner.service.BannerService;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
-import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.vo.GXBusinessStatusCode;
+import com.geoxus.modules.banner.constant.BannerConstants;
+import com.geoxus.modules.banner.entity.BannerEntity;
+import com.geoxus.modules.banner.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,14 +26,14 @@ public class BannerController implements GXController<BannerEntity> {
     @PostMapping("/create")
     public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation BannerEntity bannerEntity) {
         long i = bannerService.create(bannerEntity, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("bannerId", i));
+        return GXResultUtils.ok().putData(Dict.create().set(BannerConstants.PRIMARY_KEY, i));
     }
 
     @Override
     @PostMapping("/update")
     public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation BannerEntity bannerEntity) {
         long i = bannerService.update(bannerEntity, Dict.create());
-        return GXResultUtils.ok().putData(Dict.create().set("bannerId", i));
+        return GXResultUtils.ok().putData(Dict.create().set(BannerConstants.PRIMARY_KEY, i));
     }
 
     @Override

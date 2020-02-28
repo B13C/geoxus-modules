@@ -18,6 +18,9 @@ public class BannerConstants {
     @GXFieldCommentAnnotation(zh = "网站Banner")
     public static final int WEBSITE_TYPE = 2;
 
+    @GXFieldCommentAnnotation(zh = "模型的值")
+    public static final String MODEL_IDENTIFICATION_VALUE = "s_banner";
+
     private BannerConstants() {
     }
 }

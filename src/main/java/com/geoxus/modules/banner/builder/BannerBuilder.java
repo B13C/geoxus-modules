@@ -1,19 +1,15 @@
 package com.geoxus.modules.banner.builder;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.modules.banner.constant.BannerConstants;
 import org.apache.ibatis.jdbc.SQL;
 
 public class BannerBuilder implements GXBaseBuilder {
-    @GXFieldCommentAnnotation(zh = "模型的值")
-    String MODEL_IDENTIFICATION_VALUE = "s_banner";
-
     public String listOrSearch(Dict param) {
         SQL sql = new SQL().SELECT("*").FROM("s_banner");
-        mergeSearchConditionToSQL(sql, param, MODEL_IDENTIFICATION_VALUE);
+        mergeSearchConditionToSQL(sql, param, BannerConstants.TABLE_NAME);
         sql.ORDER_BY("sort desc , created_at desc");
         return sql.toString();
     }
@@ -21,7 +17,7 @@ public class BannerBuilder implements GXBaseBuilder {
     public String detail(Dict param) {
         SQL sql = new SQL().SELECT("*").FROM("s_banner");
         sql.WHERE("banner_id = " + param.getInt(BannerConstants.PRIMARY_KEY));
-        mergeSearchConditionToSQL(sql, param, MODEL_IDENTIFICATION_VALUE);
+        mergeSearchConditionToSQL(sql, param, BannerConstants.TABLE_NAME);
         return sql.toString();
     }
 
@@ -40,6 +36,6 @@ public class BannerBuilder implements GXBaseBuilder {
 
     @Override
     public String getModelIdentificationValue() {
-        return MODEL_IDENTIFICATION_VALUE;
+        return BannerConstants.MODEL_IDENTIFICATION_VALUE;
     }
 }
