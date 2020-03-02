@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
-import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.message.entity.UserHasMessageEntity;
 import com.geoxus.modules.message.mapper.UserHasMessageMapper;
@@ -34,8 +33,7 @@ public class UserHasMessageServiceImpl extends ServiceImpl<UserHasMessageMapper,
         if (null == detail) {
             throw new GXException("消息不存在");
         }
-        target = modifyEntityJSONFieldMultiValue(target, Dict.create().set("ext", Dict.create().set("status", GXBusinessStatusCode.NORMAL.getCode()).set("title", detail.getStr("title")).set("content", detail.getStr("content"))));
-        saveOrUpdate(target);
+        create(target, param);
         return target.getId();
     }
 

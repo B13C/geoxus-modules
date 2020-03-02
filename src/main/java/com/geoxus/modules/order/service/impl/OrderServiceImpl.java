@@ -62,9 +62,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
             }, param.getObj("items")));
             target.setOrderPrice(totalAmount);
         }
-        if (-1 == getSingleJSONFieldValue(target, "ext.status", Integer.class, -1)) {
-            target = modifyEntityJSONFieldSingleValue(target, "ext.status", GXBusinessStatusCode.ORDER_WAITING_PAYMENT.getCode());
-        }
         final OrderBeforeEvent orderBeforeEvent = new OrderBeforeEvent("新增订单之前", target, param);
         GXSyncEventBusCenterUtils.getInstance().post(orderBeforeEvent);
         target.setUserId(userId);
@@ -104,8 +101,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
     public boolean cancelOrderStatus(Dict param) {
         final Long orderNumber = param.getLong(OrderConstants.PRIMARY_KEY);
         OrderEntity orderEntity = getById(orderNumber);
-        orderEntity = modifyEntityJSONFieldSingleValue(orderEntity, "ext.status", GXBusinessStatusCode.CANCEL_STATE.getCode());
-        orderEntity = modifyEntityJSONFieldSingleValue(orderEntity, "ext.remark", param.getStr("remark"));
         return updateById(orderEntity);
     }
 
@@ -141,7 +136,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
         data.set("pay_type", "aliPay");
         data.set("pay_platform", "支付宝支付");
         data.set("status", GXBusinessStatusCode.NORMAL.getCode());
-        target = modifyEntityJSONFieldMultiValue(target, Dict.create().set("payInfo", data).set("ext", Dict.create().set("status", GXBusinessStatusCode.PAYMENT_SUCCESS.getCode())));
         final boolean b = updateById(target);
         final GXSlogEvent<OrderEntity> slogEvent = new GXSlogEvent<>("aliPay", target, "s_log", Dict.create());
         GXSyncEventBusCenterUtils.getInstance().post(slogEvent);
@@ -158,7 +152,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
         data.set("pay_type", "wechat");
         data.set("pay_platform", "微信支付");
         data.set("status", GXBusinessStatusCode.NORMAL.getCode());
-        target = modifyEntityJSONFieldMultiValue(target, Dict.create().set("payInfo", data).set("ext", Dict.create().set("status", GXBusinessStatusCode.PAYMENT_SUCCESS.getCode())));
         final boolean b = updateById(target);
         final GXSlogEvent<OrderEntity> slogEvent = new GXSlogEvent<>("wechatPay", target, "s_log", Dict.create());
         GXSyncEventBusCenterUtils.getInstance().post(slogEvent);

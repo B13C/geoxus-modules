@@ -368,7 +368,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     public boolean changeGrade(Dict param, UUserEntity userEntity) {
-        final boolean grade = updateJSONFieldMultiValue(userEntity, Dict.create().set("ext", Dict.create().set("grade", param.getInt("grade")).set("status", GXBusinessStatusCode.WAIT_REVIEW.getCode())));
+        final boolean grade = updateJSONFieldMultiValue(UUserEntity.class, Dict.create().set("ext", Dict.create().set("grade", param.getInt("grade")).set("status", GXBusinessStatusCode.WAIT_REVIEW.getCode())), param);
         final int oldGrade = getSingleJSONFieldValue(userEntity, "ext.grade", Integer.class);
         final Dict target = Dict.create();
         target.set("old_grade", oldGrade);

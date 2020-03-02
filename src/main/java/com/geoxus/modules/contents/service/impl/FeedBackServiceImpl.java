@@ -51,6 +51,6 @@ public class FeedBackServiceImpl extends ServiceImpl<FeedBackMapper, FeedBackEnt
             return false;
         }
         feedBackEntity.setStatus(FeedBackConstants.REPLY);
-        return updateById(modifyEntityJSONFieldMultiValue(feedBackEntity, param));
+        return updateById(feedBackEntity);
     }
 }

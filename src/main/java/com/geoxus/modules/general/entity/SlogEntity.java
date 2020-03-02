@@ -26,7 +26,7 @@ public class SlogEntity extends GXBaseEntity {
 
     private long modelId;
 
-    private String ext;
+    private String ext = "{}";
 
     private String source;
 

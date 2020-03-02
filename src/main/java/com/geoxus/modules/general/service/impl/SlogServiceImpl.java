@@ -28,16 +28,14 @@ public class SlogServiceImpl extends ServiceImpl<SlogMapper, SlogEntity> impleme
     @Override
     public long create(SlogEntity target, Dict param) {
         param.set("status", GXBusinessStatusCode.NORMAL.getCode());
-        target = modifyEntityJSONFieldMultiValue(target, Dict.create().set("ext", param));
-        saveOrUpdate(target);
+        save(target);
         return target.getLogId();
     }
 
     @Override
     public long update(SlogEntity target, Dict param) {
         param.set("status", GXBusinessStatusCode.NORMAL.getCode());
-        target = modifyEntityJSONFieldMultiValue(target, Dict.create().set("ext", param));
-        saveOrUpdate(target);
+        updateById(target);
         return target.getLogId();
     }
 

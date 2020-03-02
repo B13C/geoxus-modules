@@ -62,7 +62,7 @@ public class ContentController implements GXController<ContentEntity> {
     @PostMapping("/update-part-field")
     public GXResultUtils updatePartField(@RequestBody Dict param) {
         final ContentEntity contentEntity = contentService.getById(param.getLong(contentService.getPrimaryKey()));
-        contentService.updateById(contentService.modifyEntityJSONFieldMultiValue(contentEntity, param));
+        //contentService.updateById(contentService.modifyEntityJSONFieldMultiValue(contentEntity, param));
         return GXResultUtils.ok().putData(param);
     }
 }

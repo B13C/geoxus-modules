@@ -6,9 +6,9 @@ import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
-import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXResultUtils;
+import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.user.entity.UUserEntity;
 import com.geoxus.modules.user.entity.UWithdrawEntity;
 import com.geoxus.modules.user.service.UUserService;
@@ -26,7 +26,7 @@ import java.util.Optional;
 @RequestMapping("/withdraw/frontend")
 public class WithdrawController implements GXController<UWithdrawEntity> {
     @Autowired
-    private UWithdrawService UWithdrawService;
+    private UWithdrawService uWithdrawService;
 
     @Autowired
     private UUserService uUserService;
@@ -41,8 +41,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
         final String username = uUserService.getSingleJSONFieldValue(userEntity, "ext.username", String.class);
         final Integer type = Optional.ofNullable(uUserService.getSingleJSONFieldValue(userEntity, "ext.type", Integer.class)).orElse(0);
         final Dict extData = Dict.create().set("status", GXBusinessStatusCode.WAIT_REVIEW.getCode()).set("remark", "").set("username", username).set("type", type);
-        target = UWithdrawService.modifyEntityJSONFieldMultiValue(target, Dict.create().set("ext", extData));
-        final long i = UWithdrawService.create(target, Dict.create().set("user_id", userId));
+        final long i = uWithdrawService.create(target, Dict.create().set("user_id", userId));
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
 
@@ -56,8 +55,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
         final String username = uUserService.getSingleJSONFieldValue(userEntity, "ext.username", String.class);
         final Integer type = Optional.ofNullable(uUserService.getSingleJSONFieldValue(userEntity, "ext.type", Integer.class)).orElse(0);
         final Dict extData = Dict.create().set("status", GXBusinessStatusCode.WAIT_REVIEW.getCode()).set("remark", "").set("username", username).set("type", type);
-        target = UWithdrawService.modifyEntityJSONFieldMultiValue(target, Dict.create().set("ext", extData));
-        final long i = UWithdrawService.update(target, Dict.create().set("user_id", userId));
+        final long i = uWithdrawService.update(target, Dict.create().set("user_id", userId));
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
 
@@ -74,13 +72,13 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         final UUserEntity info = uUserService.getUserInfoByToken(GXHttpContextUtils.getHttpServletRequest().getHeader(GXTokenManager.USER_TOKEN));
         param.set(GXTokenManager.USER_ID, info.getUserId());
-        return GXResultUtils.ok().putData(UWithdrawService.listOrSearchPage(param));
+        return GXResultUtils.ok().putData(uWithdrawService.listOrSearchPage(param));
     }
 
     @Override
     @PostMapping("/detail")
     @GXLoginAnnotation
     public GXResultUtils detail(@RequestBody Dict param) {
-        return GXResultUtils.ok().putData(UWithdrawService.detail(param));
+        return GXResultUtils.ok().putData(uWithdrawService.detail(param));
     }
 }

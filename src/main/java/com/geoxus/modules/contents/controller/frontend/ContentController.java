@@ -35,8 +35,7 @@ public class ContentController implements GXController<ContentEntity> {
     @PostMapping("/modify-field")
     @GXLoginAnnotation
     public GXResultUtils modifyField(@RequestBody Dict param) {
-        final ContentEntity contentEntity = contentService.getById(param.getLong(contentService.getPrimaryKey()));
-        contentService.updateById(contentService.modifyEntityJSONFieldMultiValue(contentEntity, param));
+        contentService.updateFieldBySQL(ContentEntity.class, param, Dict.create().set(ContentConstants.PRIMARY_KEY, contentService.getPrimaryKey()));
         return GXResultUtils.ok().putData(param);
     }
 

@@ -55,9 +55,8 @@ public class GoodsController implements GXController<GoodsEntity> {
     }
 
     @PostMapping("/modify-goods")
-    public GXResultUtils modifyGoods(@GXRequestBodyToBeanAnnotation GoodsEntity goodsEntity, @RequestBody Dict param) {
-        final GoodsEntity entity = goodsService.modifyEntityJSONFieldMultiValue(goodsEntity, param);
-        final boolean b = goodsService.updateById(entity);
-        return GXResultUtils.ok().putData(entity);
+    public GXResultUtils modifyGoods(@GXRequestBodyToBeanAnnotation GoodsEntity target, @RequestBody Dict param) {
+        final boolean b = goodsService.updateById(target);
+        return GXResultUtils.ok().putData(target);
     }
 }
