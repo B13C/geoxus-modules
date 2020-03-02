@@ -164,7 +164,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
             final int goodsId = info.getInt("goods_id");
             final GoodsEntity goodsEntity = goodsService.getById(goodsId);
             if (null != goodsEntity) {
-                final double price = goodsService.getSingleJSONFieldValue(goodsEntity, "ext.price", Double.class);
+                final double price = goodsService.getSingleJSONFieldValueByDB(GoodsEntity.class, "ext->>'$.price'", Double.class, Dict.create());
                 final int quantity = info.getInt("quantity");
                 totalAmount += price * quantity;
             }

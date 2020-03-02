@@ -159,7 +159,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         sUserTokenService.createOrUpdate(token, entity.getUserId());
         final UserLoginAfterEvent loginAfterEvent = new UserLoginAfterEvent("login", entity, Dict.create());
         GXSyncEventBusCenterUtils.getInstance().post(loginAfterEvent);
-        return Dict.create().set(GXTokenManager.USER_TOKEN, token).set("is_new", getSingleJSONFieldValue(entity, "ext.is_new", Integer.class, 1));
+        return Dict.create().set(GXTokenManager.USER_TOKEN, token);
     }
 
     @Override
@@ -177,7 +177,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
                 sUserTokenService.createOrUpdate(token, Convert.toLong(entity.getUserId()));
                 final UserLoginAfterEvent loginAfterEvent = new UserLoginAfterEvent("login", entity, Dict.create());
                 GXSyncEventBusCenterUtils.getInstance().post(loginAfterEvent);
-                return Dict.create().set(GXTokenManager.USER_TOKEN, token).set("is_new", getSingleJSONFieldValue(entity, "ext.is_new", Integer.class, 1));
+                return Dict.create().set(GXTokenManager.USER_TOKEN, token);
             }
         }
         return Dict.create().set(GXTokenManager.USER_TOKEN, "");
@@ -202,7 +202,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
                 sUserTokenService.createOrUpdate(token, Convert.toLong(entity.getUserId()));
                 final UserLoginAfterEvent loginAfterEvent = new UserLoginAfterEvent("login", entity, Dict.create());
                 GXSyncEventBusCenterUtils.getInstance().post(loginAfterEvent);
-                return dict.set("is_new", getSingleJSONFieldValue(entity, "ext.is_new", Integer.class, 1));
+                return dict;
             }
         }
         return Dict.create().set(GXTokenManager.USER_TOKEN, "").set("bind_phone", false);
@@ -234,7 +234,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
                     sUserTokenService.createOrUpdate(token, userId);
                     final UserLoginAfterEvent loginAfterEvent = new UserLoginAfterEvent("login", entity, Dict.create());
                     GXSyncEventBusCenterUtils.getInstance().post(loginAfterEvent);
-                    return Dict.create().set(GXTokenManager.USER_TOKEN, token).set("is_new", getSingleJSONFieldValue(entity, "ext.is_new", Integer.class, 1));
+                    return Dict.create().set(GXTokenManager.USER_TOKEN, token);
                 }
             }
         }
@@ -268,7 +268,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
             final long userId = create(entity, Dict.create());
             final String token = GXTokenManager.generateUserToken(userId, Dict.create().set("phone", Optional.ofNullable(entity.getPhone()).orElse("")));
             sUserTokenService.createOrUpdate(token, userId);
-            return Dict.create().set("status", 0).set("msg", "绑定成功").set(GXTokenManager.USER_TOKEN, token).set("is_new", getSingleJSONFieldValue(entity, "ext.is_new", Integer.class, 1));
+            return Dict.create().set("status", 0).set("msg", "绑定成功").set(GXTokenManager.USER_TOKEN, token);
         }
         return Dict.create().set("status", 1).set("msg", "失败");
     }
@@ -369,7 +369,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean changeGrade(Dict param, UUserEntity userEntity) {
         final boolean grade = updateJSONFieldMultiValue(UUserEntity.class, Dict.create().set("ext", Dict.create().set("grade", param.getInt("grade")).set("status", GXBusinessStatusCode.WAIT_REVIEW.getCode())), param);
-        final int oldGrade = getSingleJSONFieldValue(userEntity, "ext.grade", Integer.class);
+        final int oldGrade = getSingleJSONFieldValueByDB(UUserEntity.class, "ext->>'$.grade'", Integer.class, param);
         final Dict target = Dict.create();
         target.set("old_grade", oldGrade);
         target.set("new_grade", param.getInt("grade"));

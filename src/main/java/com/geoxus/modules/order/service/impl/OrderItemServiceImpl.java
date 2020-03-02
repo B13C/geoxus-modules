@@ -113,8 +113,8 @@ public class OrderItemServiceImpl extends ServiceImpl<OrderItemMapper, OrderItem
      */
     private Dict compositeGoodsInfo(GoodsEntity goods) {
         final Dict dict = Dict.create();
-        final String goodsName = goodsService.getSingleJSONFieldValue(goods, "ext.name", String.class);
-        final Float price = goodsService.getSingleJSONFieldValue(goods, "ext.price", Float.class);
+        final String goodsName = goodsService.getSingleJSONFieldValueByDB(GoodsEntity.class, "ext->>'$.name'", String.class, dict);
+        final Float price = goodsService.getSingleJSONFieldValueByDB(GoodsEntity.class, "ext->>'$.price'", Float.class, dict);
         return dict.set("name", goodsName).set("price", price);
     }
 }

@@ -38,8 +38,8 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation UWithdrawEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         final UUserEntity userEntity = uUserService.getById(userId);
-        final String username = uUserService.getSingleJSONFieldValue(userEntity, "ext.username", String.class);
-        final Integer type = Optional.ofNullable(uUserService.getSingleJSONFieldValue(userEntity, "ext.type", Integer.class)).orElse(0);
+        final String username = uUserService.getSingleJSONFieldValueByEntity(userEntity, "ext.username", String.class);
+        final Integer type = Optional.ofNullable(uUserService.getSingleJSONFieldValueByEntity(userEntity, "ext.type", Integer.class)).orElse(0);
         final Dict extData = Dict.create().set("status", GXBusinessStatusCode.WAIT_REVIEW.getCode()).set("remark", "").set("username", username).set("type", type);
         final long i = uWithdrawService.create(target, Dict.create().set("user_id", userId));
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
@@ -52,8 +52,8 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation UWithdrawEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         final UUserEntity userEntity = uUserService.getById(userId);
-        final String username = uUserService.getSingleJSONFieldValue(userEntity, "ext.username", String.class);
-        final Integer type = Optional.ofNullable(uUserService.getSingleJSONFieldValue(userEntity, "ext.type", Integer.class)).orElse(0);
+        final String username = uUserService.getSingleJSONFieldValueByEntity(userEntity, "ext.username", String.class);
+        final Integer type = Optional.ofNullable(uUserService.getSingleJSONFieldValueByEntity(userEntity, "ext.type", Integer.class)).orElse(0);
         final Dict extData = Dict.create().set("status", GXBusinessStatusCode.WAIT_REVIEW.getCode()).set("remark", "").set("username", username).set("type", type);
         final long i = uWithdrawService.update(target, Dict.create().set("user_id", userId));
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
