@@ -1,7 +1,7 @@
 package com.geoxus.modules.contents.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.modules.contents.constant.FeedBackConstants;
@@ -23,7 +23,7 @@ public class FeedBackController implements GXController<FeedBackEntity> {
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation FeedBackEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation FeedBackEntity target) {
         final long i = feedBackService.update(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(FeedBackConstants.PRIMARY_KEY, i));
     }

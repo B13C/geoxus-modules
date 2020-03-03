@@ -1,7 +1,7 @@
 package com.geoxus.modules.user.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
@@ -25,13 +25,13 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation UWithdrawEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation UWithdrawEntity target) {
         return null;
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation UWithdrawEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation UWithdrawEntity target) {
         return null;
     }
 

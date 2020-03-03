@@ -1,7 +1,7 @@
 package com.geoxus.modules.message.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXResultUtils;
@@ -23,14 +23,14 @@ public class MessageController implements GXController<MessageEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation MessageEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation MessageEntity target) {
         final long i = messageService.create(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation MessageEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation MessageEntity target) {
         final long i = messageService.update(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }

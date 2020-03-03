@@ -1,7 +1,7 @@
 package com.geoxus.modules.user.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.response.GXPagination;
@@ -27,14 +27,14 @@ public class UserController implements GXController<UUserEntity> {
     @Override
     @PostMapping("/create")
     @Transactional(rollbackFor = Exception.class)
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation UUserEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation UUserEntity target) {
         final long i = userService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation UUserEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation UUserEntity target) {
         final long i = userService.update(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }

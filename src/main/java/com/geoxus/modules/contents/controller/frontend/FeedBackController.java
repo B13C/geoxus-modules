@@ -2,7 +2,7 @@ package com.geoxus.modules.contents.controller.frontend;
 
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXResultUtils;
@@ -26,7 +26,7 @@ public class FeedBackController implements GXController<FeedBackEntity> {
     @Override
     @PostMapping("/create")
     @GXLoginAnnotation
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation FeedBackEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation FeedBackEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         target.setUserId(userId);
         final long i = feedBackService.create(target, Dict.create());

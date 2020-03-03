@@ -1,7 +1,7 @@
 package com.geoxus.modules.banner.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
@@ -24,14 +24,14 @@ public class BannerController implements GXController<BannerEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation BannerEntity bannerEntity) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation BannerEntity bannerEntity) {
         long i = bannerService.create(bannerEntity, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(BannerConstants.PRIMARY_KEY, i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation BannerEntity bannerEntity) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation BannerEntity bannerEntity) {
         long i = bannerService.update(bannerEntity, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(BannerConstants.PRIMARY_KEY, i));
     }

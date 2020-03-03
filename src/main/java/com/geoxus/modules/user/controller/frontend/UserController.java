@@ -5,7 +5,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXHttpContextUtils;
@@ -41,7 +41,7 @@ public class UserController implements GXController<UUserEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation UUserEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation UUserEntity target) {
         final long userId = userService.create(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
         return GXResultUtils.ok().putData(Dict.create().set(GXTokenManager.USER_ID, userId).set(GXTokenManager.USER_TOKEN, GXTokenManager.generateUserToken(userId, Dict.create().set("phone", Optional.ofNullable(target.getPhone()).orElse("")))));
     }
@@ -49,7 +49,7 @@ public class UserController implements GXController<UUserEntity> {
     @Override
     @PostMapping("/update")
     @GXLoginAnnotation
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation UUserEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation UUserEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         if (userId > 0) {
             target.setUserId(userId);

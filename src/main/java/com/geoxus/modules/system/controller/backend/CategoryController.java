@@ -1,7 +1,7 @@
 package com.geoxus.modules.system.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.response.GXPagination;
@@ -24,14 +24,14 @@ public class CategoryController implements GXController<SCategoryEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation SCategoryEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation SCategoryEntity target) {
         final long i = categoryService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("category_id", i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation SCategoryEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation SCategoryEntity target) {
         final long i = categoryService.update(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("category_id", i));
     }

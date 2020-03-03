@@ -3,7 +3,7 @@ package com.geoxus.modules.contents.controller.frontend;
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXCommonUtils;
@@ -36,7 +36,7 @@ public class CommentController implements GXController<CommentEntity> {
     @Override
     @PostMapping("/create")
     @GXLoginAnnotation
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation CommentEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation CommentEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         target.setUserId(userId);
         final long i = commentService.create(target, Dict.create());
@@ -46,7 +46,7 @@ public class CommentController implements GXController<CommentEntity> {
     @Override
     @PostMapping("/update")
     @GXLoginAnnotation
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation CommentEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation CommentEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         target.setUserId(userId);
         final long i = commentService.update(target, Dict.create());

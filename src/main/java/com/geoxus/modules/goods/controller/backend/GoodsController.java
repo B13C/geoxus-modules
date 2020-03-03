@@ -1,7 +1,7 @@
 package com.geoxus.modules.goods.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.service.GXApiIdempotentService;
 import com.geoxus.core.common.util.GXResultUtils;
@@ -32,13 +32,13 @@ public class GoodsController implements GXController<GoodsEntity> {
     }
 
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation GoodsEntity goodsEntity) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation GoodsEntity goodsEntity) {
         final long i = goodsService.create(goodsEntity, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
 
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation GoodsEntity goodsEntity) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation GoodsEntity goodsEntity) {
         final long i = goodsService.update(goodsEntity, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set("id", i));
     }
@@ -55,7 +55,7 @@ public class GoodsController implements GXController<GoodsEntity> {
     }
 
     @PostMapping("/modify-goods")
-    public GXResultUtils modifyGoods(@GXRequestBodyToBeanAnnotation GoodsEntity target, @RequestBody Dict param) {
+    public GXResultUtils modifyGoods(@GXRequestBodyToEntityAnnotation GoodsEntity target, @RequestBody Dict param) {
         final boolean b = goodsService.updateById(target);
         return GXResultUtils.ok().putData(target);
     }

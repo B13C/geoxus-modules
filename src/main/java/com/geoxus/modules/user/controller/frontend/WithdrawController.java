@@ -3,7 +3,7 @@ package com.geoxus.modules.user.controller.frontend;
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXHttpContextUtils;
@@ -35,7 +35,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     @PostMapping("/create")
     @GXLoginAnnotation
     @GXApiIdempotentAnnotation
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation UWithdrawEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation UWithdrawEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         final UUserEntity userEntity = uUserService.getById(userId);
         final String username = uUserService.getSingleJSONFieldValueByEntity(userEntity, "ext.username", String.class);
@@ -49,7 +49,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     @PostMapping("/update")
     @GXLoginAnnotation
     @GXApiIdempotentAnnotation
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation UWithdrawEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation UWithdrawEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         final UUserEntity userEntity = uUserService.getById(userId);
         final String username = uUserService.getSingleJSONFieldValueByEntity(userEntity, "ext.username", String.class);

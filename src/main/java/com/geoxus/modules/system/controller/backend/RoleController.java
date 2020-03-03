@@ -1,7 +1,7 @@
 package com.geoxus.modules.system.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.validator.group.GXCreateGroup;
@@ -25,14 +25,14 @@ public class RoleController implements GXController<SRolesEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXCreateGroup.class}) SRolesEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation(groups = {GXCreateGroup.class}) SRolesEntity target) {
         final long i = rolesService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(SRolesConstants.PRIMARY_KEY, i));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation(groups = {GXUpdateGroup.class}) SRolesEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation(groups = {GXUpdateGroup.class}) SRolesEntity target) {
         final long i = rolesService.update(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(SRolesConstants.PRIMARY_KEY, i));
     }

@@ -2,7 +2,7 @@ package com.geoxus.modules.order.controller.frontend;
 
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXHttpContextUtils;
@@ -28,7 +28,7 @@ public class OrderController implements GXController<OrderEntity> {
     @Override
     @PostMapping("/create")
     @GXLoginAnnotation
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation OrderEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation OrderEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         final Integer flag = GXHttpContextUtils.getHttpParam("flag", Integer.class);
         final List items = GXHttpContextUtils.getHttpParam("items", List.class);
@@ -40,7 +40,7 @@ public class OrderController implements GXController<OrderEntity> {
     @Override
     @PostMapping("/update")
     @GXLoginAnnotation
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation OrderEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation OrderEntity target) {
         final long userId = getUserIdFromToken(GXTokenManager.USER_TOKEN, GXTokenManager.USER_ID);
         final int flag = GXHttpContextUtils.getHttpParam("flag", Integer.class);
         final List items = GXHttpContextUtils.getHttpParam("items", List.class);

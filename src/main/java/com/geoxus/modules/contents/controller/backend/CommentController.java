@@ -1,7 +1,7 @@
 package com.geoxus.modules.contents.controller.backend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXResultUtils;
@@ -24,14 +24,14 @@ public class CommentController implements GXController<CommentEntity> {
 
     @Override
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation CommentEntity target) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation CommentEntity target) {
         final long param = commentService.create(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
         return GXResultUtils.ok().putData(Dict.create().set(CommentConstants.PRIMARY_KEY, param));
     }
 
     @Override
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation CommentEntity target) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation CommentEntity target) {
         final long param = commentService.update(target, GXHttpContextUtils.getHttpParam("param", Dict.class));
         return GXResultUtils.ok().putData(Dict.create().set(CommentConstants.PRIMARY_KEY, param));
     }

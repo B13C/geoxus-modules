@@ -1,7 +1,7 @@
 package com.geoxus.modules.goods.controller.frontend;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXRequestBodyToBeanAnnotation;
+import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.service.GXApiIdempotentService;
 import com.geoxus.core.common.util.GXResultUtils;
@@ -32,12 +32,12 @@ public class GoodsController implements GXController<GoodsEntity> {
     }
 
     @PostMapping("/create")
-    public GXResultUtils create(@Valid @GXRequestBodyToBeanAnnotation GoodsEntity goodsEntity) {
+    public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation GoodsEntity goodsEntity) {
         return null;
     }
 
     @PostMapping("/update")
-    public GXResultUtils update(@Valid @GXRequestBodyToBeanAnnotation GoodsEntity goodsEntity) {
+    public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation GoodsEntity goodsEntity) {
         return null;
     }
 
