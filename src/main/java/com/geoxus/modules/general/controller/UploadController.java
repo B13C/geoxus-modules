@@ -4,6 +4,7 @@ import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXUploadFileLegalAnnotation;
 import com.geoxus.core.common.config.UploadConfig;
+import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.util.GXBase64DecodedMultipartFileUtils;
 import com.geoxus.core.common.util.GXHttpContextUtils;
@@ -148,11 +149,11 @@ public class UploadController {
         final String modelType = GXHttpContextUtils.getHttpParam("model_type", String.class);
         final String collectionName = GXHttpContextUtils.getHttpParam("collection_name", String.class);
         final Long modelId = GXHttpContextUtils.getHttpParam("model_id", Long.class);
-        final Long coreModelId = GXHttpContextUtils.getHttpParam("core_model_id", Long.class);
+        final Long coreModelId = GXHttpContextUtils.getHttpParam(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, Long.class);
         return Dict.create()
                 .set("collection_name", collectionName)
                 .set("model_id", modelId)
-                .set("core_model_id", coreModelId)
+                .set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, coreModelId)
                 .set("resource_type", resourceType)
                 .set("model_type", modelType);
     }

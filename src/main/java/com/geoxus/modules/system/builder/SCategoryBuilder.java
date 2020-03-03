@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
+import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.system.constant.SCategoryConstants;
 import org.apache.ibatis.jdbc.SQL;
@@ -36,7 +37,7 @@ public class SCategoryBuilder implements GXBaseBuilder {
         return Dict.create()
                 .set(SCategoryConstants.PRIMARY_KEY, GXBaseBuilderConstants.NUMBER_EQ)
                 .set("status", GXBaseBuilderConstants.NUMBER_EQ)
-                .set("core_model_id", GXBaseBuilderConstants.NUMBER_EQ);
+                .set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, GXBaseBuilderConstants.NUMBER_EQ);
     }
 
     @Override

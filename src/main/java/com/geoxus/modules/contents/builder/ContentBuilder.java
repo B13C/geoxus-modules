@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
+import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.contents.constant.ContentConstants;
 import org.apache.ibatis.jdbc.SQL;
@@ -34,7 +35,7 @@ public class ContentBuilder implements GXBaseBuilder {
                 .set("title", GXBaseBuilderConstants.AFTER_LIKE)
                 .set("keywords", GXBaseBuilderConstants.AFTER_LIKE)
                 .set("created_at", GXBaseBuilderConstants.TIME_RANGE_WITH_EQ)
-                .set("core_model_id", GXBaseBuilderConstants.NUMBER_EQ);
+                .set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, GXBaseBuilderConstants.NUMBER_EQ);
     }
 
     @Override

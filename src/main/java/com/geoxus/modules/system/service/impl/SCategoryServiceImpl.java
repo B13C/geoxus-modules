@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
+import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.core.framework.service.GXCoreModelService;
@@ -150,7 +151,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
         if (parentId == 0) {
             return "0";
         }
-        final Dict dictData = getFieldBySQL(SCategoryEntity.class, CollUtil.newHashSet("path"), Dict.create().set(SCategoryConstants.PRIMARY_KEY, parentId).set("core_model_id", coreModelId));
+        final Dict dictData = getFieldBySQL(SCategoryEntity.class, CollUtil.newHashSet("path"), Dict.create().set(SCategoryConstants.PRIMARY_KEY, parentId).set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, coreModelId));
         if (null == dictData || null == dictData.getStr("path")) {
             return "0";
         }

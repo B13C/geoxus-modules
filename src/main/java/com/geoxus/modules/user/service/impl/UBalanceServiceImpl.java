@@ -4,10 +4,11 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.exception.GXException;
-import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
+import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.user.constant.UBalanceConstants;
 import com.geoxus.modules.user.entity.UBalanceEntity;
 import com.geoxus.modules.user.mapper.UBalanceMapper;
@@ -63,7 +64,7 @@ public class UBalanceServiceImpl extends ServiceImpl<UBalanceMapper, UBalanceEnt
                 .set("remark", Optional.ofNullable(appendInfo.getStr("remark")).orElse("新增用户余额"))
                 .set("status", GXBusinessStatusCode.NORMAL.getCode());
         final String source = Optional.ofNullable(appendInfo.getStr("source")).orElse("increment_balance");
-        final GXSlogEvent<Dict> event = new GXSlogEvent<>(source, data, "s_log", Dict.create().set("user_id", userId).set("model_id", entity.getBalanceId()).set("core_model_id", UBalanceConstants.CORE_MODEL_ID));
+        final GXSlogEvent<Dict> event = new GXSlogEvent<>(source, data, "s_log", Dict.create().set("user_id", userId).set("model_id", entity.getBalanceId()).set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, UBalanceConstants.CORE_MODEL_ID));
         GXSyncEventBusCenterUtils.getInstance().post(event);
         return newBalance;
     }
@@ -96,7 +97,7 @@ public class UBalanceServiceImpl extends ServiceImpl<UBalanceMapper, UBalanceEnt
                 .set("remark", Optional.ofNullable(appendInfo.getStr("remark")).orElse("扣除用户余额"))
                 .set("status", GXBusinessStatusCode.NORMAL.getCode());
         final String source = Optional.ofNullable(appendInfo.getStr("source")).orElse("reduce_balance");
-        final GXSlogEvent<Dict> event = new GXSlogEvent<>(source, data, "s_log", Dict.create().set("user_id", userId).set("model_id", entity.getBalanceId()).set("core_model_id", UBalanceConstants.CORE_MODEL_ID));
+        final GXSlogEvent<Dict> event = new GXSlogEvent<>(source, data, "s_log", Dict.create().set("user_id", userId).set("model_id", entity.getBalanceId()).set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, UBalanceConstants.CORE_MODEL_ID));
         GXSyncEventBusCenterUtils.getInstance().post(event);
         return newBalance;
     }

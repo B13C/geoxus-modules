@@ -16,6 +16,7 @@ import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
+import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.oauth.GXTokenManager;
@@ -374,7 +375,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
         target.set("old_grade", oldGrade);
         target.set("new_grade", param.getInt("grade"));
         final Dict data = Dict.create();
-        data.set("core_model_id", UUserConstants.CORE_MODEL_ID);
+        data.set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, UUserConstants.CORE_MODEL_ID);
         data.set("model_id", userEntity.getUserId());
         data.set("user_id", userEntity.getUserId());
         final GXSlogEvent<Dict> event = new GXSlogEvent<>("common", target, "s_log", data);
