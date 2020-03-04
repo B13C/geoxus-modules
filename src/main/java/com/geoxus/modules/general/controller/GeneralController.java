@@ -5,11 +5,13 @@ import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.service.GXApiIdempotentService;
 import com.geoxus.core.common.util.GXResultUtils;
-import com.geoxus.core.framework.entity.GXCoreModelEntity;
+import com.geoxus.core.framework.service.GXCoreModelAttributesService;
 import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.user.entity.UUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/general/general")
@@ -20,17 +22,18 @@ public class GeneralController {
     @Autowired
     private GXCoreModelService coreModelService;
 
+    @Autowired
+    private GXCoreModelAttributesService gxCoreModelAttributesService;
+
     @PostMapping("/get-api-idempotent-token")
     @GXLoginAnnotation
     public GXResultUtils getApiIdempotentToken(@GXLoginUserAnnotation UUserEntity uUserEntity) {
         return GXResultUtils.ok().putData(Dict.create().set("api-token", apiIdempotentService.createApiIdempotentToken(Dict.parse(uUserEntity))));
     }
 
-    @GetMapping("/get-model-attribute")
-    public GXResultUtils getModelAttribute(@RequestBody Dict param) {
-        final Integer coreModelId = param.getInt("coreModelId");
-        final String fieldName = param.getStr("fieldName");
-        final GXCoreModelEntity modelEntity = coreModelService.getCoreModelByModelId(coreModelId, fieldName);
-        return GXResultUtils.ok().putData(modelEntity);
+    @GetMapping("/get-model-attributes")
+    public GXResultUtils getModelAttributes(@RequestBody Dict param) {
+        final List<Dict> attributes = gxCoreModelAttributesService.getModelAttributesByModelId(param);
+        return GXResultUtils.ok().putData(attributes);
     }
 }
