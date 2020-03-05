@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class SAdminHasRolesServiceImpl extends ServiceImpl<SAdminHasRolesMapper, SAdminHasRolesEntity> implements SAdminHasRolesService {
@@ -29,8 +28,13 @@ public class SAdminHasRolesServiceImpl extends ServiceImpl<SAdminHasRolesMapper,
     private SAdminService sAdminService;
 
     @Override
-    public Set<String> getAdminRoles(long adminId) {
-        return baseMapper.getRoleNameByAdminId(adminId);
+    public Dict getAdminRoles(long adminId) {
+        final List<Dict> roles = baseMapper.getRolesByAdminId(adminId);
+        final Dict dict = Dict.create();
+        for (Dict role : roles) {
+            dict.set(role.getStr("role_id"), role.getStr("role_name"));
+        }
+        return dict;
     }
 
     @Override

@@ -23,8 +23,8 @@ public class SRolesBuilder implements GXBaseBuilder {
         return sql.toString();
     }
 
-    public String getRoleNameByAdminId(Long adminId) {
-        SQL sql = new SQL().SELECT("s_roles.role_name").FROM(SRolesConstants.TABLE_NAME);
+    public String getRolesByAdminId(Long adminId) {
+        SQL sql = new SQL().SELECT("s_roles.role_id,s_roles.role_name").FROM(SRolesConstants.TABLE_NAME);
         sql.INNER_JOIN("s_admin_has_roles ON s_admin_has_roles.role_id = s_roles.role_id");
         sql.WHERE("s_admin_has_roles.admin_id=#{adminId}");
         return sql.toString();
