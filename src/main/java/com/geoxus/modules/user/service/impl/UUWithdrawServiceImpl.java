@@ -7,7 +7,6 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
@@ -66,7 +65,7 @@ public class UUWithdrawServiceImpl extends ServiceImpl<UWithdrawMapper, UWithdra
     @Override
     public boolean delete(Dict param) {
         final Dict condition = Dict.create().set(UWithdrawConstants.PRIMARY_KEY, param.getInt(UWithdrawConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition);
     }
 
     @Override

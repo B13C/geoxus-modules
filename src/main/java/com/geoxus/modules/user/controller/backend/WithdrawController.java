@@ -2,7 +2,6 @@ package com.geoxus.modules.user.controller.backend;
 
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXRequestBodyToEntityAnnotation;
-import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
@@ -58,7 +57,7 @@ public class WithdrawController implements GXController<UWithdrawEntity> {
     @PostMapping("/approve")
     public GXResultUtils approve(@RequestBody Dict param) {
         final Dict condition = Dict.create().set(UWithdrawConstants.PRIMARY_KEY, param.getInt(UWithdrawConstants.PRIMARY_KEY));
-        final boolean status = UWithdrawService.modifyStatus(GXBusinessStatusCode.APPROVE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        final boolean status = UWithdrawService.modifyStatus(GXBusinessStatusCode.APPROVE.getCode(), condition);
         return GXResultUtils.ok().putData(Dict.create().set("status", status));
     }
 

@@ -2,7 +2,6 @@ package com.geoxus.modules.system.service.impl;
 
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.util.GXChineseToPinYinUtils;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
@@ -50,7 +49,7 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
     @Override
     public boolean delete(Dict param) {
         final Dict condition = Dict.create().set(SRolesConstants.PRIMARY_KEY, param.getObj(SRolesConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition);
     }
 
     @Override
@@ -78,12 +77,12 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
     @Override
     public boolean freeze(Dict param) {
         final Dict condition = Dict.create().set(SRolesConstants.PRIMARY_KEY, param.getObj(SRolesConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(SRolesConstants.PRIMARY_KEY, param.getObj(SRolesConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition);
     }
 }

@@ -6,7 +6,6 @@ import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.system.constant.SMenuConstants;
@@ -85,21 +84,21 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     public boolean openStatus(Dict param) {
         final int id = param.getInt(SMenuConstants.PRIMARY_KEY);
         final Dict condition = Dict.create().set(SMenuConstants.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition);
     }
 
     @Override
     public boolean closeStatus(Dict param) {
         final int id = param.getInt(SMenuConstants.PRIMARY_KEY);
         final Dict condition = Dict.create().set(SMenuConstants.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.OFF_STATE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.OFF_STATE.getCode(), condition);
     }
 
     @Override
     public boolean freezeStatus(Dict param) {
         final int id = param.getInt(SMenuConstants.PRIMARY_KEY);
         final Dict condition = Dict.create().set(SMenuConstants.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition);
     }
 
     /**

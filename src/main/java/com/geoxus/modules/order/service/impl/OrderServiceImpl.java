@@ -8,7 +8,6 @@ import cn.hutool.json.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.config.GXWeChatConfig;
-import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXSyncEventBusCenterUtils;
@@ -84,7 +83,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
 
     @Override
     public boolean delete(Dict param) {
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), param, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), param);
     }
 
     @Override

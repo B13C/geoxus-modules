@@ -15,7 +15,6 @@ import com.geoxus.core.common.annotation.GXCheckRequestVerifyCodeAnnotation;
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
 import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
-import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.event.GXSlogEvent;
 import com.geoxus.core.common.exception.GXException;
@@ -457,7 +456,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean delete(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition, GXBaseBuilderConstants.NON_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.DELETED.getCode(), condition);
     }
 
     @Override
@@ -515,13 +514,13 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
     @Override
     public boolean frozen(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.OR_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition);
     }
 
     @Override
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(UUserConstants.PRIMARY_KEY, param.getLong(UUserConstants.PRIMARY_KEY));
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition, GXBaseBuilderConstants.NEGATION_OPERATOR);
+        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition);
     }
 
     @Override
