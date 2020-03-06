@@ -461,7 +461,7 @@ public class UUserServiceImpl extends ServiceImpl<UUserMapper, UUserEntity> impl
 
     @Override
     public GXPagination listOrSearchPage(Dict param) {
-        return generatePage(param);
+        return generatePage(param, Dict.create());
     }
 
     @Override

@@ -34,7 +34,7 @@ public class FeedBackServiceImpl extends ServiceImpl<FeedBackMapper, FeedBackEnt
 
     @Override
     public GXPagination listOrSearchPage(Dict param) {
-        return generatePage(param);
+        return generatePage(param, Dict.create());
     }
 
     @Override

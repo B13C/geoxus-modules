@@ -88,7 +88,7 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper, OrderEntity> impl
 
     @Override
     public GXPagination listOrSearchPage(Dict param) {
-        return generatePage(param);
+        return generatePage(param, Dict.create());
     }
 
     @Override

@@ -54,7 +54,7 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
 
     @Override
     public GXPagination listOrSearchPage(Dict param) {
-        return generatePage(param);
+        return generatePage(param, Dict.create());
     }
 
     @Override
