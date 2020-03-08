@@ -14,7 +14,7 @@ import com.geoxus.core.framework.service.GXCoreMediaLibraryService;
 import com.geoxus.modules.contents.constant.CommentConstants;
 import com.geoxus.modules.contents.entity.CommentEntity;
 import com.geoxus.modules.contents.service.CommentService;
-import com.geoxus.modules.user.entity.UUserEntity;
+import com.geoxus.user.entity.UUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

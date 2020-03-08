@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.modules.contents.constant.FeedBackConstants;
-import com.geoxus.modules.user.constant.UUserConstants;
+import com.geoxus.user.constant.UUserConstants;
 import org.apache.ibatis.jdbc.SQL;
 
 public class FeedBackBuilder implements GXBaseBuilder {
