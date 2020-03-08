@@ -5,8 +5,6 @@ import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.validator.group.GXCreateGroup;
 import com.geoxus.modules.general.service.StatisticsService;
-import com.geoxus.goods.listener.GoodsListener;
-import com.geoxus.goods.service.GoodsService;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +25,6 @@ import java.util.Map;
 public class StatisticsController {
     @Autowired
     private StatisticsService statisticsService;
-
-    @Autowired
-    private GoodsService goodsService;
-
-    @Autowired
-    private GoodsListener goodsListener;
 
     /**
      * 首页数据统计
