@@ -3,6 +3,7 @@ package com.geoxus.modules.system.builder;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.system.constant.SPermissionsConstants;
 import org.apache.ibatis.jdbc.SQL;
@@ -48,6 +49,19 @@ public class SPermissionsBuilder implements GXBaseBuilder {
                 "INNER JOIN s_roles ON s_admin_has_roles.role_id = s_roles.role_id\n" +
                 "WHERE s_admin_has_roles.admin_id = {admin_id} AND s_roles.`status` = " + GXBusinessStatusCode.NORMAL.getCode();
         return StrUtil.format(sql, param);
+    }
+
+    /**
+     * 根据权限ID获取权限码
+     *
+     * @param permissionIds 权限码列表
+     * @return Set<String>
+     */
+    public String getPermissionsCode(String permissionIds) {
+        final SQL sql = new SQL().SELECT("permission_code").FROM(SPermissionsConstants.TABLE_NAME);
+        final String where = SPermissionsConstants.PRIMARY_KEY + " " + GXBaseBuilderConstants.IN;
+        sql.WHERE(StrUtil.format(where, permissionIds));
+        return sql.toString();
     }
 
     @Override

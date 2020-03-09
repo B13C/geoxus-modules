@@ -2,6 +2,7 @@ package com.geoxus.modules.system.service.impl;
 
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
+import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -12,7 +13,9 @@ import com.geoxus.modules.system.constant.SMenuConstants;
 import com.geoxus.modules.system.entity.SMenuEntity;
 import com.geoxus.modules.system.mapper.SMenuMapper;
 import com.geoxus.modules.system.service.SMenuService;
+import com.geoxus.modules.system.service.SPermissionsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -20,19 +23,30 @@ import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> implements SMenuService {
+    @Autowired
+    private SPermissionsService sPermissionsService;
+
     @Override
     public long create(SMenuEntity target, Dict param) {
-        save(target);
+        final List<Integer> permissionsIds = Convert.convert(new TypeReference<List<Integer>>() {
+        }, target.getPerms());
+        final Set<String> permissionsCode = sPermissionsService.getPermissionsCode(permissionsIds);
+        target.setPerms(String.join(",", permissionsCode));
         return target.getMenuId();
     }
 
     @Override
     public long update(SMenuEntity target, Dict param) {
+        final List<Integer> permissionsIds = Convert.convert(new TypeReference<List<Integer>>() {
+        }, target.getPerms());
+        final Set<String> permissionsCode = sPermissionsService.getPermissionsCode(permissionsIds);
+        target.setPerms(String.join(",", permissionsCode));
         updateById(target);
         return target.getMenuId();
     }
@@ -118,7 +132,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     @Override
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
-        final int parentId = Convert.toInt(value);
-        return parentId == 0 || null != getById(parentId);
+        final int parentId = Convert.toInt(value, 0);
+        return parentId == 0 || 1 == checkRecordIsExists(SMenuEntity.class, Dict.create().set(SMenuConstants.PRIMARY_KEY, parentId));
     }
 }

@@ -1,5 +1,6 @@
 package com.geoxus.modules.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -43,6 +44,15 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
             return baseMapper.getAllPermissionCode();
         }
         return baseMapper.getAdminAllPermissions(Dict.create().set(GXTokenManager.ADMIN_ID, adminId));
+    }
+
+    @Override
+    public Set<String> getPermissionsCode(List<Integer> permissionIds) {
+        if (permissionIds.isEmpty()) {
+            return CollUtil.newHashSet();
+        }
+        final String permissionIdStr = permissionIds.stream().map(Object::toString).collect(Collectors.joining(","));
+        return baseMapper.getPermissionsCode(permissionIdStr);
     }
 
     @Override

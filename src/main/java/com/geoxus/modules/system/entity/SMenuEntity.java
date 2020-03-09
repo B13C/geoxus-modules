@@ -2,8 +2,11 @@ package com.geoxus.modules.system.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
+import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.modules.system.constant.SMenuConstants;
+import com.geoxus.modules.system.service.SMenuService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -14,6 +17,7 @@ public class SMenuEntity extends GXBaseEntity {
     @TableId
     private int menuId;
 
+    @GXValidateDBExistsAnnotation(service = SMenuService.class, fieldName = SMenuConstants.PRIMARY_KEY)
     private int parentId;
 
     private String menuName;
@@ -22,6 +26,7 @@ public class SMenuEntity extends GXBaseEntity {
 
     private String perms;
 
+    @GXFieldCommentAnnotation(zh = "类型 0 : 目录  1 : 菜单  2 : 按钮")
     private int type;
 
     private int icon;

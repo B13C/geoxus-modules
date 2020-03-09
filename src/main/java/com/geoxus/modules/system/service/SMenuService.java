@@ -11,32 +11,32 @@ public interface SMenuService extends GXBusinessService<SMenuEntity>, GXValidate
     /**
      * 获取树状结构
      *
-     * @param param
-     * @return
+     * @param param 参数
+     * @return List
      */
     List<Dict> getTree(Dict param);
 
     /**
      * 开启
      *
-     * @param param
-     * @return
+     * @param param 参数
+     * @return boolean
      */
     boolean openStatus(Dict param);
 
     /**
      * 关闭
      *
-     * @param param
-     * @return
+     * @param param 参数
+     * @return boolean
      */
     boolean closeStatus(Dict param);
 
     /**
      * 冻结
      *
-     * @param param
-     * @return
+     * @param param 参数
+     * @return boolean
      */
     boolean freezeStatus(Dict param);
 }

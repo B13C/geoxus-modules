@@ -25,5 +25,13 @@ public interface SPermissionsService extends GXSPermissionsService<SPermissionsE
      * @return
      */
     Set<String> getAdminAllPermissions(Long adminId);
+
+    /**
+     * 根据权限ID获取权限码
+     *
+     * @param permissionIds 权限码列表
+     * @return Set<String>
+     */
+    Set<String> getPermissionsCode(List<Integer> permissionIds);
 }
 
