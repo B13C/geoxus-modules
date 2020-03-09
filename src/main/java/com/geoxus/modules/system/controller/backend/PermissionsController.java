@@ -34,7 +34,7 @@ public class PermissionsController {
      * @return
      */
     @PostMapping("/get-permissions-tree")
-    @RequiresPermissions("sys-permissions-get-permissions-tree")
+    @RequiresPermissions("permissions-get-permissions-tree")
     public GXResultUtils getPermissionsTree() {
         List<SPermissionsEntity> list = sPermissionsService.getPermissionsTree();
         return GXResultUtils.ok().putData(list);
@@ -46,7 +46,7 @@ public class PermissionsController {
      * @return
      */
     @PostMapping("/get-role-permissions")
-    @RequiresPermissions("sys-permissions-get-role-permissions")
+    @RequiresPermissions("permissions-get-role-permissions")
     public GXResultUtils getRolePermissions(@RequestBody Dict param) {
         List<Long> list = sPermissionsService.getRolePermissions(param.getLong(SRolesConstants.PRIMARY_KEY));
         return GXResultUtils.ok().putData(list);
@@ -59,6 +59,7 @@ public class PermissionsController {
      * @return
      */
     @PostMapping("/get-admin-permissions")
+    @RequiresPermissions("permissions-get-admin-permissions")
     public GXResultUtils getAdminPermissions(@RequestBody Dict param) {
         final List<Dict> list = sAdminHasPermissionsService.listOrSearch(param);
         return GXResultUtils.ok().putData(list);
@@ -74,6 +75,7 @@ public class PermissionsController {
      * @return GXResultUtils
      */
     @PostMapping("/get-admin-all-permissions")
+    @RequiresPermissions("permissions-get-admin-all-permissions")
     public GXResultUtils getAdminAllPermissions(@RequestBody Dict param) {
         Long adminId = param.getLong(SAdminConstants.PRIMARY_KEY);
         if (null == adminId) {

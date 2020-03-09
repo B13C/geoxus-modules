@@ -8,6 +8,7 @@ import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.banner.constant.BannerConstants;
 import com.geoxus.modules.banner.entity.BannerEntity;
 import com.geoxus.modules.banner.service.BannerService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +25,7 @@ public class BannerController implements GXController<BannerEntity> {
 
     @Override
     @PostMapping("/create")
+    @RequiresPermissions("banner-create")
     public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation BannerEntity bannerEntity) {
         long i = bannerService.create(bannerEntity, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(BannerConstants.PRIMARY_KEY, i));
@@ -31,6 +33,7 @@ public class BannerController implements GXController<BannerEntity> {
 
     @Override
     @PostMapping("/update")
+    @RequiresPermissions("banner-update")
     public GXResultUtils update(@Valid @GXRequestBodyToEntityAnnotation BannerEntity bannerEntity) {
         long i = bannerService.update(bannerEntity, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(BannerConstants.PRIMARY_KEY, i));
@@ -38,6 +41,7 @@ public class BannerController implements GXController<BannerEntity> {
 
     @Override
     @PostMapping("/delete")
+    @RequiresPermissions("banner-delete")
     public GXResultUtils delete(@RequestBody Dict param) {
         final boolean b = bannerService.delete(param);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
@@ -45,6 +49,7 @@ public class BannerController implements GXController<BannerEntity> {
 
     @Override
     @PostMapping("/list-or-search")
+    @RequiresPermissions("banner-list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
         param.set("status", GXBusinessStatusCode.NORMAL.getCode());
         return GXResultUtils.ok().putData(bannerService.listOrSearchPage(param));
@@ -52,16 +57,19 @@ public class BannerController implements GXController<BannerEntity> {
 
     @Override
     @PostMapping("/detail")
+    @RequiresPermissions("banner-detail")
     public GXResultUtils detail(@RequestBody Dict param) {
         return GXResultUtils.ok().putData(bannerService.detail(param));
     }
 
     @PostMapping("/show")
+    @RequiresPermissions("banner-show")
     public GXResultUtils show(@RequestBody Dict param) {
         return GXResultUtils.ok().putData(Dict.create().set("status", bannerService.show(param)));
     }
 
     @PostMapping("/hidden")
+    @RequiresPermissions("banner-hidden")
     public GXResultUtils hidden(@RequestBody Dict param) {
         return GXResultUtils.ok().putData(Dict.create().set("status", bannerService.hidden(param)));
     }
