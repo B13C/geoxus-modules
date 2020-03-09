@@ -5,7 +5,6 @@ import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
@@ -21,7 +20,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -53,7 +51,8 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
 
     @Override
     public boolean delete(Dict param) {
-        final List<Integer> ids = Convert.convert((Type) TypeUtil.getClass(param.getObj(SMenuConstants.PRIMARY_KEY).getClass()), param.getObj(SMenuConstants.PRIMARY_KEY));
+        final List<Integer> ids = Convert.convert(new TypeReference<List<Integer>>() {
+        }, param.getObj(SMenuConstants.PRIMARY_KEY));
         final ArrayList<SMenuEntity> updateList = new ArrayList<>();
         for (int id : ids) {
             SMenuEntity entity = getById(id);

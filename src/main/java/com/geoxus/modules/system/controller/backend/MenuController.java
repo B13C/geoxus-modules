@@ -7,6 +7,7 @@ import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.modules.system.constant.SMenuConstants;
 import com.geoxus.modules.system.entity.SMenuEntity;
 import com.geoxus.modules.system.service.SMenuService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class MenuController implements GXController<SMenuEntity> {
 
     @Override
     @PostMapping("/create")
+    @RequiresPermissions("menu-create")
     public GXResultUtils create(@GXRequestBodyToEntityAnnotation @Valid SMenuEntity target) {
         final long l = sMenuService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(SMenuConstants.PRIMARY_KEY, l));
