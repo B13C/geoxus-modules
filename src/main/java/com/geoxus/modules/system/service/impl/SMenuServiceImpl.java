@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.lang.TypeReference;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -21,10 +22,7 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -118,9 +116,16 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
 
     @Override
     public Set<String> getAllPerms(Long adminId) {
-        final HashSet<Object> perms = CollUtil.newHashSet();
-        final Set<String> allPerms = baseMapper.getAllPerms(adminId);
-        return allPerms;
+        final HashSet<String> permsSet = CollUtil.newHashSet();
+        final List<Dict> allPerms = baseMapper.getAllPerms(adminId);
+        for (Dict dict : allPerms) {
+            final String perms = dict.getStr("perms");
+            if (StrUtil.isBlank(perms)) {
+                continue;
+            }
+            permsSet.addAll(Arrays.asList(perms.trim().split(",")));
+        }
+        return permsSet;
     }
 
     @Override

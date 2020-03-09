@@ -14,6 +14,7 @@ import com.geoxus.modules.system.entity.SPermissionsEntity;
 import com.geoxus.modules.system.entity.SRoleHasPermissionsEntity;
 import com.geoxus.modules.system.mapper.SPermissionsMapper;
 import com.geoxus.modules.system.service.SAdminHasPermissionsService;
+import com.geoxus.modules.system.service.SMenuService;
 import com.geoxus.modules.system.service.SPermissionsService;
 import com.geoxus.modules.system.service.SRoleHasPermissionsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     @Autowired
     private SRoleHasPermissionsService sRoleHasPermissionsService;
 
+    @Autowired
+    private SMenuService sMenuService;
+
     @Override
     public List<SPermissionsEntity> getPermissionsTree() {
         return super.list(new QueryWrapper<>());
@@ -43,7 +47,9 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
         if (0 == adminId.compareTo(superAdminId)) {
             return baseMapper.getAllPermissionCode();
         }
-        return baseMapper.getAdminAllPermissions(Dict.create().set(GXTokenManager.ADMIN_ID, adminId));
+        final Set<String> permissions = baseMapper.getAdminAllPermissions(Dict.create().set(GXTokenManager.ADMIN_ID, adminId));
+        permissions.addAll(sMenuService.getAllPerms(adminId));
+        return permissions;
     }
 
     @Override
