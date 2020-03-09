@@ -3,6 +3,7 @@ package com.geoxus.modules.system.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.entity.GXSPermissionsEntity;
 import com.geoxus.modules.system.constant.SPermissionsConstants;
@@ -20,53 +21,29 @@ import java.util.List;
 public class SPermissionsEntity extends GXSPermissionsEntity {
     private static final long serialVersionUID = 1L;
 
-    /**
-     * 主键ID
-     */
+    @GXFieldCommentAnnotation(zh = "主键ID")
     @TableId
     private int permissionId;
 
     @GXValidateDBExistsAnnotation
     private int coreModelId;
 
-    /**
-     * 权限码
-     */
+    @GXFieldCommentAnnotation(zh = "权限码")
     private String permissionCode;
 
-    /**
-     * 权限保护类型(web,php，主要用于PHP)
-     */
+    @GXFieldCommentAnnotation(zh = "权限保护类型(web,php,主要用于PHP)")
     private String guardName;
 
-    /**
-     * 权限名称
-     */
+    @GXFieldCommentAnnotation(zh = "权限名称")
     private String showName;
 
-    /**
-     * 父级ID
-     */
-    private int parentId;
+    @GXFieldCommentAnnotation(zh = "归类(分类)")
+    private int category;
 
-    /**
-     * 当前层级(1-2-3)
-     */
-    private String path;
-
-    /**
-     * 状态，1：正常，0：冻结
-     */
+    @GXFieldCommentAnnotation(zh = "状态，1：正常，0：冻结")
     private int status;
 
-    /**
-     * 权限在当前模块下的顺序，由小到大
-     */
-    private int sort;
-
-    /**
-     * 备注
-     */
+    @GXFieldCommentAnnotation(zh = "备注")
     private String remark;
 
     @TableField(exist = false)

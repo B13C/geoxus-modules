@@ -2,7 +2,6 @@ package com.geoxus.modules.system.service.impl;
 
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.oauth.GXTokenManager;
 import com.geoxus.core.common.util.GXCommonUtils;
@@ -33,30 +32,7 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
 
     @Override
     public List<SPermissionsEntity> getPermissionsTree() {
-        List<SPermissionsEntity> list = super.list(new QueryWrapper<>());
-        //把根分类区分出来
-        List<SPermissionsEntity> roots = list.stream().filter(root -> root.getParentId() == 0).collect(Collectors.toList());
-        //把非根分类区分出来
-        List<SPermissionsEntity> subs = list.stream().filter(sub -> sub.getParentId() != 0).collect(Collectors.toList());
-        //递归构建结构化的分类信息
-        roots.forEach(root -> buildSubs(root, subs));
-        return roots;
-    }
-
-    /**
-     * 递归构建
-     *
-     * @param parent
-     * @param subs
-     */
-    private void buildSubs(SPermissionsEntity parent, List<SPermissionsEntity> subs) {
-        List<SPermissionsEntity> children = subs.stream().filter(sub -> sub.getParentId() == parent.getPermissionId()).collect(Collectors.toList());
-        parent.setChildren(children);
-        //有子分类的情况
-        if (!CollectionUtils.isEmpty(children)) {
-            //再次递归构建
-            children.forEach(child -> buildSubs(child, subs));
-        }
+        return super.list(new QueryWrapper<>());
     }
 
     @Override
