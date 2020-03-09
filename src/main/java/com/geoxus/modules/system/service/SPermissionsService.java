@@ -15,18 +15,6 @@ public interface SPermissionsService extends GXSPermissionsService<SPermissionsE
     List<SPermissionsEntity> getPermissionsTree();
 
     /**
-     * 获取管理员的所有权限列表
-     * 权限包括:
-     * <p>
-     * 1、分配给角色的权限
-     * 2、直接分配给管理员的权限
-     *
-     * @param adminId 为NULL是获取当前登录人的
-     * @return
-     */
-    Set<String> getAdminAllPermissions(Long adminId);
-
-    /**
      * 根据权限ID获取权限码
      *
      * @param permissionIds 权限码列表

@@ -1,6 +1,5 @@
 package com.geoxus.modules.system.service.impl;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -20,6 +19,7 @@ import com.geoxus.modules.system.service.SRoleHasPermissionsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -55,7 +55,7 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
     @Override
     public Set<String> getPermissionsCode(List<Integer> permissionIds) {
         if (permissionIds.isEmpty()) {
-            return CollUtil.newHashSet();
+            return Collections.emptySet();
         }
         final String permissionIdStr = permissionIds.stream().map(Object::toString).collect(Collectors.joining(","));
         return baseMapper.getPermissionsCode(permissionIdStr);
