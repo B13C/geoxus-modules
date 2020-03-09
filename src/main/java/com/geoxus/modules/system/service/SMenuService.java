@@ -6,15 +6,15 @@ import com.geoxus.core.common.validator.GXValidateDBExists;
 import com.geoxus.modules.system.entity.SMenuEntity;
 
 import java.util.List;
+import java.util.Set;
 
 public interface SMenuService extends GXBusinessService<SMenuEntity>, GXValidateDBExists {
     /**
      * 获取树状结构
      *
-     * @param param 参数
      * @return List
      */
-    List<Dict> getTree(Dict param);
+    List<Dict> getTree();
 
     /**
      * 开启
@@ -39,4 +39,20 @@ public interface SMenuService extends GXBusinessService<SMenuEntity>, GXValidate
      * @return boolean
      */
     boolean freezeStatus(Dict param);
+
+    /**
+     * 获取管理员的permissions
+     *
+     * @param adminId 用户ID
+     * @return Set
+     */
+    Set<String> getAllPerms(Long adminId);
+
+    /**
+     * 获取管理员的菜单列表
+     *
+     * @param adminId 用户ID
+     * @return Set
+     */
+    List<Integer> getAllMenuId(Long adminId);
 }

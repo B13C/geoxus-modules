@@ -1,11 +1,11 @@
 package com.geoxus.modules.system.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.TypeUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -38,6 +39,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
         }, target.getPerms());
         final Set<String> permissionsCode = sPermissionsService.getPermissionsCode(permissionsIds);
         target.setPerms(String.join(",", permissionsCode));
+        save(target);
         return target.getMenuId();
     }
 
@@ -82,13 +84,12 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
      * @return
      */
     @Cacheable(value = "__DEFAULT__", key = "targetClass + methodName")
-    public List<Dict> getTree(Dict param) {
-        final Page<Dict> page = new Page<>(1, 10000);
-        final List<Dict> list = baseMapper.listOrSearchPage(page, param);
+    public List<Dict> getTree() {
+        final List<Dict> list = baseMapper.listOrSearch(Dict.create());
         //把根分类区分出来
-        List<Dict> rootList = list.stream().filter(root -> root.getInt("parent_id") == 0).collect(Collectors.toList());
+        List<Dict> rootList = list.stream().filter(root -> root.getInt(SMenuConstants.PARENT_ID_NAME) == 0).collect(Collectors.toList());
         //把非根分类区分出来
-        List<Dict> subList = list.stream().filter(sub -> sub.getInt("parent_id") != 0).collect(Collectors.toList());
+        List<Dict> subList = list.stream().filter(sub -> sub.getInt(SMenuConstants.PARENT_ID_NAME) != 0).collect(Collectors.toList());
         //递归构建结构化的分类信息
         rootList.forEach(root -> buildSubs(root, subList));
         return rootList;
@@ -115,6 +116,18 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
         return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition);
     }
 
+    @Override
+    public Set<String> getAllPerms(Long adminId) {
+        final HashSet<Object> perms = CollUtil.newHashSet();
+        final Set<String> allPerms = baseMapper.getAllPerms(adminId);
+        return allPerms;
+    }
+
+    @Override
+    public List<Integer> getAllMenuId(Long adminId) {
+        return baseMapper.getAllMenuId(adminId);
+    }
+
     /**
      * 递归构建
      *
@@ -122,7 +135,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
      * @param subs   子集数据
      */
     private void buildSubs(Dict parent, List<Dict> subs) {
-        List<Dict> children = subs.stream().filter(sub -> sub.getInt("parent_id") == (int) parent.getInt(SMenuConstants.PRIMARY_KEY)).collect(Collectors.toList());
+        List<Dict> children = subs.stream().filter(sub -> sub.getInt(SMenuConstants.PARENT_ID_NAME) == (int) parent.getInt(SMenuConstants.PRIMARY_KEY)).collect(Collectors.toList());
         parent.set("children", children);
         if (!CollectionUtils.isEmpty(children)) {//有子分类的情况
             children.forEach(child -> buildSubs(child, subs));//再次递归构建

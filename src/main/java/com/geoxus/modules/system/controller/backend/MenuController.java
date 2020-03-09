@@ -25,7 +25,7 @@ public class MenuController implements GXController<SMenuEntity> {
     @Override
     @PostMapping("/list-or-search")
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final List<Dict> menuTree = sMenuService.getTree(param);
+        final List<Dict> menuTree = sMenuService.getTree();
         return GXResultUtils.ok().putData(menuTree);
     }
 

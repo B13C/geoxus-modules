@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.SelectProvider;
 
 import java.util.List;
+import java.util.Set;
 
 @Mapper
 public interface SMenuMapper extends GXBaseMapper<SMenuEntity> {
@@ -16,4 +17,10 @@ public interface SMenuMapper extends GXBaseMapper<SMenuEntity> {
 
     @SelectProvider(type = SMenuBuilder.class, method = "listOrSearch")
     List<Dict> listOrSearch(Dict param);
+
+    @SelectProvider(type = SMenuBuilder.class, method = "getAllPerms")
+    Set<String> getAllPerms(Long adminId);
+
+    @SelectProvider(type = SMenuBuilder.class, method = "getAllMenuId")
+    List<Integer> getAllMenuId(Long adminId);
 }
