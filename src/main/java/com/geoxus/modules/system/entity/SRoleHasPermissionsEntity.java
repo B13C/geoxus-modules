@@ -27,7 +27,4 @@ public class SRoleHasPermissionsEntity implements Serializable {
 
     @GXFieldCommentAnnotation(zh = "角色ID")
     private long roleId;
-
-    @GXFieldCommentAnnotation(zh = "模型类型")
-    private String modelType = "default";
 }

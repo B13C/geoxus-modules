@@ -3,6 +3,7 @@ package com.geoxus.modules.system.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.modules.system.constant.SAdminHasPermissionsConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,15 +22,9 @@ public class SAdminHasPermissionsEntity implements Serializable {
     @TableId(type = IdType.AUTO)
     private int id;
 
+    @GXFieldCommentAnnotation(zh = "权限ID")
     private long permissionId;
 
-    /**
-     * 管理员ID
-     */
+    @GXFieldCommentAnnotation(zh = "管理员ID")
     private long adminId;
-
-    /**
-     * 模型类型(用户获取用户权限,主要用于PHP)
-     */
-    private String modelType;
 }
