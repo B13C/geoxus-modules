@@ -4,9 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
-import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
+import com.geoxus.core.common.annotation.GXValidateDBUniqueAnnotation;
 import com.geoxus.core.common.entity.GXSPermissionsEntity;
 import com.geoxus.modules.system.constant.SPermissionsConstants;
+import com.geoxus.modules.system.service.SPermissionsService;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,14 +26,11 @@ public class SPermissionsEntity extends GXSPermissionsEntity {
     @TableId
     private int permissionId;
 
-    @GXValidateDBExistsAnnotation
     private int coreModelId;
 
     @GXFieldCommentAnnotation(zh = "权限码")
+    @GXValidateDBUniqueAnnotation(service = SPermissionsService.class, fieldName = "permission_code")
     private String permissionCode;
-
-    @GXFieldCommentAnnotation(zh = "权限保护类型(web,php,主要用于PHP)")
-    private String guardName;
 
     @GXFieldCommentAnnotation(zh = "权限名称")
     private String showName;
