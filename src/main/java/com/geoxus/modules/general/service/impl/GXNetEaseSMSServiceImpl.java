@@ -7,12 +7,14 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
 import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXCacheKeysUtils;
-import com.geoxus.core.common.util.GXRedisUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.vo.GXResultCode;
 import com.geoxus.modules.general.config.NetEaseSMSConfig;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,11 +36,15 @@ import java.util.Optional;
 @Slf4j
 @ConditionalOnExpression("'${sms-provider}'.equals('netease-sms')")
 public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
-    @Autowired
-    private GXRedisUtils redisUtils;
+    @GXFieldCommentAnnotation(zh = "Guava缓存组件")
+    private static final Cache<String, String> NET_EASE_SMS_CACHE;
+
+    static {
+        NET_EASE_SMS_CACHE = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(Duration.ofSeconds(300L)).build();
+    }
 
     @Autowired
-    private GXCacheKeysUtils redisKeysUtils;
+    private GXCacheKeysUtils gxCacheKeysUtils;
 
     @Autowired
     private NetEaseSMSConfig netEaseSMSConfig;
@@ -90,7 +97,7 @@ public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
      * @param code  验证码
      */
     private void storeCode(String phone, String code) {
-        redisUtils.set(redisKeysUtils.getNetEaseSMSCodeConfigKey(phone), code, 5L * 60);
+        NET_EASE_SMS_CACHE.put(gxCacheKeysUtils.getNetEaseSMSCodeConfigKey(phone), code);
     }
 
     /**
@@ -104,10 +111,11 @@ public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
         if (StrUtil.isEmpty(phone) || StrUtil.isEmpty(code)) {
             return false;
         }
-        String key = redisKeysUtils.getNetEaseSMSCodeConfigKey(phone);
-        String s = redisUtils.get(key);
+        String key = gxCacheKeysUtils.getNetEaseSMSCodeConfigKey(phone);
+        String s = NET_EASE_SMS_CACHE.getIfPresent(key);
         if (code.equalsIgnoreCase(s)) {
-            return redisUtils.delete(key);
+            NET_EASE_SMS_CACHE.invalidate(key);
+            return true;
         }
         return false;
     }

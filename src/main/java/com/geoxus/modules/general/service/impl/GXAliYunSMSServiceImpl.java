@@ -34,10 +34,10 @@ import java.util.Optional;
 @ConditionalOnExpression("'${sms-provider}'.equals('aliyun-sms')")
 public class GXAliYunSMSServiceImpl implements GXSendSMSService {
     @GXFieldCommentAnnotation(zh = "Guava缓存组件")
-    private static final Cache<String, String> captchaCache;
+    private static final Cache<String, String> ALI_YUN_SMS_CACHE;
 
     static {
-        captchaCache = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(Duration.ofSeconds(300L)).build();
+        ALI_YUN_SMS_CACHE = CacheBuilder.newBuilder().maximumSize(10000).expireAfterWrite(Duration.ofSeconds(300L)).build();
     }
 
     @Autowired
@@ -51,7 +51,7 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
     @GXDurationCountLimitAnnotation(key = "ali:yun:sms")
     public GXResultUtils send(String phone, String templateName, Dict param) {
         String cacheKey = gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone);
-        if (captchaCache.getIfPresent(cacheKey) != null) {
+        if (ALI_YUN_SMS_CACHE.getIfPresent(cacheKey) != null) {
             throw new GXException("操作频繁,请稍后再试....");
         }
         final Dict aliYunTemplateConfig = aliYunSMSConfig.getTemplates().get(templateName);
@@ -79,9 +79,9 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
             return false;
         }
         String key = gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone);
-        final String s = captchaCache.getIfPresent(key);
+        final String s = ALI_YUN_SMS_CACHE.getIfPresent(key);
         if (code.equalsIgnoreCase(s)) {
-            captchaCache.invalidate(key);
+            ALI_YUN_SMS_CACHE.invalidate(key);
             return true;
         }
         return false;
@@ -140,6 +140,6 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
      * @param code
      */
     private void storeCode(String phone, String code) {
-        captchaCache.put(gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone), code);
+        ALI_YUN_SMS_CACHE.put(gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone), code);
     }
 }
