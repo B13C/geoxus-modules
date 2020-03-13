@@ -18,4 +18,7 @@ public interface SRolesMapper extends GXBaseMapper<SRolesEntity> {
 
     @SelectProvider(type = SRolesBuilder.class, method = "detail")
     Dict detail(Dict param);
+
+    @SelectProvider(type = SRolesBuilder.class, method = "getIDS")
+    List<Integer> getIDS(Long adminId);
 }

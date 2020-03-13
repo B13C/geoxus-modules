@@ -13,6 +13,7 @@ import com.github.stuxuhai.jpinyin.PinyinFormat;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
+import java.util.List;
 
 @Service
 public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> implements SRolesService {
@@ -84,5 +85,10 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
     public boolean unfreeze(Dict param) {
         final Dict condition = Dict.create().set(SRolesConstants.PRIMARY_KEY, param.getObj(SRolesConstants.PRIMARY_KEY));
         return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition);
+    }
+
+    @Override
+    public List<Integer> getIDS(Long adminId) {
+        return baseMapper.getIDS(adminId);
     }
 }

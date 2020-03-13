@@ -24,7 +24,7 @@ public class SPermissionsBuilder implements GXBaseBuilder {
      *
      * @return
      */
-    public String getAllPermissionCode() {
+    public String getAllPermissionsCode() {
         final SQL sql = new SQL().SELECT("permission_code").FROM(SPermissionsConstants.TABLE_NAME);
         return sql.toString();
     }

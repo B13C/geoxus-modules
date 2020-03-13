@@ -17,9 +17,12 @@ public interface SMenuMapper extends GXBaseMapper<SMenuEntity> {
     @SelectProvider(type = SMenuBuilder.class, method = "listOrSearch")
     List<Dict> listOrSearch(Dict param);
 
-    @SelectProvider(type = SMenuBuilder.class, method = "getAllPerms")
-    List<Dict> getAllPerms(Long adminId);
-
     @SelectProvider(type = SMenuBuilder.class, method = "getAllMenuId")
     List<Integer> getAllMenuId(Long adminId);
+
+    @SelectProvider(type = SMenuBuilder.class, method = "getRoleAllPerms")
+    List<Dict> getRoleAllPerms(String roles);
+
+    @SelectProvider(type = SMenuBuilder.class, method = "getAdminAllPerms")
+    List<Dict> getAdminAllPerms(Long adminId);
 }

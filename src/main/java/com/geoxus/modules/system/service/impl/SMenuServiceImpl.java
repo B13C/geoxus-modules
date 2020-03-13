@@ -13,16 +13,14 @@ import com.geoxus.modules.system.entity.SMenuEntity;
 import com.geoxus.modules.system.mapper.SMenuMapper;
 import com.geoxus.modules.system.service.SMenuService;
 import com.geoxus.modules.system.service.SPermissionsService;
+import com.geoxus.modules.system.service.SRolesService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +28,9 @@ import java.util.stream.Collectors;
 public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> implements SMenuService {
     @Autowired
     private SPermissionsService sPermissionsService;
+
+    @Autowired
+    private SRolesService sRolesService;
 
     @Override
     public long create(SMenuEntity target, Dict param) {
@@ -87,21 +88,56 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
 
     @Override
     public Set<String> getAllPerms(Long adminId) {
-        final HashSet<String> permsSet = CollUtil.newHashSet();
-        final List<Dict> allPerms = baseMapper.getAllPerms(adminId);
-        for (Dict dict : allPerms) {
-            final String perms = dict.getStr("perms");
-            if (StrUtil.isBlank(perms)) {
-                continue;
-            }
-            permsSet.addAll(Arrays.asList(perms.trim().split(",")));
-        }
+        final Set<String> permsSet = CollUtil.newHashSet();
+        List<Integer> ids = sRolesService.getIDS(adminId);
+        Set<String> roleAllPerms = getRoleAllPerms(ids);
+        Set<String> adminAllPerms = getAdminAllPerms(adminId);
+        permsSet.addAll(roleAllPerms);
+        permsSet.addAll(adminAllPerms);
         return permsSet;
     }
 
     @Override
     public List<Integer> getAllMenuId(Long adminId) {
         return baseMapper.getAllMenuId(adminId);
+    }
+
+    @Override
+    public Set<String> getRoleAllPerms(List<Integer> roles) {
+        HashSet<String> permsSet = CollUtil.newHashSet();
+        if (null == roles || roles.isEmpty()) {
+            return permsSet;
+        }
+        List<Dict> roleAllPerms = baseMapper.getRoleAllPerms(roles.stream().map(Objects::toString).collect(Collectors.joining(",")));
+        for (Dict dict : roleAllPerms) {
+            final String perms = dict.getStr("perms");
+            if (StrUtil.isNotBlank(perms)) {
+                if (StrUtil.isBlank(perms)) {
+                    continue;
+                }
+                permsSet.addAll(Arrays.asList(perms.trim().split(",")));
+            }
+        }
+        return permsSet;
+    }
+
+    @Override
+    public Set<String> getAdminAllPerms(Long adminId) {
+        HashSet<String> permsSet = CollUtil.newHashSet();
+        if (null == adminId || adminId == 0) {
+            return permsSet;
+        }
+        List<Dict> adminAllPerms = baseMapper.getAdminAllPerms(adminId);
+        for (Dict dict : adminAllPerms) {
+            final String perms = dict.getStr("perms");
+            if (StrUtil.isNotBlank(perms)) {
+                if (StrUtil.isBlank(perms)) {
+                    continue;
+                }
+                permsSet.addAll(Arrays.asList(perms.trim().split(",")));
+            }
+        }
+        return permsSet;
     }
 
     /**

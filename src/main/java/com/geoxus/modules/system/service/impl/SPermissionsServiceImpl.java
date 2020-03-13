@@ -65,7 +65,7 @@ public class SPermissionsServiceImpl extends ServiceImpl<SPermissionsMapper, SPe
         adminId = adminId == null ? GXShiroUtils.getAdminId() : adminId;
         final Long superAdminId = GXCommonUtils.getEnvironmentValue("super.admin.id", Long.class);
         if (0 == adminId.compareTo(superAdminId)) {
-            return baseMapper.getAllPermissionCode();
+            return baseMapper.getAllPermissionsCode();
         }
         final Set<String> permissions = baseMapper.getAdminAllPermissions(Dict.create().set(GXTokenManager.ADMIN_ID, adminId));
         permissions.addAll(sMenuService.getAllPerms(adminId));

@@ -31,4 +31,20 @@ public interface SMenuService extends GXBusinessService<SMenuEntity>, GXValidate
      * @return Set
      */
     List<Integer> getAllMenuId(Long adminId);
+
+    /**
+     * 获取所有指定角色的所有权限列表
+     *
+     * @param roles 角色字符串
+     * @return
+     */
+    Set<String> getRoleAllPerms(List<Integer> roles);
+
+    /**
+     * 获取指定管理员的所有权限列表
+     *
+     * @param adminId 管理员ID
+     * @return Set
+     */
+    Set<String> getAdminAllPerms(Long adminId);
 }
