@@ -15,7 +15,7 @@ import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.entity.SAdminEntity;
 import com.geoxus.modules.system.mapper.SAdminMapper;
-import com.geoxus.modules.system.service.SAdminHasRolesService;
+import com.geoxus.modules.system.service.SAdminRolesService;
 import com.geoxus.modules.system.service.SAdminService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -28,7 +28,7 @@ import java.util.List;
 @Service
 public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> implements SAdminService {
     @Autowired
-    private SAdminHasRolesService sAdminHasRolesService;
+    private SAdminRolesService sAdminRolesService;
 
     @Override
     public long create(SAdminEntity target, Dict param) {
@@ -129,7 +129,7 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     @RequiresPermissions("sys:admin:assign:roles:to:admin")
     @RequiresRoles("administrator")
     public boolean assignRolesToAdmin(Long adminId, List<Long> roleIds) {
-        return sAdminHasRolesService.addRoleToAdmin(adminId, roleIds);
+        return sAdminRolesService.addRoleToAdmin(adminId, roleIds);
     }
 
     @Override

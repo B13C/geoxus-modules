@@ -8,9 +8,7 @@ import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.constant.SPermissionsConstants;
-import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SPermissionsEntity;
-import com.geoxus.modules.system.service.SAdminHasPermissionsService;
 import com.geoxus.modules.system.service.SPermissionsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +26,6 @@ import java.util.Set;
 public class PermissionsController implements GXController<SPermissionsEntity> {
     @Autowired
     private SPermissionsService sPermissionsService;
-
-    @Autowired
-    private SAdminHasPermissionsService sAdminHasPermissionsService;
 
     @Override
     @PostMapping("/create")
@@ -57,31 +52,6 @@ public class PermissionsController implements GXController<SPermissionsEntity> {
     @RequiresPermissions("permissions-get-permissions-tree")
     public GXResultUtils getPermissionsTree() {
         List<SPermissionsEntity> list = sPermissionsService.getPermissionsTree();
-        return GXResultUtils.ok().putData(list);
-    }
-
-    /**
-     * 获取分配给角色的权限
-     *
-     * @return
-     */
-    @PostMapping("/get-role-permissions")
-    @RequiresPermissions("permissions-get-role-permissions")
-    public GXResultUtils getRolePermissions(@RequestBody Dict param) {
-        List<Long> list = sPermissionsService.getRolePermissions(param.getLong(SRolesConstants.PRIMARY_KEY));
-        return GXResultUtils.ok().putData(list);
-    }
-
-    /**
-     * 获取直接分配给管理员的权限
-     *
-     * @param param
-     * @return
-     */
-    @PostMapping("/get-admin-permissions")
-    @RequiresPermissions("permissions-get-admin-permissions")
-    public GXResultUtils getAdminPermissions(@RequestBody Dict param) {
-        final List<Dict> list = sAdminHasPermissionsService.listOrSearch(param);
         return GXResultUtils.ok().putData(list);
     }
 

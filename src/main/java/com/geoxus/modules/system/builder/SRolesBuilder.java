@@ -5,7 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.core.common.vo.GXBusinessStatusCode;
-import com.geoxus.modules.system.constant.SAdminHasRolesConstants;
+import com.geoxus.modules.system.constant.SAdminRolesConstants;
 import com.geoxus.modules.system.constant.SRolesConstants;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -27,14 +27,14 @@ public class SRolesBuilder implements GXBaseBuilder {
 
     public String getRolesByAdminId(Long adminId) {
         SQL sql = new SQL().SELECT("s_roles.role_id,s_roles.role_name").FROM(SRolesConstants.TABLE_NAME);
-        sql.INNER_JOIN("s_admin_has_roles ON s_admin_has_roles.role_id = s_roles.role_id");
-        sql.WHERE("s_admin_has_roles.admin_id=#{adminId}");
+        sql.INNER_JOIN("s_admin_roles ON s_admin_roles.role_id = s_roles.role_id");
+        sql.WHERE("s_admin_roles.admin_id=#{adminId}");
         return sql.toString();
     }
 
     public String getIDS(Long adminId) {
         String sql = "SELECT role_id from {}  WHERE admin_id = {}";
-        return StrUtil.format(sql, SAdminHasRolesConstants.TABLE_NAME, adminId);
+        return StrUtil.format(sql, SAdminRolesConstants.TABLE_NAME, adminId);
     }
 
     @Override

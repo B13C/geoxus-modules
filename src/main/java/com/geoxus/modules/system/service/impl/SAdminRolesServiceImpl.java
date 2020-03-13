@@ -7,10 +7,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SAdminEntity;
-import com.geoxus.modules.system.entity.SAdminHasRolesEntity;
+import com.geoxus.modules.system.entity.SAdminRolesEntity;
 import com.geoxus.modules.system.entity.SRolesEntity;
-import com.geoxus.modules.system.mapper.SAdminHasRolesMapper;
-import com.geoxus.modules.system.service.SAdminHasRolesService;
+import com.geoxus.modules.system.mapper.SAdminRolesMapper;
+import com.geoxus.modules.system.service.SAdminRolesService;
 import com.geoxus.modules.system.service.SAdminService;
 import com.geoxus.modules.system.service.SRolesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class SAdminHasRolesServiceImpl extends ServiceImpl<SAdminHasRolesMapper, SAdminHasRolesEntity> implements SAdminHasRolesService {
+public class SAdminRolesServiceImpl extends ServiceImpl<SAdminRolesMapper, SAdminRolesEntity> implements SAdminRolesService {
     @Autowired
     private SRolesService sRolesService;
 
@@ -44,18 +44,18 @@ public class SAdminHasRolesServiceImpl extends ServiceImpl<SAdminHasRolesMapper,
             return false;
         }
         boolean remove = true;
-        final QueryWrapper<SAdminHasRolesEntity> deleteQuery = new QueryWrapper<SAdminHasRolesEntity>().eq(SAdminConstants.PRIMARY_KEY, adminId);
-        if (null != checkRecordIsExists(SAdminHasRolesEntity.class, Dict.create().set(SAdminConstants.PRIMARY_KEY, adminId))) {
+        final QueryWrapper<SAdminRolesEntity> deleteQuery = new QueryWrapper<SAdminRolesEntity>().eq(SAdminConstants.PRIMARY_KEY, adminId);
+        if (null != checkRecordIsExists(SAdminRolesEntity.class, Dict.create().set(SAdminConstants.PRIMARY_KEY, adminId))) {
             remove = remove(deleteQuery);
         }
         if (remove) {
-            final ArrayList<SAdminHasRolesEntity> addListEntity = CollUtil.newArrayList();
+            final ArrayList<SAdminRolesEntity> addListEntity = CollUtil.newArrayList();
             for (Long roleId : roleIds) {
                 final Integer sRoleExists = sRolesService.checkRecordIsExists(SRolesEntity.class, Dict.create().set(SRolesConstants.PRIMARY_KEY, roleId));
                 if (null == sRoleExists) {
                     continue;
                 }
-                final SAdminHasRolesEntity entity = new SAdminHasRolesEntity();
+                final SAdminRolesEntity entity = new SAdminRolesEntity();
                 entity.setAdminId(adminId);
                 entity.setRoleId(roleId);
                 addListEntity.add(entity);

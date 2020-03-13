@@ -89,8 +89,8 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     @Override
     public Set<String> getAllPerms(Long adminId) {
         final Set<String> permsSet = CollUtil.newHashSet();
-        List<Integer> ids = sRolesService.getIDS(adminId);
-        Set<String> roleAllPerms = getRoleAllPerms(ids);
+        List<Integer> roleIds = sRolesService.getRoleIdsByAdminId(adminId);
+        Set<String> roleAllPerms = getRoleAllPerms(roleIds);
         Set<String> adminAllPerms = getAdminAllPerms(adminId);
         permsSet.addAll(roleAllPerms);
         permsSet.addAll(adminAllPerms);

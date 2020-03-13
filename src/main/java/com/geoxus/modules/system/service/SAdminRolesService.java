@@ -1,11 +1,11 @@
 package com.geoxus.modules.system.service;
 
 import com.geoxus.core.common.service.GXSAdminHasRolesService;
-import com.geoxus.modules.system.entity.SAdminHasRolesEntity;
+import com.geoxus.modules.system.entity.SAdminRolesEntity;
 
 import java.util.List;
 
-public interface SAdminHasRolesService extends GXSAdminHasRolesService<SAdminHasRolesEntity> {
+public interface SAdminRolesService extends GXSAdminHasRolesService<SAdminRolesEntity> {
     /**
      * 给管理员新增角色
      *

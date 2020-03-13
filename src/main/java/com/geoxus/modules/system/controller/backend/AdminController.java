@@ -12,9 +12,7 @@ import com.geoxus.core.common.validator.group.GXUpdateGroup;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import com.geoxus.modules.system.constant.SRolesConstants;
 import com.geoxus.modules.system.entity.SAdminEntity;
-import com.geoxus.modules.system.service.SAdminHasPermissionsService;
 import com.geoxus.modules.system.service.SAdminService;
-import com.geoxus.modules.system.service.SRoleHasPermissionsService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,12 +31,6 @@ public class AdminController implements GXController<SAdminEntity> {
 
     @Autowired
     private GXCaptchaService captchaService;
-
-    @Autowired
-    private SAdminHasPermissionsService sAdminHasPermissionsService;
-
-    @Autowired
-    private SRoleHasPermissionsService sRoleHasPermissionsService;
 
     @Override
     @PostMapping("/create")
@@ -98,26 +90,6 @@ public class AdminController implements GXController<SAdminEntity> {
             return GXResultUtils.error(dict.getInt("code"), "账号或密码错误");
         }
         return GXResultUtils.ok().putData(dict);
-    }
-
-    @PostMapping("/add-admin-permissions")
-    @RequiresPermissions("admin-add-admin-permissions")
-    public GXResultUtils addAdminPermissions(@RequestBody Dict param) {
-        final long adminId = param.getLong(GXTokenManager.ADMIN_ID);
-        final List<Long> permissions = Convert.convert(new TypeReference<List<Long>>() {
-        }, param.getObj("permissions"));
-        final boolean b = sAdminHasPermissionsService.addPermissionBatch(adminId, permissions);
-        return GXResultUtils.ok().putData(Dict.create().set("status", b));
-    }
-
-    @PostMapping("/add-role-permissions")
-    @RequiresPermissions("admin-add-role-permissions")
-    public GXResultUtils addRolePermissions(@RequestBody Dict param) {
-        final long roleId = param.getLong(SRolesConstants.PRIMARY_KEY);
-        final List<Long> permissions = Convert.convert(new TypeReference<List<Long>>() {
-        }, param.getObj("permissions"));
-        final boolean b = sRoleHasPermissionsService.addPermissionBatch(roleId, permissions);
-        return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
     @PostMapping("/assign-role-to-admin")

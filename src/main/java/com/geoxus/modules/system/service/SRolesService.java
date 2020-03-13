@@ -29,6 +29,6 @@ public interface SRolesService extends GXBusinessService<SRolesEntity> {
      * @param adminId 管理员ID
      * @return List
      */
-    List<Integer> getIDS(Long adminId);
+    List<Integer> getRoleIdsByAdminId(Long adminId);
 }
 

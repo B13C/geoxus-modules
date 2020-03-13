@@ -4,7 +4,6 @@ import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
 import com.geoxus.core.common.constant.GXBaseBuilderConstants;
-import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.modules.system.constant.SPermissionsConstants;
 import org.apache.ibatis.jdbc.SQL;
 
@@ -30,34 +29,12 @@ public class SPermissionsBuilder implements GXBaseBuilder {
     }
 
     /**
-     * 通过参数获取用户的权限列表
-     * 获取的权限列表包括:
-     * 直接分配给用户的
-     * 所属角色中包含的
-     *
-     * @param param 参数
-     * @return String
-     */
-    public String getAdminAllPermissions(Dict param) {
-        String sql = "select s_permissions.permission_code from s_permissions \n" +
-                "INNER JOIN s_admin_has_permissions ON s_admin_has_permissions.permission_id = s_permissions.permission_id\n" +
-                "WHERE s_admin_has_permissions.admin_id = {admin_id}";
-        sql += "\nUNION\n";
-        sql += "select s_permissions.permission_code from s_permissions \n" +
-                "INNER JOIN s_role_has_permissions ON s_role_has_permissions.permission_id =  s_permissions.permission_id\n" +
-                "INNER JOIN s_admin_has_roles ON s_admin_has_roles.role_id = s_role_has_permissions.role_id\n" +
-                "INNER JOIN s_roles ON s_admin_has_roles.role_id = s_roles.role_id\n" +
-                "WHERE s_admin_has_roles.admin_id = {admin_id} AND s_roles.`status` = " + GXBusinessStatusCode.NORMAL.getCode();
-        return StrUtil.format(sql, param);
-    }
-
-    /**
      * 根据权限ID获取权限码
      *
      * @param permissionIds 权限码列表
      * @return Set<String>
      */
-    public String getPermissionsCode(String permissionIds) {
+    public String getPermissionCodeByPermissionIds(String permissionIds) {
         final SQL sql = new SQL().SELECT("permission_code").FROM(SPermissionsConstants.TABLE_NAME);
         final String where = SPermissionsConstants.PRIMARY_KEY + " " + GXBaseBuilderConstants.IN;
         sql.WHERE(StrUtil.format(where, permissionIds));

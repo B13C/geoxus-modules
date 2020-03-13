@@ -88,7 +88,7 @@ public class SRolesServiceImpl extends ServiceImpl<SRolesMapper, SRolesEntity> i
     }
 
     @Override
-    public List<Integer> getIDS(Long adminId) {
+    public List<Integer> getRoleIdsByAdminId(Long adminId) {
         return baseMapper.getIDS(adminId);
     }
 }

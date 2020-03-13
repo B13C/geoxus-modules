@@ -12,7 +12,7 @@ public class SAdminBuilder implements GXBaseBuilder {
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("sa.admin_id,sa.nick_name,sa.username,sa.remark,sa.`status`,sa.created_at,sr.role_id,sr.role_name");
         sql.FROM(StrUtil.format("{} as {}", SAdminConstants.TABLE_NAME, "sa"));
-        sql.LEFT_OUTER_JOIN("s_admin_has_roles sahr ON sahr.admin_id = sa.admin_id");
+        sql.LEFT_OUTER_JOIN("s_admin_roles sahr ON sahr.admin_id = sa.admin_id");
         sql.LEFT_OUTER_JOIN("s_roles sr ON sr.role_id = sahr.role_id");
         mergeSearchConditionToSQL(sql, param);
         return sql.toString();
