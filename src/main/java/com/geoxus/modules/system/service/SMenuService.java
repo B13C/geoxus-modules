@@ -17,30 +17,6 @@ public interface SMenuService extends GXBusinessService<SMenuEntity>, GXValidate
     List<Dict> getTree();
 
     /**
-     * 开启
-     *
-     * @param param 参数
-     * @return boolean
-     */
-    boolean openStatus(Dict param);
-
-    /**
-     * 关闭
-     *
-     * @param param 参数
-     * @return boolean
-     */
-    boolean closeStatus(Dict param);
-
-    /**
-     * 冻结
-     *
-     * @param param 参数
-     * @return boolean
-     */
-    boolean freezeStatus(Dict param);
-
-    /**
      * 获取管理员的permissions
      *
      * @param adminId 用户ID

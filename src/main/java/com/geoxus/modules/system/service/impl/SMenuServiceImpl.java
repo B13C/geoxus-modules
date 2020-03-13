@@ -7,7 +7,6 @@ import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.geoxus.core.common.vo.GXBusinessStatusCode;
 import com.geoxus.core.common.vo.response.GXPagination;
 import com.geoxus.modules.system.constant.SMenuConstants;
 import com.geoxus.modules.system.entity.SMenuEntity;
@@ -20,7 +19,10 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,16 +55,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     public boolean delete(Dict param) {
         final List<Integer> ids = Convert.convert(new TypeReference<List<Integer>>() {
         }, param.getObj(SMenuConstants.PRIMARY_KEY));
-        final ArrayList<SMenuEntity> updateList = new ArrayList<>();
-        for (int id : ids) {
-            SMenuEntity entity = getById(id);
-            entity.setStatus(GXBusinessStatusCode.DELETED.getCode());
-            updateList.add(entity);
-        }
-        if (!updateList.isEmpty()) {
-            return updateBatchById(updateList);
-        }
-        return true;
+        return removeByIds(ids);
     }
 
     @Override
@@ -78,7 +71,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     /**
      * 获取树状结构
      *
-     * @return
+     * @return List
      */
     @Cacheable(value = "__DEFAULT__", key = "targetClass + methodName")
     public List<Dict> getTree() {
@@ -90,27 +83,6 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
         //递归构建结构化的分类信息
         rootList.forEach(root -> buildSubs(root, subList));
         return rootList;
-    }
-
-    @Override
-    public boolean openStatus(Dict param) {
-        final int id = param.getInt(SMenuConstants.PRIMARY_KEY);
-        final Dict condition = Dict.create().set(SMenuConstants.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.NORMAL.getCode(), condition);
-    }
-
-    @Override
-    public boolean closeStatus(Dict param) {
-        final int id = param.getInt(SMenuConstants.PRIMARY_KEY);
-        final Dict condition = Dict.create().set(SMenuConstants.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.OFF_STATE.getCode(), condition);
-    }
-
-    @Override
-    public boolean freezeStatus(Dict param) {
-        final int id = param.getInt(SMenuConstants.PRIMARY_KEY);
-        final Dict condition = Dict.create().set(SMenuConstants.PRIMARY_KEY, id);
-        return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition);
     }
 
     @Override
