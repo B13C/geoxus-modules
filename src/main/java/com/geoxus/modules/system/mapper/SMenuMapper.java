@@ -1,6 +1,7 @@
 package com.geoxus.modules.system.mapper;
 
 import cn.hutool.core.lang.Dict;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.geoxus.core.common.mapper.GXBaseMapper;
 import com.geoxus.modules.system.builder.SMenuBuilder;
 import com.geoxus.modules.system.entity.SMenuEntity;
@@ -16,6 +17,9 @@ public interface SMenuMapper extends GXBaseMapper<SMenuEntity> {
 
     @SelectProvider(type = SMenuBuilder.class, method = "listOrSearch")
     List<Dict> listOrSearch(Dict param);
+
+    @SelectProvider(type = SMenuBuilder.class, method = "listOrSearch")
+    List<Dict> listOrSearchPage(IPage<Dict> page, Dict param);
 
     @SelectProvider(type = SMenuBuilder.class, method = "getAllMenuId")
     List<Integer> getAllMenuId(Long adminId);

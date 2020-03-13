@@ -3,6 +3,7 @@ package com.geoxus.modules.system.builder;
 import cn.hutool.core.lang.Dict;
 import cn.hutool.core.util.StrUtil;
 import com.geoxus.core.common.builder.GXBaseBuilder;
+import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.modules.system.constant.SAdminRolesConstants;
 import com.geoxus.modules.system.constant.SMenuConstants;
 import com.geoxus.modules.system.constant.SRoleMenuConstants;
@@ -12,6 +13,7 @@ public class SMenuBuilder implements GXBaseBuilder {
     @Override
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("*").FROM(SMenuConstants.TABLE_NAME);
+        mergeSearchConditionToSQL(sql, param);
         return sql.toString();
     }
 
@@ -82,7 +84,10 @@ public class SMenuBuilder implements GXBaseBuilder {
 
     @Override
     public Dict getDefaultSearchField() {
-        return Dict.create();
+        return Dict.create()
+                .set("parent_id", GXBaseBuilderConstants.NUMBER_EQ)
+                .set("type", GXBaseBuilderConstants.NUMBER_EQ)
+                .set("!type", GXBaseBuilderConstants.NUMBER_NOT_EQ);
     }
 
     @Override
