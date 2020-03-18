@@ -154,10 +154,10 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
         }
     }
 
-    @Override
+   /* @Override
     public boolean validateExists(Object value, String field, ConstraintValidatorContext constraintValidatorContext, Dict param) throws UnsupportedOperationException {
         log.info("validateExists : {} , field : {}", value, field);
         final int parentId = Convert.toInt(value, 0);
         return parentId == 0 || 1 == checkRecordIsExists(SMenuEntity.class, Dict.create().set(SMenuConstants.PRIMARY_KEY, parentId));
-    }
+    }*/
 }
