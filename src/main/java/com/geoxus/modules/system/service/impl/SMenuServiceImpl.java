@@ -60,7 +60,7 @@ public class SMenuServiceImpl extends ServiceImpl<SMenuMapper, SMenuEntity> impl
     }
 
     @Override
-    public GXPagination listOrSearchPage(Dict param) {
+    public GXPagination<Dict> listOrSearchPage(Dict param) {
         return generatePage(param, Dict.create());
     }
 
