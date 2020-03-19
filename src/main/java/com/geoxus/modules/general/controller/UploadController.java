@@ -3,7 +3,7 @@ package com.geoxus.modules.general.controller;
 import cn.hutool.core.io.FileTypeUtil;
 import cn.hutool.core.lang.Dict;
 import com.geoxus.core.common.annotation.GXUploadFileLegalAnnotation;
-import com.geoxus.core.common.config.UploadConfig;
+import com.geoxus.core.common.config.GXUploadConfig;
 import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.util.GXBase64DecodedMultipartFileUtils;
@@ -39,7 +39,7 @@ public class UploadController {
     private GXCoreMediaLibraryService mediaLibraryService;
 
     @Autowired
-    private UploadConfig uploadConfig;
+    private GXUploadConfig gxUploadConfig;
 
     /**
      * 单图片上传
@@ -86,7 +86,7 @@ public class UploadController {
             return GXResultUtils.error(GXResultCode.FILE_ERROR);
         }
         try {
-            String fileName = GXUploadUtils.singleUpload(file, uploadConfig.getDepositPath().trim());
+            String fileName = GXUploadUtils.singleUpload(file, gxUploadConfig.getDepositPath().trim());
             return GXResultUtils.ok().putData(fileName);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
@@ -98,7 +98,7 @@ public class UploadController {
     @GXUploadFileLegalAnnotation
     public GXResultUtils multiUploadFile(MultipartFile... files) throws Exception {
         List<Dict> list = new ArrayList<>();
-        final List<Dict> dicts = GXUploadUtils.multiUpload(files, uploadConfig.getDepositPath());
+        final List<Dict> dicts = GXUploadUtils.multiUpload(files, gxUploadConfig.getDepositPath());
         for (Dict dict : dicts) {
             final int id = mediaLibraryService.save(dict);
             final Dict d = Dict.create().set("id", id).set("name", dict.getStr("file_name"));
@@ -112,7 +112,7 @@ public class UploadController {
     public void downloadFile(@RequestBody Dict dict, HttpServletResponse response) {
         try {
             GXCoreMediaLibraryEntity entity = mediaLibraryService.getById(dict.getInt("id"));
-            File file = new File(uploadConfig.getDepositPath() + File.separator + entity.getFileName());
+            File file = new File(gxUploadConfig.getDepositPath() + File.separator + entity.getFileName());
             byte[] data = FileUtils.readFileToByteArray(file);
             response.reset();
             response.setHeader("Content-Disposition", "attachment; filename=" + dict.getStr("name"));
