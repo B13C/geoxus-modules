@@ -3,7 +3,7 @@ package com.geoxus.modules.system.entity;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.geoxus.core.common.entity.GXBaseEntity;
-import com.geoxus.modules.system.constant.SCommonOperationLogConstants;
+import com.geoxus.modules.system.constant.GXSyslogConstants;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -13,9 +13,9 @@ import java.io.Serializable;
  * 系统操作日志
  */
 @Data
-@TableName(SCommonOperationLogConstants.TABLE_NAME)
+@TableName(GXSyslogConstants.TABLE_NAME)
 @EqualsAndHashCode(callSuper = false)
-public class CommonOperationLogEntity extends GXBaseEntity implements Serializable {
+public class GXSyslogEntity extends GXBaseEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId

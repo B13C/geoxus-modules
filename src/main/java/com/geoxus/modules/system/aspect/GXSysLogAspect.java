@@ -5,8 +5,8 @@ import cn.hutool.json.JSONUtil;
 import com.geoxus.core.common.annotation.GXSyslogAnnotation;
 import com.geoxus.core.common.util.GXHttpContextUtils;
 import com.geoxus.core.common.util.GXShiroUtils;
-import com.geoxus.modules.system.entity.CommonOperationLogEntity;
-import com.geoxus.modules.system.service.CommonOperationLogService;
+import com.geoxus.modules.system.entity.GXSyslogEntity;
+import com.geoxus.modules.system.service.GXSyslogService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -23,7 +23,7 @@ import java.util.Optional;
 @Component
 public class GXSysLogAspect {
     @Autowired
-    private CommonOperationLogService operationLogService;
+    private GXSyslogService operationLogService;
 
     @Around("@annotation(com.geoxus.core.common.annotation.GXSyslogAnnotation)")
     public Object around(ProceedingJoinPoint point) throws Throwable {
@@ -44,7 +44,7 @@ public class GXSysLogAspect {
     private void saveOperationLog(ProceedingJoinPoint joinPoint, long time) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
-        CommonOperationLogEntity operationLog = new CommonOperationLogEntity();
+        GXSyslogEntity operationLog = new GXSyslogEntity();
         GXSyslogAnnotation log = method.getAnnotation(GXSyslogAnnotation.class);
         if (log != null) {
             //注解上的描述
