@@ -155,6 +155,6 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     @Override
     public Dict getStatus(long adminId) {
         final Dict condition = Dict.create().set(SAdminConstants.PRIMARY_KEY, adminId);
-        return getFieldBySQL(SAdminEntity.class, CollUtil.newHashSet("admin_id", "status", "is_super_admin"), condition);
+        return getFieldValueBySQL(SAdminEntity.class, CollUtil.newHashSet("admin_id", "status", "is_super_admin"), condition);
     }
 }

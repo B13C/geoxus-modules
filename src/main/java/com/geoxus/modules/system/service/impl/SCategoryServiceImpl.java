@@ -150,7 +150,7 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
         if (parentId == 0) {
             return "0";
         }
-        final Dict dictData = getFieldBySQL(SCategoryEntity.class, CollUtil.newHashSet("path"), Dict.create().set(SCategoryConstants.PRIMARY_KEY, parentId).set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, coreModelId));
+        final Dict dictData = getFieldValueBySQL(SCategoryEntity.class, CollUtil.newHashSet("path"), Dict.create().set(SCategoryConstants.PRIMARY_KEY, parentId).set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, coreModelId));
         if (null == dictData || null == dictData.getStr("path")) {
             return "0";
         }
