@@ -20,7 +20,7 @@ public class SAdminBuilder implements GXBaseBuilder {
 
     @Override
     public String detail(Dict param) {
-        final String selectFieldStr = getSelectFieldStr(SAdminConstants.TABLE_NAME, CollUtil.newHashSet("password", "salt", "is_super_admin"), true);
+        final String selectFieldStr = getSelectFieldStr(SAdminConstants.TABLE_NAME, CollUtil.newHashSet("password", "salt", "is_super_admin"));
         final SQL sql = new SQL().SELECT(selectFieldStr).FROM(SAdminConstants.TABLE_NAME);
         mergeSearchConditionToSQL(sql, param);
         return sql.toString();
