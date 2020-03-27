@@ -8,6 +8,8 @@ import com.geoxus.core.common.constant.GXBaseBuilderConstants;
 import com.geoxus.modules.system.constant.SAdminConstants;
 import org.apache.ibatis.jdbc.SQL;
 
+import java.util.HashSet;
+
 public class SAdminBuilder implements GXBaseBuilder {
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("sa.admin_id,sa.nick_name,sa.username,sa.remark,sa.`status`,sa.created_at,sr.role_id,sr.role_name");
@@ -20,7 +22,8 @@ public class SAdminBuilder implements GXBaseBuilder {
 
     @Override
     public String detail(Dict param) {
-        final String selectFieldStr = getSelectFieldStr(SAdminConstants.TABLE_NAME, CollUtil.newHashSet("password", "salt", "is_super_admin"));
+        HashSet<String> field = CollUtil.newHashSet("password", "salt", "is_super_admin");
+        final String selectFieldStr = getSelectFieldStr(SAdminConstants.TABLE_NAME, field, false);
         final SQL sql = new SQL().SELECT(selectFieldStr).FROM(SAdminConstants.TABLE_NAME);
         mergeSearchConditionToSQL(sql, param);
         return sql.toString();

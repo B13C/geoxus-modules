@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintValidatorContext;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -155,6 +156,7 @@ public class SAdminServiceImpl extends ServiceImpl<SAdminMapper, SAdminEntity> i
     @Override
     public Dict getStatus(long adminId) {
         final Dict condition = Dict.create().set(SAdminConstants.PRIMARY_KEY, adminId);
-        return getFieldValueBySQL(SAdminEntity.class, CollUtil.newHashSet("admin_id", "status", "is_super_admin"), condition);
+        HashSet<String> columns = CollUtil.newHashSet("admin_id", "status", "is_super_admin");
+        return getFieldValueBySQL(SAdminEntity.class, columns, condition, false);
     }
 }

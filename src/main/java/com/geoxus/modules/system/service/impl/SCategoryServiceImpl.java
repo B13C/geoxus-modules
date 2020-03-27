@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -150,7 +151,9 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
         if (parentId == 0) {
             return "0";
         }
-        final Dict dictData = getFieldValueBySQL(SCategoryEntity.class, CollUtil.newHashSet("path"), Dict.create().set(SCategoryConstants.PRIMARY_KEY, parentId).set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, coreModelId));
+        HashSet<String> columns = CollUtil.newHashSet("path");
+        Dict condition = Dict.create().set(SCategoryConstants.PRIMARY_KEY, parentId).set(GXCommonConstants.CORE_MODEL_PRIMARY_NAME, coreModelId);
+        final Dict dictData = getFieldValueBySQL(SCategoryEntity.class, columns, condition, false);
         if (null == dictData || null == dictData.getStr("path")) {
             return "0";
         }
