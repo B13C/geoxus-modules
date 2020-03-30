@@ -50,7 +50,7 @@ public class UserHasMessageServiceImpl extends ServiceImpl<UserHasMessageMapper,
 
     @Override
     public boolean delete(Dict param) {
-        return batchDelete(param);
+        return batchSoftDelete(param);
     }
 
     @Override
