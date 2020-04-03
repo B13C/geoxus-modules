@@ -1,8 +1,10 @@
 package com.geoxus.modules.general.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.geoxus.modules.general.constant.SRegionConstants;
 import com.geoxus.modules.general.entity.SRegionEntity;
 import com.geoxus.modules.general.mapper.SRegionMapper;
 import com.geoxus.modules.general.service.SRegionService;
@@ -19,7 +21,7 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
     private static final String PARENT_ID_FIELD = "parent_id";
 
     private static final String TYPE_FIELD = "type";
-    
+
     @Override
     @Cacheable(value = "region", key = "targetClass + methodName")
     public List<Dict> getRegionTree(Dict param) {
@@ -31,6 +33,18 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
         //递归构建结构化的分类信息
         rootList.forEach(root -> buildSubs(root, subList));
         return rootList;
+    }
+
+    @Override
+    public Integer getIdByName(String name) {
+        final Dict condition = Dict.create().set("name", name);
+        return getSingleJSONFieldValueByDB(SRegionEntity.class, SRegionConstants.PRIMARY_KEY, Integer.class, condition);
+    }
+
+    @Override
+    public Dict getDataById(Integer id) {
+        final Dict condition = Dict.create().set(SRegionConstants.PRIMARY_KEY, id);
+        return getFieldValueBySQL(SRegionEntity.class, CollUtil.newHashSet("region_id", "parent_id", "type", "name"), condition, false);
     }
 
     /**
