@@ -10,9 +10,7 @@ import com.aliyuncs.dysmsapi.model.v20170525.SendSmsResponse;
 import com.aliyuncs.exceptions.ClientException;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.profile.IClientProfile;
-import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
-import com.geoxus.core.common.annotation.GXFrequencyLimitAnnotation;
 import com.geoxus.core.common.exception.GXException;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXCacheKeysUtils;
@@ -48,8 +46,6 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
     private AliYunSMSConfig aliYunSMSConfig;
 
     @Override
-    @GXApiIdempotentAnnotation(expires = 60)
-    @GXFrequencyLimitAnnotation(count = 5, key = "ali:yun:sms", expire = 600)
     public GXResultUtils send(String phone, String templateName, Dict param) {
         String cacheKey = gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone);
         if (ALI_YUN_SMS_CACHE.getIfPresent(cacheKey) != null) {

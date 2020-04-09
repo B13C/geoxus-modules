@@ -1,7 +1,7 @@
 package com.geoxus.modules.general.controller;
 
 import cn.hutool.core.lang.Dict;
-import com.geoxus.core.common.annotation.GXCheckCaptchaAnnotation;
+import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
 import com.geoxus.core.common.annotation.GXFrequencyLimitAnnotation;
 import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.core.common.service.GXEMailService;
@@ -30,12 +30,13 @@ public class CaptchaController {
     }
 
     @PostMapping("/get-sms-captcha")
-    @GXCheckCaptchaAnnotation()
-    @GXFrequencyLimitAnnotation(key = "get-sms-captcha", count = 2, expire = 600)
+    @GXApiIdempotentAnnotation(expires = 60)
+    @GXFrequencyLimitAnnotation(count = 5, key = "ali:yun:sms", expire = 600)
     public GXResultUtils getSMSCaptcha(@RequestBody Dict dict) {
         final String phone = dict.getStr("phone");
         final String templateName = Optional.ofNullable(dict.getStr("template_name")).orElse("");
         GXSendSMSService sendSMSService = GXSpringContextUtils.getBean(GXSendSMSService.class);
+        assert sendSMSService != null;
         return sendSMSService.send(phone, templateName, Dict.create());
     }
 
