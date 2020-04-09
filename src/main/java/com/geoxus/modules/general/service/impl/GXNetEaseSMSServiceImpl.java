@@ -6,8 +6,8 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.HttpUtil;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
-import com.geoxus.core.common.annotation.GXDurationCountLimitAnnotation;
 import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
+import com.geoxus.core.common.annotation.GXFrequencyLimitAnnotation;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXCacheKeysUtils;
 import com.geoxus.core.common.util.GXResultUtils;
@@ -50,8 +50,8 @@ public class GXNetEaseSMSServiceImpl implements GXSendSMSService {
     private NetEaseSMSConfig netEaseSMSConfig;
 
     @Override
-    @GXApiIdempotentAnnotation(expires = 10)
-    @GXDurationCountLimitAnnotation(key = "net:ease:sms")
+    @GXApiIdempotentAnnotation(expires = 60)
+    @GXFrequencyLimitAnnotation(value = 5, key = "net:ease:sms", expire = 600)
     public GXResultUtils send(String phone, String templateName, Dict param) {
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> result = new HashMap<>();

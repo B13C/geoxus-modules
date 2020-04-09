@@ -1,6 +1,7 @@
 package com.geoxus.modules.test.controller.frontend;
 
 import cn.hutool.core.lang.Dict;
+import com.geoxus.core.common.annotation.GXFrequencyLimitAnnotation;
 import com.geoxus.core.common.controller.GXController;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.rpc.service.GXRabbitMQRPCClientService;
@@ -28,7 +29,7 @@ public class TestController implements GXController<TestEntity> {
     private List<CacheManager> cacheManagers;
 
     @PostMapping("/test")
-    //@GXDurationCountLimitAnnotation(key = "hello")
+    @GXFrequencyLimitAnnotation(key = "hello")
     public GXResultUtils test(@RequestBody Dict param) {
         for (CacheManager c : cacheManagers) {
             System.out.println(c);

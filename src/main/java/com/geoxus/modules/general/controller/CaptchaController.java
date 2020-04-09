@@ -1,6 +1,8 @@
 package com.geoxus.modules.general.controller;
 
 import cn.hutool.core.lang.Dict;
+import com.geoxus.core.common.annotation.GXCheckCaptchaAnnotation;
+import com.geoxus.core.common.annotation.GXFrequencyLimitAnnotation;
 import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
@@ -28,6 +30,8 @@ public class CaptchaController {
     }
 
     @PostMapping("/get-sms-captcha")
+    @GXCheckCaptchaAnnotation()
+    @GXFrequencyLimitAnnotation(key = "get-sms-captcha", count = 2, expire = 600)
     public GXResultUtils getSMSCaptcha(@RequestBody Dict dict) {
         final String phone = dict.getStr("phone");
         final String templateName = Optional.ofNullable(dict.getStr("template_name")).orElse("");
