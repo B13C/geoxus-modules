@@ -38,7 +38,7 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
     @Override
     public Integer getIdByName(String name) {
         final Dict condition = Dict.create().set("name", name);
-        return getSingleJSONFieldValueByDB(SRegionEntity.class, SRegionConstants.PRIMARY_KEY, Integer.class, condition);
+        return getSingleFieldValueByDB(SRegionEntity.class, SRegionConstants.PRIMARY_KEY, Integer.class, condition);
     }
 
     @Override
