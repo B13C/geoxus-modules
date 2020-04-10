@@ -52,6 +52,7 @@ public class CaptchaController {
     @PostMapping("/check-sms-captcha")
     public GXResultUtils checkSMSCaptcha(@RequestBody Dict param) {
         GXSendSMSService sendSMSService = GXSpringContextUtils.getBean(GXSendSMSService.class);
+        assert sendSMSService != null;
         final boolean b = sendSMSService.verification(param.getStr("phone"), param.getStr("code"));
         if (b) {
             return GXResultUtils.ok().putData(Dict.create().set("status", 0));
@@ -62,7 +63,9 @@ public class CaptchaController {
     @PostMapping("/get-email-captcha")
     public GXResultUtils getEmailCaptcha(@RequestBody Dict param) {
         final String email = param.getStr("email");
-        final boolean b = GXSpringContextUtils.getBean(GXEMailService.class).sendVerifyCode(email);
+        final GXEMailService mailService = GXSpringContextUtils.getBean(GXEMailService.class);
+        assert mailService != null;
+        final boolean b = mailService.sendVerifyCode(email);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 
@@ -70,7 +73,9 @@ public class CaptchaController {
     public GXResultUtils checkEmailCaptcha(@RequestBody Dict param) {
         final String email = param.getStr("email");
         final String code = param.getStr("code");
-        final boolean b = GXSpringContextUtils.getBean(GXEMailService.class).verification(email, code);
+        final GXEMailService mailService = GXSpringContextUtils.getBean(GXEMailService.class);
+        assert mailService != null;
+        final boolean b = mailService.verification(email, code);
         return GXResultUtils.ok().putData(Dict.create().set("status", b));
     }
 }
