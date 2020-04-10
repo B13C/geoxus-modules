@@ -29,7 +29,7 @@ public class CaptchaController {
     }
 
     @PostMapping("/get-sms-captcha")
-    //@GXApiIdempotentAnnotation(expires = 60)
+    //@GXApiIdempotentAnnotation(expires = 10)
     @GXFrequencyLimitAnnotation(count = 5, key = "ali:yun:sms", expire = 600)
     public GXResultUtils getSMSCaptcha(@RequestBody Dict dict) {
         final String phone = dict.getStr("phone");
