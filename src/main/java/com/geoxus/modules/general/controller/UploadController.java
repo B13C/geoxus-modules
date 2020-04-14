@@ -44,11 +44,11 @@ public class UploadController {
     /**
      * 单图片上传
      *
-     * @param file
-     * @return
+     * @param file 上传文件
+     * @return GXResultUtils
      */
     @PostMapping("/single-upload")
-    @GXUploadFileLegalAnnotation
+    //@GXUploadFileLegalAnnotation
     public GXResultUtils singleUpload(MultipartFile file) throws IOException {
         if (file.isEmpty() || null == FileTypeUtil.getType(file.getInputStream())) {
             return GXResultUtils.error(GXResultCode.FILE_ERROR);
@@ -77,7 +77,7 @@ public class UploadController {
      * 上传图片不保存数据库
      *
      * @param file 文件名字
-     * @return
+     * @return GXResultUtils
      */
     @PostMapping("/single-upload-without-save-db")
     @GXUploadFileLegalAnnotation
@@ -125,11 +125,18 @@ public class UploadController {
         }
     }
 
+    @PostMapping("/update-old-file")
+    public GXResultUtils updateOldFile(@RequestBody Dict param) {
+        mediaLibraryService.updateOldFile(param);
+        Dict data = Dict.create().set("status", true);
+        return GXResultUtils.ok().putData(data);
+    }
+
     /**
      * 获取实时上传进度
      *
-     * @param request
-     * @return int percent
+     * @param request 请求参数
+     * @return percent 比列
      */
     @GetMapping("/get-percent")
     @GXUploadFileLegalAnnotation
@@ -142,7 +149,7 @@ public class UploadController {
     /**
      * 从请求中获取额外的数据
      *
-     * @return
+     * @return Dict
      */
     private Dict getParamFromRequest() {
         final String resourceType = GXHttpContextUtils.getHttpParam("resource_type", String.class);
