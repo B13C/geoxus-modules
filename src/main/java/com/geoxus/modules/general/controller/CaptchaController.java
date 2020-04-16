@@ -7,6 +7,7 @@ import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXSpringContextUtils;
+import com.geoxus.core.common.vo.GXResultCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +46,7 @@ public class CaptchaController {
         if (b) {
             return GXResultUtils.ok().putData(Dict.create().set("status", 0));
         }
-        return GXResultUtils.ok().putData(Dict.create().set("status", 1));
+        return GXResultUtils.error(GXResultCode.NEED_CAPTCHA);
     }
 
     @PostMapping("/check-sms-captcha")
