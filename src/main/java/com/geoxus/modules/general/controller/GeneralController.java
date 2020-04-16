@@ -4,13 +4,11 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Dict;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.geoxus.core.common.annotation.GXLoginAnnotation;
-import com.geoxus.core.common.annotation.GXLoginUserAnnotation;
 import com.geoxus.core.common.service.GXApiIdempotentService;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.framework.entity.GXCoreModelEntity;
 import com.geoxus.core.framework.service.GXCoreModelAttributesService;
 import com.geoxus.core.framework.service.GXCoreModelService;
-import com.geoxus.user.entity.UUserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,8 +29,8 @@ public class GeneralController {
 
     @PostMapping("/get-api-idempotent-token")
     @GXLoginAnnotation
-    public GXResultUtils getApiIdempotentToken(@GXLoginUserAnnotation UUserEntity uUserEntity) {
-        return GXResultUtils.ok().putData(Dict.create().set("api-token", apiIdempotentService.createApiIdempotentToken(Dict.parse(uUserEntity))));
+    public GXResultUtils getApiIdempotentToken() {
+        return GXResultUtils.ok().putData(Dict.create().set("api-token", apiIdempotentService.createApiIdempotentToken(Dict.create())));
     }
 
     @GetMapping("/get-model-attributes")
