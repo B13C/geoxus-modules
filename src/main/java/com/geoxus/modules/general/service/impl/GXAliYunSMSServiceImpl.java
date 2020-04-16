@@ -53,6 +53,7 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
         }
         final Dict aliYunTemplateConfig = aliYunSMSConfig.getTemplates().get(templateName);
         if (null == aliYunTemplateConfig) {
+            ALI_YUN_SMS_CACHE.invalidate(cacheKey);
             throw new GXException("阿里云短信模板不存在....");
         }
         String codeName = "code";
@@ -63,6 +64,7 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
         param.put(codeName, code);
         String templateParam = JSONUtil.toJsonStr(param);
         final boolean sendResult = this.processSend(phone, aliYunTemplateConfig, templateParam);
+        ALI_YUN_SMS_CACHE.invalidate(cacheKey);
         if (sendResult) {
             storeCode(phone, code);
             return GXResultUtils.ok();
