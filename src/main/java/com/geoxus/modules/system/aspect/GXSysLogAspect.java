@@ -62,7 +62,7 @@ public class GXSysLogAspect {
             GXSysLogAspect.log.error(e.getMessage(), e);
         }
         //设置IP地址
-        operationLog.setIp(GXHttpContextUtils.getIP(GXHttpContextUtils.getHttpServletRequest()));
+        operationLog.setIp(GXHttpContextUtils.getClientIP(GXHttpContextUtils.getHttpServletRequest()));
         //用户名
         String nickName = Optional.ofNullable(GXShiroUtils.getAdminData().getStr("user_name")).orElse(GXShiroUtils.getAdminData().getStr(StrUtil.toCamelCase("user_name")));
         operationLog.setUsername(nickName);

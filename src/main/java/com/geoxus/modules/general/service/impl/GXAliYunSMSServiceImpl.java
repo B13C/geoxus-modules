@@ -135,8 +135,8 @@ public class GXAliYunSMSServiceImpl implements GXSendSMSService {
     /**
      * 储存手机验证码到redis
      *
-     * @param phone
-     * @param code
+     * @param phone 手机号码
+     * @param code  验证码
      */
     private void storeCode(String phone, String code) {
         ALI_YUN_SMS_CACHE.put(gxCacheKeysUtils.getAliYunSMSCodeConfigKey(phone), code);
