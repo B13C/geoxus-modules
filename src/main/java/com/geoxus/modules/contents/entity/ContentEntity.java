@@ -2,12 +2,12 @@ package com.geoxus.modules.contents.entity;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.geoxus.core.common.annotation.GXFieldCommentAnnotation;
 import com.geoxus.core.common.annotation.GXValidateDBExistsAnnotation;
 import com.geoxus.core.common.annotation.GXValidateExtDataAnnotation;
 import com.geoxus.core.common.entity.GXBaseEntity;
 import com.geoxus.core.common.validator.group.GXCreateGroup;
 import com.geoxus.core.common.validator.group.GXUpdateGroup;
-import com.geoxus.core.framework.service.GXCoreModelService;
 import com.geoxus.modules.contents.constant.ContentConstants;
 import com.geoxus.modules.contents.service.ContentService;
 import com.geoxus.modules.system.service.SCategoryService;
@@ -23,27 +23,43 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = false)
 public class ContentEntity extends GXBaseEntity {
     @TableId
-    @GXValidateDBExistsAnnotation(service = ContentService.class, fieldName = "content_id", groups = GXUpdateGroup.class)
+    @GXValidateDBExistsAnnotation(service = ContentService.class, fieldName = ContentConstants.PRIMARY_KEY, groups = GXUpdateGroup.class)
     @NotNull(groups = {GXUpdateGroup.class})
     private int contentId;
 
-    @GXValidateDBExistsAnnotation(service = SCategoryService.class, fieldName = "category_id")
+    @GXValidateDBExistsAnnotation(service = SCategoryService.class, fieldName = ContentConstants.PRIMARY_KEY)
     private int categoryId = 0;
 
     @NotNull(message = "core_model_id不能为空")
-    @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
+    @GXValidateDBExistsAnnotation()
     private Integer coreModelId;
 
     @NotBlank
+    @GXFieldCommentAnnotation(zh = "文章标题")
     private String title;
 
     @NotBlank
+    @GXFieldCommentAnnotation(zh = "文章内容")
     private String contents;
 
+    @NotBlank
+    @GXFieldCommentAnnotation(zh = "文章关键词")
     private String keywords;
 
+    @NotBlank
+    @GXFieldCommentAnnotation(zh = "文章描述")
+    private String description;
+
+    @NotBlank
+    @GXFieldCommentAnnotation(zh = "文章来源")
+    private String origin = "本站整理";
+
+    @NotBlank
+    @GXFieldCommentAnnotation(zh = "文章摘要")
+    private String summary;
+
     @Valid
-    @GXValidateExtDataAnnotation(tableName = "p_content", fieldName = "ext", groups = {GXUpdateGroup.class, GXCreateGroup.class})
+    @GXValidateExtDataAnnotation(tableName = "p_content", groups = {GXUpdateGroup.class, GXCreateGroup.class})
     private String ext = "{}";
 
     private int status = 0;

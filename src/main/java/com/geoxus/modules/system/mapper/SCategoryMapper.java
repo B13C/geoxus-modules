@@ -27,4 +27,10 @@ public interface SCategoryMapper extends GXBaseMapper<SCategoryEntity> {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class)
     })
     Dict detail(Dict param);
+
+    @SelectProvider(type = SCategoryBuilder.class, method = "getCategoryName")
+    @Results({
+            @Result(column = "category_name", property = "category_name", javaType = String.class)
+    })
+    String getCategoryName(Dict param);
 }

@@ -49,15 +49,13 @@ public class ContentController implements GXController<ContentEntity> {
 
     @Override
     @PostMapping("/list-or-search")
-    @GXLoginAnnotation
     public GXResultUtils listOrSearch(@RequestBody Dict param) {
-        final GXPagination pagination = contentService.listOrSearchPage(param);
+        final GXPagination<Dict> pagination = contentService.listOrSearchPage(param);
         return GXResultUtils.ok().putData(pagination);
     }
 
     @Override
     @PostMapping("/detail")
-    @GXLoginAnnotation
     public GXResultUtils detail(@RequestBody Dict param) {
         final Dict detail = contentService.detail(param);
         return GXResultUtils.ok().putData(detail);

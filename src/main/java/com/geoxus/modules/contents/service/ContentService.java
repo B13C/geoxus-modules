@@ -9,16 +9,16 @@ public interface ContentService extends GXBusinessService<ContentEntity>, GXVali
     /**
      * 显示
      *
-     * @param param
-     * @return
+     * @param param 请求参数
+     * @return boolean
      */
     boolean show(Dict param);
 
     /**
      * 隐藏
      *
-     * @param param
-     * @return
+     * @param param 参数
+     * @return boolean
      */
     boolean hidden(Dict param);
 }

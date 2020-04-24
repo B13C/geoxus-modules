@@ -16,6 +16,10 @@ public interface ContentMapper extends GXBaseMapper<ContentEntity> {
     @SelectProvider(type = ContentBuilder.class, method = "detail")
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
+            @Result(column = "{category_id = category_id}", property = "category_name", one = @One(
+                    select = "com.geoxus.modules.system.mapper.SCategoryMapper.getCategoryName",
+                    fetchType = FetchType.EAGER
+            ), javaType = String.class),
             @Result(column = "{model_id=content_id , core_model_id=core_model_id}", property = "comments", many = @Many(
                     select = "com.geoxus.modules.contents.mapper.CommentMapper.listOrSearch",
                     fetchType = FetchType.EAGER
@@ -27,6 +31,10 @@ public interface ContentMapper extends GXBaseMapper<ContentEntity> {
     @SelectProvider(type = ContentBuilder.class, method = "listOrSearch")
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
+            @Result(column = "{category_id = category_id}", property = "category_name", one = @One(
+                    select = "com.geoxus.modules.system.mapper.SCategoryMapper.getCategoryName",
+                    fetchType = FetchType.EAGER
+            ), javaType = String.class),
             @Result(column = "{model_id=content_id , core_model_id=core_model_id}", property = "comments", many = @Many(
                     select = "com.geoxus.modules.contents.mapper.CommentMapper.listOrSearch",
                     fetchType = FetchType.EAGER

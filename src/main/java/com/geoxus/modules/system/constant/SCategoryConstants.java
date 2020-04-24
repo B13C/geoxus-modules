@@ -12,6 +12,9 @@ public class SCategoryConstants {
     @GXFieldCommentAnnotation(zh = "数据表的别名")
     public static final String TABLE_ALIAS_NAME = "category";
 
+    @GXFieldCommentAnnotation(zh = "模型标识")
+    public static final String MODEL_IDENTIFICATION = "s_category";
+
     private SCategoryConstants() {
     }
 }

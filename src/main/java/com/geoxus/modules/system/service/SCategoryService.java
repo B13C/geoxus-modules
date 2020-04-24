@@ -39,4 +39,12 @@ public interface SCategoryService extends GXBusinessService<SCategoryEntity>, GX
      * @return
      */
     boolean freezeStatus(Dict param);
+
+    /**
+     * 获取分类的名字
+     *
+     * @param param 参数
+     * @return String
+     */
+    String getCategoryName(Dict param);
 }

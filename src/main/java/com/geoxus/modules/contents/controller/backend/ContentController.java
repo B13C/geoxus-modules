@@ -27,7 +27,7 @@ public class ContentController implements GXController<ContentEntity> {
 
     @Override
     @PostMapping("/create")
-    @RequiresPermissions("content-create")
+    //@RequiresPermissions("content-create")
     public GXResultUtils create(@Valid @GXRequestBodyToEntityAnnotation(groups = {GXCreateGroup.class}) ContentEntity target) {
         contentService.create(target, Dict.create());
         return GXResultUtils.ok().putData(Dict.create().set(ContentConstants.PRIMARY_KEY, target.getContentId()));

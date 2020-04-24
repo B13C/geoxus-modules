@@ -118,6 +118,11 @@ public class SCategoryServiceImpl extends ServiceImpl<SCategoryMapper, SCategory
         return modifyStatus(GXBusinessStatusCode.FREEZE.getCode(), condition);
     }
 
+    @Override
+    public String getCategoryName(Dict param) {
+        return baseMapper.getCategoryName(param);
+    }
+
     /**
      * 递归构建
      *

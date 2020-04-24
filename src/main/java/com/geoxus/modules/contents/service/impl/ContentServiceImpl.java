@@ -58,7 +58,7 @@ public class ContentServiceImpl extends ServiceImpl<ContentMapper, ContentEntity
     }
 
     @Override
-    public GXPagination listOrSearchPage(Dict param) {
+    public GXPagination<Dict> listOrSearchPage(Dict param) {
         return generatePage(param, Dict.create());
     }
 

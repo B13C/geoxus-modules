@@ -12,7 +12,7 @@ public class CommentBuilder implements GXBaseBuilder {
     public String detail(Dict param) {
         final SQL sql = new SQL().SELECT("comment.* , user.username, user.nick_name , media.file_name as user_head").FROM(StrUtil.format("{} as comment", CommentConstants.TABLE_NAME));
         sql.INNER_JOIN("u_user user on user.user_id = comment.user_id");
-        sql.LEFT_OUTER_JOIN("core_media_library media on media.model_id = user.user_id and media.core_model_id = user.core_model_id and media.resource_type='USER_HEAD'");
+        sql.LEFT_OUTER_JOIN("core_media_library media on media.object_id = user.user_id and media.core_model_id = user.core_model_id and media.resource_type='USER_HEAD'");
         mergeSearchConditionToSQL(sql, param, "comment");
         return sql.toString();
     }
@@ -21,7 +21,7 @@ public class CommentBuilder implements GXBaseBuilder {
     public String listOrSearch(Dict param) {
         final SQL sql = new SQL().SELECT("comment.* , user.username, user.nick_name , media.file_name as user_head").FROM(StrUtil.format("{} as comment", CommentConstants.TABLE_NAME));
         sql.INNER_JOIN("u_user user on user.user_id = comment.user_id");
-        sql.LEFT_OUTER_JOIN("core_media_library media on media.model_id = user.user_id and media.core_model_id = user.core_model_id and media.resource_type='USER_HEAD'");
+        sql.LEFT_OUTER_JOIN("core_media_library media on media.object_id = user.user_id and media.core_model_id = user.core_model_id and media.resource_type='USER_HEAD'");
         mergeSearchConditionToSQL(sql, param, "");
         return sql.toString();
     }

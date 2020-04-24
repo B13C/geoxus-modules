@@ -21,13 +21,12 @@ public class ContentBuilder implements GXBaseBuilder {
 
     @Override
     public String listOrSearch(Dict param) {
-        final SQL sql = new SQL().SELECT("*").FROM(ContentConstants.TABLE_NAME);
+        final SQL sql = new SQL().SELECT("content_id,title,summary,origin,category_id,core_model_id,created_at,updated_at").FROM(ContentConstants.TABLE_NAME);
         addConditionToSearchCondition(param, "status", GXBusinessStatusCode.NORMAL.getCode());
         mergeSearchConditionToSQL(sql, param, "");
         return sql.toString();
     }
-
-
+    
     @Override
     public Dict getDefaultSearchField() {
         return Dict.create()
