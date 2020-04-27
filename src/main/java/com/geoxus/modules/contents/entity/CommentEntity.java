@@ -22,7 +22,7 @@ public class CommentEntity extends GXBaseEntity {
 
     private int parentId;
 
-    private int targetModelId;
+    private int objectId;
 
     @NotNull
     @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
@@ -30,7 +30,7 @@ public class CommentEntity extends GXBaseEntity {
 
     @NotNull
     @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
-    private Integer targetCoreModelId;
+    private Integer objectCoreModelId;
 
     private String modelType;
 

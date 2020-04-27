@@ -20,7 +20,7 @@ public interface ContentMapper extends GXBaseMapper<ContentEntity> {
                     select = "com.geoxus.modules.system.mapper.SCategoryMapper.getCategoryName",
                     fetchType = FetchType.EAGER
             ), javaType = String.class),
-            @Result(column = "{model_id=content_id , core_model_id=core_model_id}", property = "comments", many = @Many(
+            @Result(column = "{object_id=content_id , core_model_id=core_model_id}", property = "comments", many = @Many(
                     select = "com.geoxus.modules.contents.mapper.CommentMapper.listOrSearch",
                     fetchType = FetchType.EAGER
             ))
@@ -35,7 +35,7 @@ public interface ContentMapper extends GXBaseMapper<ContentEntity> {
                     select = "com.geoxus.modules.system.mapper.SCategoryMapper.getCategoryName",
                     fetchType = FetchType.EAGER
             ), javaType = String.class),
-            @Result(column = "{model_id=content_id , core_model_id=core_model_id}", property = "comments", many = @Many(
+            @Result(column = "{object_id=content_id , core_model_id=core_model_id}", property = "comments", many = @Many(
                     select = "com.geoxus.modules.contents.mapper.CommentMapper.listOrSearch",
                     fetchType = FetchType.EAGER
             ))

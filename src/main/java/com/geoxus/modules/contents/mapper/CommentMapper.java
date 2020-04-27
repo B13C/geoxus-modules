@@ -16,7 +16,7 @@ public interface CommentMapper extends GXBaseMapper<CommentEntity> {
     @SelectProvider(type = CommentBuilder.class, method = "listOrSearch")
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
-            @Result(column = "{model_id=comment_id,core_model_id=core_model_id}", property = "media", many = @Many(
+            @Result(column = "{object_id=comment_id,core_model_id=core_model_id}", property = "media", many = @Many(
                     select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })
@@ -25,7 +25,7 @@ public interface CommentMapper extends GXBaseMapper<CommentEntity> {
     @SelectProvider(type = CommentBuilder.class, method = "detail")
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
-            @Result(column = "{model_id=comment_id,core_model_id=core_model_id}", property = "media", many = @Many(
+            @Result(column = "{object_id=comment_id,core_model_id=core_model_id}", property = "media", many = @Many(
                     select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })
@@ -35,7 +35,7 @@ public interface CommentMapper extends GXBaseMapper<CommentEntity> {
     @SelectProvider(type = CommentBuilder.class, method = "listOrSearch")
     @Results(value = {
             @Result(column = "ext", property = "ext", typeHandler = GXJsonToMapTypeHandler.class),
-            @Result(column = "{model_id=comment_id,core_model_id=core_model_id}", property = "media", many = @Many(
+            @Result(column = "{object_id=comment_id,core_model_id=core_model_id}", property = "media", many = @Many(
                     select = "com.geoxus.core.framework.mapper.GXCoreMediaLibraryMapper.getMediaByCondition"
             ))
     })

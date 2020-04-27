@@ -30,7 +30,7 @@ public class CommentBuilder implements GXBaseBuilder {
     public Dict getDefaultSearchField() {
         return Dict.create()
                 .set(StrUtil.format("comment.{}", CommentConstants.PRIMARY_KEY), GXBaseBuilderConstants.NUMBER_EQ)
-                .set("comment.target_model_id", GXBaseBuilderConstants.NUMBER_EQ)
+                .set("comment.object_id", GXBaseBuilderConstants.NUMBER_EQ)
                 .set("comment.target_core_model_id", GXBaseBuilderConstants.NUMBER_EQ)
                 .set("comment.status", GXBaseBuilderConstants.NUMBER_EQ);
     }
