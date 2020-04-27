@@ -30,7 +30,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     public long create(CommentEntity target, Dict param) {
         target.setPath(getPath(target.getParentId()));
         target.setStatus(GXBusinessStatusCode.NORMAL.getCode());
-        target.setModelType(gxCoreModelService.getModelTypeByModelId(target.getObjectCoreModelId(), ""));
+        target.setModelType(gxCoreModelService.getModelTypeByModelId(target.getCoreModelId(), ""));
         save(target);
         handleMedia(target, target.getCommentId(), Dict.create());
         return target.getCommentId();
@@ -40,7 +40,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, CommentEntity
     public long update(CommentEntity target, Dict param) {
         target.setPath(getPath(target.getParentId()));
         target.setStatus(GXBusinessStatusCode.NORMAL.getCode());
-        target.setModelType(gxCoreModelService.getModelTypeByModelId(target.getObjectCoreModelId(), ""));
+        target.setModelType(gxCoreModelService.getModelTypeByModelId(target.getCoreModelId(), ""));
         updateById(target);
         handleMedia(target, target.getCommentId(), Dict.create());
         return target.getCommentId();

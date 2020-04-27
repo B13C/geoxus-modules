@@ -28,10 +28,6 @@ public class CommentEntity extends GXBaseEntity {
     @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
     private Integer coreModelId;
 
-    @NotNull
-    @GXValidateDBExistsAnnotation(service = GXCoreModelService.class, fieldName = "model_id")
-    private Integer objectCoreModelId;
-
     private String modelType;
 
     @GXValidateExtDataAnnotation(tableName = CommentConstants.TABLE_NAME, fieldName = "ext")
