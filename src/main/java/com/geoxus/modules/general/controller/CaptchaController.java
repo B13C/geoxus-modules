@@ -1,6 +1,9 @@
 package com.geoxus.modules.general.controller;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.convert.Convert;
 import cn.hutool.core.lang.Dict;
+import cn.hutool.core.lang.TypeReference;
 import com.geoxus.core.common.annotation.GXApiIdempotentAnnotation;
 import com.geoxus.core.common.annotation.GXCheckCaptchaAnnotation;
 import com.geoxus.core.common.annotation.GXFrequencyLimitAnnotation;
@@ -8,6 +11,7 @@ import com.geoxus.core.common.constant.GXCommonConstants;
 import com.geoxus.core.common.service.GXCaptchaService;
 import com.geoxus.core.common.service.GXEMailService;
 import com.geoxus.core.common.service.GXSendSMSService;
+import com.geoxus.core.common.util.GXCommonUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXSpringContextUtils;
 import com.geoxus.core.common.vo.GXResultCode;
@@ -17,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -38,6 +44,14 @@ public class CaptchaController {
     @GXCheckCaptchaAnnotation(verifyType = GXCommonConstants.CAPTCHA_VERIFY)
     public GXResultUtils getSMSCaptcha(@RequestBody Dict dict) {
         final String phone = dict.getStr("phone");
+        if (null == phone) {
+            return GXResultUtils.error(GXResultCode.WRONG_PHONE);
+        }
+        final List<String> specialPhone = Convert.convert(new TypeReference<List<String>>() {
+        }, Optional.ofNullable(GXCommonUtils.getEnvironmentValue("special.phone", Object.class)).orElse(Collections.emptyList()));
+        if (CollUtil.contains(specialPhone, phone)) {
+            return GXResultUtils.ok();
+        }
         final String templateName = Optional.ofNullable(dict.getStr("template_name")).orElse("");
         GXSendSMSService sendSMSService = GXSpringContextUtils.getBean(GXSendSMSService.class);
         assert sendSMSService != null;
