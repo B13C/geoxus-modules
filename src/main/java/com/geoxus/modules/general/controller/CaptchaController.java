@@ -47,7 +47,7 @@ public class CaptchaController {
         if (b) {
             return GXResultUtils.ok().putData(Dict.create().set("status", 0));
         }
-        return GXResultUtils.error(GXResultCode.NEED_CAPTCHA);
+        return GXResultUtils.error(GXResultCode.NEED_GRAPH_CAPTCHA);
     }
 
     @PostMapping("/check-sms-captcha")
