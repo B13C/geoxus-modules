@@ -15,6 +15,7 @@ import com.geoxus.core.common.util.GXCommonUtils;
 import com.geoxus.core.common.util.GXResultUtils;
 import com.geoxus.core.common.util.GXSpringContextUtils;
 import com.geoxus.core.common.vo.GXResultCode;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,6 +29,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/general/captcha")
+@Slf4j
 public class CaptchaController {
     @Autowired
     private GXCaptchaService captchaService;
@@ -50,6 +52,7 @@ public class CaptchaController {
         final List<String> specialPhone = Convert.convert(new TypeReference<List<String>>() {
         }, Optional.ofNullable(GXCommonUtils.getEnvironmentValue("special.phone", Object.class)).orElse(Collections.emptyList()));
         if (CollUtil.contains(specialPhone, phone)) {
+            log.info("正在使用放行手机号码{}发送短信", phone);
             return GXResultUtils.ok();
         }
         final String templateName = Optional.ofNullable(dict.getStr("template_name")).orElse("");
