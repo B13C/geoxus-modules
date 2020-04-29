@@ -47,6 +47,12 @@ public class SRegionServiceImpl extends ServiceImpl<SRegionMapper, SRegionEntity
         return getFieldValueBySQL(SRegionEntity.class, CollUtil.newHashSet("region_id", "parent_id", "type", "name"), condition, false);
     }
 
+    @Override
+    public String getNameById(Integer id) {
+        final Dict condition = Dict.create().set(SRegionConstants.PRIMARY_KEY, id);
+        return baseMapper.getNameByCondition(condition);
+    }
+
     /**
      * 递归构建
      *

@@ -30,5 +30,13 @@ public interface SRegionService extends GXBaseService<SRegionEntity> {
      * @return Dict
      */
     Dict getDataById(Integer id);
+
+    /**
+     * 通过ID获取名字
+     *
+     * @param id 区域ID
+     * @return String
+     */
+    String getNameById(Integer id);
 }
 

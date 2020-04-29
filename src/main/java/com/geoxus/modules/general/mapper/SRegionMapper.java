@@ -13,4 +13,7 @@ import java.util.List;
 public interface SRegionMapper extends GXBaseMapper<SRegionEntity> {
     @SelectProvider(type = RegionBuilder.class, method = "listOrSearch")
     List<Dict> listOrSearch(Dict param);
+
+    @SelectProvider(type = RegionBuilder.class, method = "getNameByCondition")
+    String getNameByCondition(Dict condition);
 }
